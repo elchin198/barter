@@ -13,6 +13,7 @@ echo "Fayllar köçürülür..."
 cp -r dist/client/* /home/u726371272/bartertap.az/public_html/dist/client/
 cp -r public/images /home/u726371272/bartertap.az/public_html/dist/client/
 cp public/favicon.ico /home/u726371272/bartertap.az/public_html/dist/client/
+cp public/logo.png /home/u726371272/bartertap.az/public_html/dist/client/
 
 # PM2 konfigurasiyasını quraşdırmaq
 echo "PM2 konfiqurasiyası quraşdırılır..."

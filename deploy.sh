@@ -24,6 +24,7 @@ echo "Copying files to public_html directory..."
 cp -r dist/client/* /home/u726371272/bartertap.az/public_html/dist/client/
 cp client/public/favicon.ico /home/u726371272/bartertap.az/public_html/dist/client/
 cp -r client/public/images /home/u726371272/bartertap.az/public_html/dist/client/
+cp public/logo.png /home/u726371272/bartertap.az/public_html/dist/client/
 
 # Create PM2 config if not exists
 if [ ! -f "ecosystem.config.js" ]; then

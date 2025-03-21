@@ -11,10 +11,10 @@ import ItemListing from "@/pages/ItemListing";
 import Profile from "@/pages/Profile";
 import Messages from "@/pages/Messages";
 import Notifications from "@/pages/Notifications";
-import { AuthProvider } from "./hooks/use-auth";
-import { ProtectedRoute } from "./lib/protected-route";
-import Navbar from "./components/layout/Navbar";
-import Footer from "./components/layout/Footer";
+import { AuthProvider } from "@/context/AuthContext";
+import { ProtectedRoute } from "@/lib/protected-route";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 
 function Router() {
   return (

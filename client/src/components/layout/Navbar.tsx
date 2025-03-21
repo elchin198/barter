@@ -68,7 +68,8 @@ export default function Navbar() {
                 <img 
                   src="/assets/images/bartertap-logo.png" 
                   alt="BarterTap.az" 
-                  className="h-12 mr-2"
+                  className="h-8 mr-2"
+                  style={{ maxWidth: "160px" }}
                 />
               </a>
             </Link>
@@ -153,10 +154,10 @@ export default function Navbar() {
             ) : (
               <div className="hidden md:flex items-center gap-4">
                 <Link href="/login">
-                  <Button variant="outline">Log in</Button>
+                  <Button variant="outline">Daxil ol</Button>
                 </Link>
                 <Link href="/register">
-                  <Button>Sign up</Button>
+                  <Button>Qeydiyyat</Button>
                 </Link>
               </div>
             )}
@@ -171,56 +172,48 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent side="right">
                 <nav className="flex flex-col gap-4 mt-8">
-                  <Link href="/">
-                    <a className="text-lg font-medium hover:text-blue-600">Home</a>
+                  <Link href="/" className="text-lg font-medium hover:text-blue-600">
+                    Ana Səhifə
                   </Link>
 
                   {user ? (
                     <>
-                      <Link href="/profile">
-                        <a className="text-lg font-medium hover:text-blue-600 flex items-center">
-                          <User className="mr-2 h-5 w-5" />
-                          Profile
-                        </a>
+                      <Link href="/profile" className="text-lg font-medium hover:text-blue-600 flex items-center">
+                        <User className="mr-2 h-5 w-5" />
+                        Profil
                       </Link>
-                      <Link href="/items/new">
-                        <a className="text-lg font-medium hover:text-blue-600 flex items-center">
-                          <Plus className="mr-2 h-5 w-5" />
-                          List an Item
-                        </a>
+                      <Link href="/items/new" className="text-lg font-medium hover:text-blue-600 flex items-center">
+                        <Plus className="mr-2 h-5 w-5" />
+                        Əşya Əlavə Et
                       </Link>
-                      <Link href="/messages">
-                        <a className="text-lg font-medium hover:text-blue-600 flex items-center">
-                          <MessageSquare className="mr-2 h-5 w-5" />
-                          Messages
-                        </a>
+                      <Link href="/messages" className="text-lg font-medium hover:text-blue-600 flex items-center">
+                        <MessageSquare className="mr-2 h-5 w-5" />
+                        Mesajlar
                       </Link>
-                      <Link href="/notifications">
-                        <a className="text-lg font-medium hover:text-blue-600 flex items-center">
-                          <Bell className="mr-2 h-5 w-5" />
-                          Notifications
-                          {notificationCount > 0 && (
-                            <Badge variant="destructive" className="ml-2">
-                              {notificationCount}
-                            </Badge>
-                          )}
-                        </a>
+                      <Link href="/notifications" className="text-lg font-medium hover:text-blue-600 flex items-center">
+                        <Bell className="mr-2 h-5 w-5" />
+                        Bildirişlər
+                        {notificationCount > 0 && (
+                          <Badge variant="destructive" className="ml-2">
+                            {notificationCount}
+                          </Badge>
+                        )}
                       </Link>
-                      <a 
-                        className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer"
+                      <button 
+                        className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer bg-transparent border-0 text-left p-0"
                         onClick={handleLogout}
                       >
                         <LogOut className="mr-2 h-5 w-5" />
-                        Log out
-                      </a>
+                        Çıxış
+                      </button>
                     </>
                   ) : (
                     <>
-                      <Link href="/login">
-                        <a className="text-lg font-medium hover:text-blue-600">Log in</a>
+                      <Link href="/login" className="text-lg font-medium hover:text-blue-600">
+                        Daxil ol
                       </Link>
-                      <Link href="/register">
-                        <a className="text-lg font-medium hover:text-blue-600">Sign up</a>
+                      <Link href="/register" className="text-lg font-medium hover:text-blue-600">
+                        Qeydiyyat
                       </Link>
                     </>
                   )}

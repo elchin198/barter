@@ -11,10 +11,14 @@ app.use(express.urlencoded({ extended: false }));
 
 // Session setup
 app.use(session({
-  secret: 'bartertap-secret-key',
+  secret: process.env.SESSION_SECRET || 'bartertap-secret-key',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }, // 1 day
+  cookie: { 
+    secure: process.env.NODE_ENV === 'production', 
+    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    sameSite: 'lax'
+  },
   store: new MemoryStore({
     checkPeriod: 86400000 // prune expired entries every 24h
   })

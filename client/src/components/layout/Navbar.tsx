@@ -68,25 +68,22 @@ export default function Navbar() {
                 <img 
                   src="/assets/images/bartertap-logo.png" 
                   alt="BarterTap.az" 
-                  className="h-10 mr-2"
+                  className="h-12 mr-2"
                 />
-                <span className="text-2xl font-bold gradient-text">
-                  BarterTap.az
-                </span>
               </a>
             </Link>
             
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/">
                 <a className="text-sm font-medium hover:text-blue-600 transition-colors">
-                  Home
+                  Ana Səhifə
                 </a>
               </Link>
               {user && (
                 <>
                   <Link href="/items/new">
                     <a className="text-sm font-medium hover:text-blue-600 transition-colors">
-                      List an Item
+                      Əşya Əlavə Et
                     </a>
                   </Link>
                 </>
@@ -128,27 +125,27 @@ export default function Navbar() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                    <DropdownMenuLabel>Mənim Hesabım</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => navigate("/profile")}>
                       <User className="mr-2 h-4 w-4" />
-                      <span>Profile</span>
+                      <span>Profil</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/items/new")}>
                       <Plus className="mr-2 h-4 w-4" />
-                      <span>List an Item</span>
+                      <span>Əşya Əlavə Et</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/messages")}>
                       <MessageSquare className="mr-2 h-4 w-4" />
-                      <span>Messages</span>
+                      <span>Mesajlar</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/profile?tab=favorites")}>
                       <Heart className="mr-2 h-4 w-4" />
-                      <span>Favorites</span>
+                      <span>Seçilmişlər</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
-                      <span>Log out</span>
+                      <span>Çıxış</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>

@@ -11,6 +11,7 @@ import ItemListing from "@/pages/ItemListing";
 import Profile from "@/pages/Profile";
 import Messages from "@/pages/Messages";
 import Notifications from "@/pages/Notifications";
+import HowItWorks from "@/pages/HowItWorks";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProtectedRoute } from "@/lib/protected-route";
 import Navbar from "@/components/layout/Navbar";
@@ -30,6 +31,7 @@ function Router() {
           <ProtectedRoute path="/profile" component={Profile} />
           <ProtectedRoute path="/messages" component={Messages} />
           <ProtectedRoute path="/notifications" component={Notifications} />
+          <Route path="/how-it-works" component={HowItWorks} />
           <Route component={NotFound} />
         </Switch>
       </main>

@@ -16,7 +16,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Bell, Menu, MessageSquare, LogOut, User, Plus, Heart, Package, Loader2 } from "lucide-react";
+import { Bell, Menu, MessageSquare, LogOut, User, Plus, Heart, Package, Loader2, HelpCircle, Search } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { Badge } from "@/components/ui/badge";
 
@@ -66,7 +66,7 @@ export default function Navbar() {
             <div className="flex items-center">
               <Link href="/">
                 <img 
-                  src="/images/barter logo (1).png" 
+                  src="/images/logo.png" 
                   alt="BarterTap.az" 
                   className="h-8 md:h-10 transition-transform hover:scale-105 duration-300"
                 />
@@ -75,29 +75,48 @@ export default function Navbar() {
             
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/">
-                <span className="text-sm font-medium hover:text-red-600 transition-colors cursor-pointer">
+                <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
                   Ana Səhifə
                 </span>
               </Link>
+              <Link href="/items">
+                <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
+                  Bütün Əşyalar
+                </span>
+              </Link>
+              <Link href="/categories">
+                <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
+                  Kateqoriyalar
+                </span>
+              </Link>
+              <Link href="/how-it-works">
+                <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
+                  Necə İşləyir
+                </span>
+              </Link>
               {user && (
-                <>
-                  <Link href="/items/new">
-                    <span className="text-sm font-medium hover:text-red-600 transition-colors cursor-pointer">
-                      Əşya Əlavə Et
-                    </span>
-                  </Link>
-                </>
+                <Link href="/items/new">
+                  <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
+                    Əşya Əlavə Et
+                  </span>
+                </Link>
               )}
             </nav>
           </div>
 
           <div className="flex items-center gap-4">
+            <Link href="/search">
+              <Button variant="ghost" size="icon" className="text-gray-600 hover:text-blue-600">
+                <Search className="h-5 w-5" />
+              </Button>
+            </Link>
+            
             {user ? (
               <>
                 <div className="hidden md:flex items-center gap-4">
                   <Link href="/notifications">
                     <div className="relative cursor-pointer">
-                      <Bell className="h-5 w-5 text-gray-600 hover:text-red-600 transition-colors" />
+                      <Bell className="h-5 w-5 text-gray-600 hover:text-blue-600 transition-colors" />
                       {notificationCount > 0 && (
                         <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
                           {notificationCount > 9 ? '9+' : notificationCount}
@@ -107,7 +126,7 @@ export default function Navbar() {
                   </Link>
                   <Link href="/messages">
                     <div className="cursor-pointer">
-                      <MessageSquare className="h-5 w-5 text-gray-600 hover:text-red-600 transition-colors" />
+                      <MessageSquare className="h-5 w-5 text-gray-600 hover:text-blue-600 transition-colors" />
                     </div>
                   </Link>
                 </div>
@@ -143,6 +162,15 @@ export default function Navbar() {
                       <Heart className="mr-2 h-4 w-4" />
                       <span>Seçilmişlər</span>
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/my-items")}>
+                      <Package className="mr-2 h-4 w-4" />
+                      <span>Mənim Əşyalarım</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate("/help")}>
+                      <HelpCircle className="mr-2 h-4 w-4" />
+                      <span>Kömək</span>
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
                       <span>Çıxış</span>
@@ -153,10 +181,10 @@ export default function Navbar() {
             ) : (
               <div className="hidden md:flex items-center gap-4">
                 <Link href="/login">
-                  <Button variant="outline">Daxil ol</Button>
+                  <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">Daxil ol</Button>
                 </Link>
                 <Link href="/register">
-                  <Button>Qeydiyyat</Button>
+                  <Button className="bg-blue-600 hover:bg-blue-700">Qeydiyyat</Button>
                 </Link>
               </div>
             )}
@@ -170,35 +198,67 @@ export default function Navbar() {
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
-                <nav className="flex flex-col gap-4 mt-8">
+                <div className="mt-4 mb-6">
                   <Link href="/">
-                    <span className="text-lg font-medium hover:text-red-600 cursor-pointer block">
+                    <img 
+                      src="/images/logo.png" 
+                      alt="BarterTap.az" 
+                      className="h-10 mb-4"
+                    />
+                  </Link>
+                </div>
+                <nav className="flex flex-col gap-4">
+                  <Link href="/">
+                    <span className="text-lg font-medium hover:text-blue-600 cursor-pointer block py-2">
                       Ana Səhifə
                     </span>
                   </Link>
+                  <Link href="/items">
+                    <span className="text-lg font-medium hover:text-blue-600 cursor-pointer block py-2">
+                      Bütün Əşyalar
+                    </span>
+                  </Link>
+                  <Link href="/categories">
+                    <span className="text-lg font-medium hover:text-blue-600 cursor-pointer block py-2">
+                      Kateqoriyalar
+                    </span>
+                  </Link>
+                  <Link href="/how-it-works">
+                    <span className="text-lg font-medium hover:text-blue-600 cursor-pointer block py-2">
+                      Necə İşləyir
+                    </span>
+                  </Link>
+                  
+                  <div className="border-t my-2"></div>
 
                   {user ? (
                     <>
                       <Link href="/profile">
-                        <span className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer">
+                        <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <User className="mr-2 h-5 w-5" />
                           Profil
                         </span>
                       </Link>
                       <Link href="/items/new">
-                        <span className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer">
+                        <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <Plus className="mr-2 h-5 w-5" />
                           Əşya Əlavə Et
                         </span>
                       </Link>
+                      <Link href="/my-items">
+                        <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
+                          <Package className="mr-2 h-5 w-5" />
+                          Mənim Əşyalarım
+                        </span>
+                      </Link>
                       <Link href="/messages">
-                        <span className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer">
+                        <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <MessageSquare className="mr-2 h-5 w-5" />
                           Mesajlar
                         </span>
                       </Link>
                       <Link href="/notifications">
-                        <span className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer">
+                        <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <Bell className="mr-2 h-5 w-5" />
                           Bildirişlər
                           {notificationCount > 0 && (
@@ -208,8 +268,23 @@ export default function Navbar() {
                           )}
                         </span>
                       </Link>
+                      <Link href="/profile?tab=favorites">
+                        <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
+                          <Heart className="mr-2 h-5 w-5" />
+                          Seçilmişlər
+                        </span>
+                      </Link>
+                      <Link href="/help">
+                        <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
+                          <HelpCircle className="mr-2 h-5 w-5" />
+                          Kömək
+                        </span>
+                      </Link>
+                      
+                      <div className="border-t my-2"></div>
+                      
                       <button 
-                        className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer bg-transparent border-0 text-left p-0"
+                        className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer bg-transparent border-0 text-left p-0 py-2"
                         onClick={handleLogout}
                       >
                         <LogOut className="mr-2 h-5 w-5" />
@@ -219,14 +294,14 @@ export default function Navbar() {
                   ) : (
                     <>
                       <Link href="/login">
-                        <span className="text-lg font-medium hover:text-red-600 cursor-pointer block">
+                        <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 mb-2">
                           Daxil ol
-                        </span>
+                        </Button>
                       </Link>
                       <Link href="/register">
-                        <span className="text-lg font-medium hover:text-red-600 cursor-pointer block">
+                        <Button className="w-full bg-blue-600 hover:bg-blue-700">
                           Qeydiyyat
-                        </span>
+                        </Button>
                       </Link>
                     </>
                   )}

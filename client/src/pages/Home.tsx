@@ -113,8 +113,8 @@ export default function Home() {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Barter necə işləyir?</h2>
-            <p className="text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4 text-black">Barter necə işləyir?</h2>
+            <p className="text-gray-700 max-w-3xl mx-auto">
               BarterTap.az ilə əşya dəyişmək sadə və asandır. Cəmi üç addımda lazım olmayan əşyalarınızı 
               istədiyiniz şeylərə dəyişə bilərsiniz.
             </p>
@@ -125,24 +125,24 @@ export default function Home() {
             
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-lg transition-shadow duration-300 z-10">
               <div className="rounded-full bg-blue-600 text-white w-12 h-12 flex items-center justify-center mb-6 mx-auto font-bold text-xl">1</div>
-              <h3 className="text-xl font-bold mb-3 text-center">Əşyanızı əlavə edin</h3>
-              <p className="text-gray-600 text-center">
+              <h3 className="text-xl font-bold mb-3 text-center text-black">Əşyanızı əlavə edin</h3>
+              <p className="text-gray-700 text-center">
                 Əşyanın şəkillərini çəkin, təsvirini yazın və platformada paylaşın. Həmçinin hansı əşyaya dəyişmək istədiyinizi qeyd edin.
               </p>
             </div>
             
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-lg transition-shadow duration-300 z-10">
               <div className="rounded-full bg-blue-600 text-white w-12 h-12 flex items-center justify-center mb-6 mx-auto font-bold text-xl">2</div>
-              <h3 className="text-xl font-bold mb-3 text-center">Təkliflərə baxın</h3>
-              <p className="text-gray-600 text-center">
+              <h3 className="text-xl font-bold mb-3 text-center text-black">Təkliflərə baxın</h3>
+              <p className="text-gray-700 text-center">
                 Aldığınız təklifləri nəzərdən keçirin və ya sizi maraqlandıran əşyalar üçün özünüz təklif göndərin. Mesajlaşma vasitəsilə əlaqə qurun.
               </p>
             </div>
             
             <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-md hover:shadow-lg transition-shadow duration-300 z-10">
               <div className="rounded-full bg-blue-600 text-white w-12 h-12 flex items-center justify-center mb-6 mx-auto font-bold text-xl">3</div>
-              <h3 className="text-xl font-bold mb-3 text-center">Mübadilə edin</h3>
-              <p className="text-gray-600 text-center">
+              <h3 className="text-xl font-bold mb-3 text-center text-black">Mübadilə edin</h3>
+              <p className="text-gray-700 text-center">
                 Mübadiləni tamamlamaq üçün görüş təyin edin və əşyaları dəyişin. Mübadilə başa çatdıqdan sonra əks-əlaqə bildirin.
               </p>
             </div>
@@ -162,8 +162,8 @@ export default function Home() {
       <section className="py-16 bg-gradient-to-br from-blue-50 to-indigo-50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Müştərilər nə deyir?</h2>
-            <p className="text-gray-600 max-w-3xl mx-auto">
+            <h2 className="text-3xl font-bold mb-4 text-black">Müştərilər nə deyir?</h2>
+            <p className="text-gray-700 max-w-3xl mx-auto">
               İstifadəçilərimizin BarterTap.az haqqında fikirləri ilə tanış olun.
             </p>
           </div>
@@ -185,7 +185,7 @@ export default function Home() {
                 </div>
               </div>
               <CardContent className="p-6 pt-10">
-                <p className="text-gray-600 italic mb-6">
+                <p className="text-gray-700 italic mb-6">
                   "Artıq lazım olmayan əşyalarımı yeni şeylərə dəyişmək üçün mükəmməl platformadır. Platformanın istifadəsi çox rahat və intuitiv, mesajlaşma sistemi də çox əlverişlidir."
                 </p>
                 <div className="flex items-center">
@@ -193,7 +193,7 @@ export default function Home() {
                     <span className="font-bold text-blue-600">AZ</span>
                   </div>
                   <div>
-                    <h4 className="font-bold">Aysel Zamanova</h4>
+                    <h4 className="font-bold text-black">Aysel Zamanova</h4>
                     <p className="text-sm text-gray-500">Bakı, Azərbaycan</p>
                   </div>
                 </div>
@@ -216,7 +216,7 @@ export default function Home() {
                 </div>
               </div>
               <CardContent className="p-6 pt-10">
-                <p className="text-gray-600 italic mb-6">
+                <p className="text-gray-700 italic mb-6">
                   "Köhnə velosipedimi yeni kompüter aksesuarlarına dəyişdim və pul xərcləmədən istədiyim əşyaları əldə etmək çox əla oldu. Təhlükəsizlik təminatları və dəstək xidməti də çox yaxşıdır."
                 </p>
                 <div className="flex items-center">
@@ -224,7 +224,7 @@ export default function Home() {
                     <span className="font-bold text-blue-600">RM</span>
                   </div>
                   <div>
-                    <h4 className="font-bold">Rəşad Məmmədov</h4>
+                    <h4 className="font-bold text-black">Rəşad Məmmədov</h4>
                     <p className="text-sm text-gray-500">Gəncə, Azərbaycan</p>
                   </div>
                 </div>
@@ -247,7 +247,7 @@ export default function Home() {
                 </div>
               </div>
               <CardContent className="p-6 pt-10">
-                <p className="text-gray-600 italic mb-6">
+                <p className="text-gray-700 italic mb-6">
                   "BarterTap.az sayəsində uşaqlarım üçün oyuncaq və geyim tapmaq çox asan oldu. Eyni zamanda evdən istifadə etmədiyimiz əşyalardan da qurtulduq. Ətraf mühit üçün də faydalıdır!"
                 </p>
                 <div className="flex items-center">
@@ -255,7 +255,7 @@ export default function Home() {
                     <span className="font-bold text-blue-600">SQ</span>
                   </div>
                   <div>
-                    <h4 className="font-bold">Səbinə Quliyeva</h4>
+                    <h4 className="font-bold text-black">Səbinə Quliyeva</h4>
                     <p className="text-sm text-gray-500">Sumqayıt, Azərbaycan</p>
                   </div>
                 </div>

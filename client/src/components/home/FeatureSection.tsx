@@ -5,8 +5,8 @@ export default function FeatureSection() {
     <section className="py-16 bg-gradient-to-r from-blue-50 to-indigo-50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Niyə BarterTap.az?</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold mb-4 text-black">Niyə BarterTap.az?</h2>
+          <p className="text-gray-700 max-w-2xl mx-auto">
             Barter platformamız sizə lazım olmayan əşyalarınızı ehtiyacınız olan əşyalara dəyişməyə kömək edir.
             Əşyaları dəyişmək üçün ən etibarlı və istifadəsi rahat platformadır.
           </p>
@@ -17,8 +17,8 @@ export default function FeatureSection() {
             <div className="bg-blue-100 w-14 h-14 rounded-full flex items-center justify-center mb-4">
               <Zap className="h-7 w-7 text-blue-600" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Sürətli və Asan</h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-bold mb-2 text-black">Sürətli və Asan</h3>
+            <p className="text-gray-700">
               Cəmi bir neçə addımda əşyalarınızı əlavə edin və dərhal mübadilələr üçün hazır olun. İstifadəçi dostu interfeys ilə vaxtınıza qənaət edin.
             </p>
           </div>
@@ -27,8 +27,8 @@ export default function FeatureSection() {
             <div className="bg-blue-100 w-14 h-14 rounded-full flex items-center justify-center mb-4">
               <Shield className="h-7 w-7 text-blue-600" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Təhlükəsiz Mübadilə</h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-bold mb-2 text-black">Təhlükəsiz Mübadilə</h3>
+            <p className="text-gray-700">
               Platforma daxilində qorunan mesajlaşma və istifadəçi reytinq sistemi ilə etibarlı mübadiləni təmin edirik.
             </p>
           </div>
@@ -37,8 +37,8 @@ export default function FeatureSection() {
             <div className="bg-blue-100 w-14 h-14 rounded-full flex items-center justify-center mb-4">
               <Users className="h-7 w-7 text-blue-600" />
             </div>
-            <h3 className="text-xl font-bold mb-2">Böyük İcma</h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-bold mb-2 text-black">Böyük İcma</h3>
+            <p className="text-gray-700">
               Minlərlə aktiv istifadəçi ilə istədiyiniz əşyanı tapmaq şansınızı artırın. Hər gün yeni əşyalar əlavə olunur.
             </p>
           </div>
@@ -47,8 +47,8 @@ export default function FeatureSection() {
             <div className="bg-blue-100 w-14 h-14 rounded-full flex items-center justify-center mb-4">
               <CheckCircle className="h-7 w-7 text-blue-600" />
             </div>
-            <h3 className="text-xl font-bold mb-2">100% Pulsuz</h3>
-            <p className="text-gray-600">
+            <h3 className="text-xl font-bold mb-2 text-black">100% Pulsuz</h3>
+            <p className="text-gray-700">
               Qeydiyyat, elan yerləşdirmə və mesajlaşma - bütün xidmətlərimiz tamamilə ödənişsizdir. Heç bir gizli ödəniş yoxdur.
             </p>
           </div>
@@ -70,8 +70,8 @@ export default function FeatureSection() {
                 ))}
               </div>
             </div>
-            <h3 className="text-2xl font-bold mb-2">İstifadəçilər bizi sevirlər</h3>
-            <p className="text-gray-600 italic">
+            <h3 className="text-2xl font-bold mb-2 text-black">İstifadəçilər bizi sevirlər</h3>
+            <p className="text-gray-700 italic">
               "BarterTap.az platforması ilə artıq lazım olmayan əşyalarımı yeni şeylərə dəyişdim və bu proses çox asan oldu. Pulsuz və etibarlı xidmət üçün təşəkkürlər!"
             </p>
             <div className="mt-4">

@@ -13,11 +13,11 @@ export default function HeroSection() {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-black">
               <span className="text-blue-600">Əşyalarınızı dəyişdirin,</span> pul xərcləmədən istədiyinizi əldə edin
             </h1>
             
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl text-gray-700 mb-8">
               BarterTap.az - Azərbaycanın ən böyük əşya mübadiləsi platformasında artıq istifadə etmədiyiniz əşyaları ehtiyacınız 
               olan əşyalara dəyişin. Sürətli, təhlükəsiz və tamamilə pulsuz!
             </p>
@@ -81,7 +81,7 @@ export default function HeroSection() {
               <div className="absolute -right-20 -top-20 w-40 h-40 bg-blue-50 rounded-full"></div>
               <div className="absolute -left-16 -bottom-16 w-36 h-36 bg-indigo-50 rounded-full"></div>
               
-              <h3 className="font-bold text-xl mb-6 relative">Nə axtarırsınız?</h3>
+              <h3 className="font-bold text-xl mb-6 relative text-black">Nə axtarırsınız?</h3>
               
               <div className="space-y-4 relative">
                 <div className="flex items-center border rounded-md px-3 py-2 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100">
@@ -114,13 +114,13 @@ export default function HeroSection() {
                   <option value="other">Digər</option>
                 </select>
                 
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                   Axtar
                 </Button>
               </div>
               
               <div className="mt-6 pt-6 border-t border-gray-100 relative">
-                <p className="text-gray-500 text-sm mb-3">Populyar axtarışlar:</p>
+                <p className="text-gray-600 text-sm mb-3">Populyar axtarışlar:</p>
                 <div className="flex flex-wrap gap-2">
                   {['Velosiped', 'Telefon', 'Kitab', 'Mebel', 'Geyim'].map((tag) => (
                     <span 

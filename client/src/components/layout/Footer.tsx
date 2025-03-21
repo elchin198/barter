@@ -9,7 +9,7 @@ export default function Footer() {
             <div className="inline-block mb-4 flex items-center">
               <Link href="/">
                 <img 
-                  src="/logo.svg" 
+                  src="/images/barter logo (1).png" 
                   alt="BarterTap.az" 
                   className="h-8 md:h-10 transition-transform hover:scale-105 duration-300"
                 />

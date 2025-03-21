@@ -66,7 +66,7 @@ export default function Navbar() {
             <div className="flex items-center">
               <Link href="/">
                 <img 
-                  src="/logo.svg" 
+                  src="/images/barter logo (1).png" 
                   alt="BarterTap.az" 
                   className="h-8 md:h-10 transition-transform hover:scale-105 duration-300"
                 />

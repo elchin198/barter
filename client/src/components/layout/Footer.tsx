@@ -41,7 +41,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/messages">
-                  <a className="text-gray-600 hover:text-red-600 transition-colors">Mesajlar</a>
+                  <span className="text-gray-600 hover:text-red-600 transition-colors cursor-pointer">Mesajlar</span>
                 </Link>
               </li>
             </ul>
@@ -87,7 +87,7 @@ export default function Footer() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span className="text-gray-600">Bakı şəh., 40°24'50.1"N 49°51'36.8"E</span>
+                <span className="text-gray-600">Əhməd Rəcəbli, Bakı şəh., 40°24'50.1"N 49°51'36.8"E</span>
               </li>
               <li className="mt-4">
                 <a 

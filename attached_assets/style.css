@@ -1,0 +1,461 @@
+/**
+ * BarterTap.az - Əsas Stil Qaydaları
+ */
+
+/* Əsas Dəyişənlər */
+:root {
+    /* Əsas rəng sxemi */
+    --primary: #367BF5;
+    --primary-hover: #1E65E0;
+    --primary-50: rgba(54, 123, 245, 0.05);
+    --primary-100: rgba(54, 123, 245, 0.1);
+    --primary-200: rgba(54, 123, 245, 0.2);
+    --primary-700: #1E65E0;
+    --primary-800: #1650B3;
+    
+    /* Əlavə rənglər */
+    --success: #10B981;
+    --warning: #F59E0B;
+    --danger: #EF4444;
+    --info: #3B82F6;
+    
+    /* Gri tonlar */
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-400: #9CA3AF;
+    --gray-500: #6B7280;
+    --gray-600: #4B5563;
+    --gray-700: #374151;
+    --gray-800: #1F2937;
+    --gray-900: #111827;
+    
+    /* Gölgə dəyişənləri */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    /* Radius dəyişənləri */
+    --radius-sm: 0.125rem;
+    --radius: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+}
+
+/* Əsas stil qaydaları */
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--gray-900);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Responsiv qatdırma qaydaları */
+@media (max-width: 640px) {
+    .container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    h1, .h1 {
+        font-size: 1.875rem !important;
+    }
+    
+    h2, .h2 {
+        font-size: 1.5rem !important;
+    }
+    
+    .sm-hidden {
+        display: none !important;
+    }
+    
+    .sm-block {
+        display: block !important;
+    }
+    
+    .sm-flex-col {
+        flex-direction: column !important;
+    }
+    
+    .sm-text-center {
+        text-align: center !important;
+    }
+    
+    .sm-w-full {
+        width: 100% !important;
+    }
+    
+    .sm-p-4 {
+        padding: 1rem !important;
+    }
+    
+    .sm-py-8 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+}
+
+/* Bildiriş stil qaydaları */
+.notification {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 50;
+    max-width: 24rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: var(--shadow-lg);
+    transition: opacity 0.3s ease;
+}
+
+.notification-success {
+    background-color: #D1FAE5;
+    border-left: 4px solid var(--success);
+    color: #065F46;
+}
+
+.notification-error {
+    background-color: #FEE2E2;
+    border-left: 4px solid var(--danger);
+    color: #991B1B;
+}
+
+.notification-warning {
+    background-color: #FEF3C7;
+    border-left: 4px solid var(--warning);
+    color: #92400E;
+}
+
+.notification-info {
+    background-color: #DBEAFE;
+    border-left: 4px solid var(--info);
+    color: #1E40AF;
+}
+
+/* 404 Səhifəsi üçün stillər */
+.page-404 {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+}
+
+.page-404 .error-code {
+    font-size: 8rem;
+    font-weight: 800;
+    line-height: 1;
+    background: linear-gradient(90deg, var(--primary), #7C3AED);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 1rem;
+}
+
+/* Form elementlərinin stilləri */
+.form-control {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--primary-100);
+}
+
+.form-error {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--danger);
+}
+
+/* Düymələrin stilləri */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    border-radius: var(--radius);
+    transition: all 0.15s ease-in-out;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 1px solid var(--primary);
+    color: var(--primary);
+}
+
+.btn-outline:hover {
+    background-color: var(--primary-50);
+}
+
+/* Elan kartların stilləri */
+.item-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.item-card .image-container {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+}
+
+.item-card .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.item-card:hover .image-container img {
+    transform: scale(1.05);
+}
+
+/* Məlumat işarələri */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.badge-primary {
+    background-color: var(--primary-100);
+    color: var(--primary-800);
+}
+
+.badge-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #065F46;
+}
+
+.badge-warning {
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #92400E;
+}
+
+.badge-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #991B1B;
+}
+
+/* Kateqoriya kartlarının stilləri */
+.category-card {
+    border-radius: var(--radius);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+    border-color: var(--primary);
+}
+
+/* Animasiyalar */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animate-bounce {
+    animation: bounce 3s infinite;
+}
+
+/* Mobile menü animasiyaları */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mobile-menu-enter {
+    animation: slideDown 0.3s ease forwards;
+}
+
+/* Uzurlu əlavələr və dəyişikliklər */
+.text-truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.aspect-16-9 {
+    aspect-ratio: 16 / 9;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, var(--primary), #7C3AED);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Responsiv şəkil konteynerləri */
+.img-responsive {
+    width: 100%;
+    height: auto;
+}
+
+.img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.img-contain {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* İstifadəçi avatarı */
+.avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-sm {
+    width: 2rem;
+    height: 2rem;
+}
+
+.avatar-lg {
+    width: 3.5rem;
+    height: 3.5rem;
+}
+
+/* Media query dəstəyi üçün əlavələr */
+@media (min-width: 768px) {
+    .md-hidden {
+        display: none !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    .lg-hidden {
+        display: none !important;
+    }
+}
+
+/* Mobil cihazlar üçün ekstra optimizasiyalar */
+@media (max-width: 480px) {
+    .xs-p-2 {
+        padding: 0.5rem !important;
+    }
+    
+    .xs-text-sm {
+        font-size: 0.875rem !important;
+    }
+    
+    .xs-hidden {
+        display: none !important;
+    }
+    
+    .btn {
+        padding: 0.375rem 0.75rem !important;
+        font-size: 0.875rem !important;
+    }
+}
+
+/* Əlavə stillər */
+.blur-load {
+    background-size: cover;
+    background-position: center;
+}
+
+.blur-load.loaded > img {
+    opacity: 1;
+}
+
+.blur-load > img {
+    opacity: 0;
+    transition: opacity 200ms ease-in-out;
+}
+
+/* Scroll stillər */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gray-300);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400);
+}
+
+/* Toxunma cihazlarda hover effektlərini söndür */
+@media (hover: none) {
+    .item-card:hover {
+        transform: none;
+    }
+    
+    .item-card:hover .image-container img {
+        transform: none;
+    }
+    
+    .category-card:hover {
+        transform: none;
+    }
+}

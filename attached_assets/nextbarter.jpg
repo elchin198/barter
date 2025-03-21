@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 Error</title>
+    <link rel="stylesheet" href="/front/style/style.css" />
+  </head>
+  <body>
+    <div class="error">
+      <h1>404</h1>
+      <p>Sorry, the page you were looking for was not found</p>
+      <a href="https://nextbarter.com" class="blueButton">
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 13 13"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g clip-path="url(#clip0_865_16181)">
+            <path
+              d="M6.4974 7.04199V10.8337L2.16406 6.50033L6.4974 2.16699V5.95866H10.8307V7.04199H6.4974Z"
+              fill="white"
+            ></path>
+          </g>
+          <defs>
+            <clipPath id="clip0_865_16181">
+              <rect width="13" height="13" fill="white"></rect>
+            </clipPath>
+          </defs>
+        </svg>
+        BACK HOME
+      </a>
+    </div>
+  </body>
+</html>

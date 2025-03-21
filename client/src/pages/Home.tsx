@@ -4,29 +4,29 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, ArrowRight, Star } from "lucide-react";
 import { Link } from "wouter";
 import ItemCard from "../components/items/ItemCard";
 import { useAuth } from "../context/AuthContext";
 import { Item } from "@shared/schema";
 
 const CATEGORIES = [
-  "All Categories",
-  "Electronics",
-  "Clothing",
-  "Books",
-  "Home & Garden",
-  "Sports",
-  "Toys",
-  "Vehicles",
-  "Collectibles",
-  "Other"
+  "Bütün kateqoriyalar",
+  "Elektronika",
+  "Geyim",
+  "Kitablar",
+  "Ev və bağ",
+  "İdman",
+  "Oyuncaqlar",
+  "Nəqliyyat",
+  "Kolleksiya",
+  "Digər"
 ];
 
 export default function Home() {
   const { user } = useAuth();
   const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState("All Categories");
+  const [category, setCategory] = useState("Bütün kateqoriyalar");
   
   // Filtered search query
   const { data: items = [], isLoading } = useQuery<(Item & { mainImage?: string })[]>({
@@ -39,7 +39,7 @@ export default function Home() {
       item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       item.description.toLowerCase().includes(searchTerm.toLowerCase());
       
-    const matchesCategory = category === "All Categories" || item.category === category;
+    const matchesCategory = category === "Bütün kateqoriyalar" || item.category === category;
     
     return matchesSearch && matchesCategory;
   });
@@ -49,21 +49,21 @@ export default function Home() {
       {/* Hero section */}
       <section className="bg-gradient-to-r from-blue-600 to-orange-500 rounded-xl p-8 mb-8 text-white">
         <div className="max-w-3xl">
-          <h1 className="text-4xl font-bold mb-4">Exchange Items, Build Connections</h1>
+          <h1 className="text-4xl font-bold mb-4">Əşyalarınızı dəyişin, əlaqələr qurun</h1>
           <p className="text-lg mb-6">
-            Barter Exchange lets you trade items you no longer need for things you want. 
-            No money involved - just direct exchanges between users.
+            BarterTap.az platforması sizə lazım olmayan əşyaları istədiyiniz şeylərə dəyişmək imkanı verir. 
+            Pulsuz barter - istifadəçilər arasında birbaşa mübadilə.
           </p>
           {user ? (
             <Link href="/items/new">
               <Button className="bg-white text-blue-600 hover:bg-gray-100">
-                <Plus className="mr-2 h-4 w-4" /> List Your Item
+                <Plus className="mr-2 h-4 w-4" /> Əşyanızı əlavə edin
               </Button>
             </Link>
           ) : (
             <Link href="/register">
               <Button className="bg-white text-blue-600 hover:bg-gray-100">
-                Join Now
+                İndi qoşulun
               </Button>
             </Link>
           )}
@@ -79,7 +79,7 @@ export default function Home() {
                 <Search className="h-5 w-5 text-gray-400 mr-2" />
                 <Input 
                   type="text"
-                  placeholder="Search items..." 
+                  placeholder="Əşyaları axtar..." 
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border-0 p-0 focus-visible:ring-0"
@@ -87,7 +87,7 @@ export default function Home() {
               </div>
               <Select value={category} onValueChange={setCategory}>
                 <SelectTrigger className="w-full md:w-[200px]">
-                  <SelectValue placeholder="Category" />
+                  <SelectValue placeholder="Kateqoriya" />
                 </SelectTrigger>
                 <SelectContent>
                   {CATEGORIES.map((cat) => (
@@ -102,9 +102,37 @@ export default function Home() {
         </Card>
       </section>
       
+      {/* Featured Categories */}
+      <section className="mb-12">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">Populyar kateqoriyalar</h2>
+          <Link href="/categories" className="text-blue-600 hover:underline flex items-center">
+            Hamısını göstər <ArrowRight className="ml-1 h-4 w-4" />
+          </Link>
+        </div>
+        
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {CATEGORIES.slice(1, 7).map((category) => (
+            <Link key={category} href={`/items?category=${category}`}>
+              <div className="bg-blue-50 rounded-xl p-4 text-center hover:bg-blue-100 transition-colors cursor-pointer h-full flex flex-col items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-3">
+                  <Star className="h-6 w-6 text-blue-600" />
+                </div>
+                <span className="font-medium text-gray-800">{category}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+      
       {/* Items grid */}
       <section>
-        <h2 className="text-2xl font-bold mb-6">Available Items</h2>
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold">Mövcud əşyalar</h2>
+          <Link href="/items" className="text-blue-600 hover:underline flex items-center">
+            Hamısını göstər <ArrowRight className="ml-1 h-4 w-4" />
+          </Link>
+        </div>
         
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -120,58 +148,156 @@ export default function Home() {
           </div>
         ) : filteredItems.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {filteredItems.map((item) => (
+            {filteredItems.slice(0, 8).map((item) => (
               <ItemCard key={item.id} item={item} />
             ))}
           </div>
         ) : (
           <div className="text-center py-12">
-            <p className="text-lg text-gray-500">No items found matching your search criteria.</p>
+            <p className="text-lg text-gray-500">Axtarış kriteriyalarınıza uyğun əşya tapılmadı.</p>
           </div>
         )}
       </section>
       
       {/* How it works section */}
-      <section className="mt-16">
-        <h2 className="text-2xl font-bold mb-8 text-center">How Bartering Works</h2>
+      <section className="mt-16 bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl p-8">
+        <h2 className="text-3xl font-bold mb-8 text-center">Barter necə işləyir</h2>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <Card>
+          <Card className="border-0 shadow-lg">
             <CardContent className="pt-6">
               <div className="rounded-full bg-blue-100 w-12 h-12 flex items-center justify-center mb-4 mx-auto">
                 <span className="text-blue-600 font-bold text-xl">1</span>
               </div>
-              <h3 className="text-xl font-bold mb-2 text-center">List Your Items</h3>
+              <h3 className="text-xl font-bold mb-2 text-center">Əşyalarınızı siyahıya əlavə edin</h3>
               <p className="text-gray-600 text-center">
-                Take photos and create listings for items you no longer need or want.
+                Artıq istifadə etmədiyiniz əşyaların şəkillərini çəkin və elanlarını yerləşdirin.
               </p>
             </CardContent>
           </Card>
           
-          <Card>
+          <Card className="border-0 shadow-lg">
             <CardContent className="pt-6">
               <div className="rounded-full bg-blue-100 w-12 h-12 flex items-center justify-center mb-4 mx-auto">
                 <span className="text-blue-600 font-bold text-xl">2</span>
               </div>
-              <h3 className="text-xl font-bold mb-2 text-center">Find & Offer</h3>
+              <h3 className="text-xl font-bold mb-2 text-center">Tapın və təklif edin</h3>
               <p className="text-gray-600 text-center">
-                Browse items from other users and make offers with your own items.
+                Digər istifadəçilərin əşyalarına baxın və öz əşyalarınızla təklif irəli sürün.
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card className="border-0 shadow-lg">
+            <CardContent className="pt-6">
+              <div className="rounded-full bg-blue-100 w-12 h-12 flex items-center justify-center mb-4 mx-auto">
+                <span className="text-blue-600 font-bold text-xl">3</span>
+              </div>
+              <h3 className="text-xl font-bold mb-2 text-center">Mübadilə edin</h3>
+              <p className="text-gray-600 text-center">
+                Mesajlaşma sistemimiz vasitəsilə digər istifadəçi ilə əlaqə quraraq mübadiləni tamamlayın.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+        
+        <div className="text-center mt-8">
+          <Link href="/how-it-works">
+            <Button variant="outline" className="mt-4">
+              Daha ətraflı öyrənin
+            </Button>
+          </Link>
+        </div>
+      </section>
+      
+      {/* Testimonials */}
+      <section className="mt-16">
+        <h2 className="text-3xl font-bold mb-8 text-center">İstifadəçilər nə deyir</h2>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                  <span className="font-bold text-blue-600">AZ</span>
+                </div>
+                <div>
+                  <h4 className="font-bold">Aysel Zamanova</h4>
+                  <div className="flex text-yellow-400">
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600">
+                "İstifadəsi çox rahatdır. Artıq ehtiyacım olmayan kitabları yeni şeylərə dəyişə bildim. Həqiqətən də faydalı platformadır."
               </p>
             </CardContent>
           </Card>
           
           <Card>
-            <CardContent className="pt-6">
-              <div className="rounded-full bg-blue-100 w-12 h-12 flex items-center justify-center mb-4 mx-auto">
-                <span className="text-blue-600 font-bold text-xl">3</span>
+            <CardContent className="p-6">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                  <span className="font-bold text-blue-600">RM</span>
+                </div>
+                <div>
+                  <h4 className="font-bold">Rəşad Məmmədov</h4>
+                  <div className="flex text-yellow-400">
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                  </div>
+                </div>
               </div>
-              <h3 className="text-xl font-bold mb-2 text-center">Exchange</h3>
-              <p className="text-gray-600 text-center">
-                Coordinate with the other user through our messaging system to complete the exchange.
+              <p className="text-gray-600">
+                "Köhnə velosipedimi yeni kompüter aksesuarlarına dəyişdim. Pul xərcləmədən gərəkli əşyalar əldə etmək əla oldu."
+              </p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                  <span className="font-bold text-blue-600">SQ</span>
+                </div>
+                <div>
+                  <h4 className="font-bold">Səbinə Quliyeva</h4>
+                  <div className="flex text-yellow-400">
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                    <Star className="h-4 w-4 fill-current" />
+                  </div>
+                </div>
+              </div>
+              <p className="text-gray-600">
+                "BarterTap.az sayəsində uşaqlarım üçün oyuncaq və geyim tapmaq çox asan oldu. Eyni zamanda evdən istifadə etmədiyimiz əşyalardan da qurtulduq."
               </p>
             </CardContent>
           </Card>
         </div>
+      </section>
+      
+      {/* CTA section */}
+      <section className="mt-16 bg-blue-600 text-white rounded-xl p-8 text-center">
+        <h2 className="text-3xl font-bold mb-4">İndi qoşulun və barterlərə başlayın</h2>
+        <p className="text-lg mb-6 max-w-2xl mx-auto">
+          Minlərlə istifadəçi artıq pul xərcləmədən ehtiyac duyduqları əşyaları əldə edib. 
+          Siz də dəyişim hərəkatına qoşulun!
+        </p>
+        <Link href="/register">
+          <Button className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-3 text-lg">
+            Qeydiyyatdan keçin
+          </Button>
+        </Link>
       </section>
     </div>
   );

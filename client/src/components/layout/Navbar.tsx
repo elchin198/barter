@@ -63,29 +63,29 @@ export default function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link href="/">
-              <a className="flex items-center">
+            <div className="flex items-center">
+              <Link href="/">
                 <img 
                   src="/assets/images/bartertap-logo.png" 
                   alt="BarterTap.az" 
-                  className="h-8 mr-2"
+                  className="h-8 mr-2 cursor-pointer"
                   style={{ maxWidth: "160px" }}
                 />
-              </a>
-            </Link>
+              </Link>
+            </div>
             
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/">
-                <a className="text-sm font-medium hover:text-blue-600 transition-colors">
+                <span className="text-sm font-medium hover:text-red-600 transition-colors cursor-pointer">
                   Ana Səhifə
-                </a>
+                </span>
               </Link>
               {user && (
                 <>
                   <Link href="/items/new">
-                    <a className="text-sm font-medium hover:text-blue-600 transition-colors">
+                    <span className="text-sm font-medium hover:text-red-600 transition-colors cursor-pointer">
                       Əşya Əlavə Et
-                    </a>
+                    </span>
                   </Link>
                 </>
               )}
@@ -97,19 +97,19 @@ export default function Navbar() {
               <>
                 <div className="hidden md:flex items-center gap-4">
                   <Link href="/notifications">
-                    <a className="relative">
-                      <Bell className="h-5 w-5 text-gray-600 hover:text-blue-600 transition-colors" />
+                    <div className="relative cursor-pointer">
+                      <Bell className="h-5 w-5 text-gray-600 hover:text-red-600 transition-colors" />
                       {notificationCount > 0 && (
                         <Badge variant="destructive" className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
                           {notificationCount > 9 ? '9+' : notificationCount}
                         </Badge>
                       )}
-                    </a>
+                    </div>
                   </Link>
                   <Link href="/messages">
-                    <a>
-                      <MessageSquare className="h-5 w-5 text-gray-600 hover:text-blue-600 transition-colors" />
-                    </a>
+                    <div className="cursor-pointer">
+                      <MessageSquare className="h-5 w-5 text-gray-600 hover:text-red-600 transition-colors" />
+                    </div>
                   </Link>
                 </div>
 
@@ -172,35 +172,45 @@ export default function Navbar() {
               </SheetTrigger>
               <SheetContent side="right">
                 <nav className="flex flex-col gap-4 mt-8">
-                  <Link href="/" className="text-lg font-medium hover:text-blue-600">
-                    Ana Səhifə
+                  <Link href="/">
+                    <span className="text-lg font-medium hover:text-red-600 cursor-pointer block">
+                      Ana Səhifə
+                    </span>
                   </Link>
 
                   {user ? (
                     <>
-                      <Link href="/profile" className="text-lg font-medium hover:text-blue-600 flex items-center">
-                        <User className="mr-2 h-5 w-5" />
-                        Profil
+                      <Link href="/profile">
+                        <span className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer">
+                          <User className="mr-2 h-5 w-5" />
+                          Profil
+                        </span>
                       </Link>
-                      <Link href="/items/new" className="text-lg font-medium hover:text-blue-600 flex items-center">
-                        <Plus className="mr-2 h-5 w-5" />
-                        Əşya Əlavə Et
+                      <Link href="/items/new">
+                        <span className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer">
+                          <Plus className="mr-2 h-5 w-5" />
+                          Əşya Əlavə Et
+                        </span>
                       </Link>
-                      <Link href="/messages" className="text-lg font-medium hover:text-blue-600 flex items-center">
-                        <MessageSquare className="mr-2 h-5 w-5" />
-                        Mesajlar
+                      <Link href="/messages">
+                        <span className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer">
+                          <MessageSquare className="mr-2 h-5 w-5" />
+                          Mesajlar
+                        </span>
                       </Link>
-                      <Link href="/notifications" className="text-lg font-medium hover:text-blue-600 flex items-center">
-                        <Bell className="mr-2 h-5 w-5" />
-                        Bildirişlər
-                        {notificationCount > 0 && (
-                          <Badge variant="destructive" className="ml-2">
-                            {notificationCount}
-                          </Badge>
-                        )}
+                      <Link href="/notifications">
+                        <span className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer">
+                          <Bell className="mr-2 h-5 w-5" />
+                          Bildirişlər
+                          {notificationCount > 0 && (
+                            <Badge variant="destructive" className="ml-2">
+                              {notificationCount}
+                            </Badge>
+                          )}
+                        </span>
                       </Link>
                       <button 
-                        className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer bg-transparent border-0 text-left p-0"
+                        className="text-lg font-medium hover:text-red-600 flex items-center cursor-pointer bg-transparent border-0 text-left p-0"
                         onClick={handleLogout}
                       >
                         <LogOut className="mr-2 h-5 w-5" />
@@ -209,11 +219,15 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
-                      <Link href="/login" className="text-lg font-medium hover:text-blue-600">
-                        Daxil ol
+                      <Link href="/login">
+                        <span className="text-lg font-medium hover:text-red-600 cursor-pointer block">
+                          Daxil ol
+                        </span>
                       </Link>
-                      <Link href="/register" className="text-lg font-medium hover:text-blue-600">
-                        Qeydiyyat
+                      <Link href="/register">
+                        <span className="text-lg font-medium hover:text-red-600 cursor-pointer block">
+                          Qeydiyyat
+                        </span>
                       </Link>
                     </>
                   )}

@@ -2,7 +2,7 @@
 <html lang="az">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/assets/images/bartertap-logo.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BarterTap - Barter Mübadilə Platformu</title>
   <meta name="description" content="BarterTap - Azərbaycanda əşyaların barter mübadiləsi üçün platformadır. Burada istifadə etmədiyiniz əşyaları sizə lazım olan əşyalara səmərəli şəkildə dəyişə bilərsiniz." />
@@ -13,107 +13,19 @@
   <meta property="og:url" content="https://bartertap.az/" />
   <meta property="og:title" content="BarterTap - Barter Mübadilə Platformu" />
   <meta property="og:description" content="Azərbaycanın əşya mübadiləsi platforması - əşyalarınızı asanlıqla, sərfəli şəkildə dəyişin" />
-  <meta property="og:image" content="/assets/images/bartertap-logo.png" />
+  <meta property="og:image" content="/logo.svg" />
   
   <!-- Twitter -->
   <meta property="twitter:card" content="summary_large_image" />
   <meta property="twitter:url" content="https://bartertap.az/" />
   <meta property="twitter:title" content="BarterTap - Barter Mübadilə Platformu" />
   <meta property="twitter:description" content="Azərbaycanın əşya mübadiləsi platforması - əşyalarınızı asanlıqla, sərfəli şəkildə dəyişin" />
-  <meta property="twitter:image" content="/assets/images/bartertap-logo.png" />
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-    
-    :root {
-      --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-      --background: hsl(0 0% 100%);
-      --foreground: hsl(222.2 47.4% 11.2%);
-      --card: hsl(0 0% 100%);
-      --card-foreground: hsl(222.2 47.4% 11.2%);
-      --popover: hsl(0 0% 100%);
-      --popover-foreground: hsl(222.2 47.4% 11.2%);
-      --primary: hsl(210 100% 40%);
-      --primary-foreground: hsl(210 40% 98%);
-      --secondary: hsl(210 40% 96.1%);
-      --secondary-foreground: hsl(222.2 47.4% 11.2%);
-      --muted: hsl(210 40% 96.1%);
-      --muted-foreground: hsl(215.4 16.3% 46.9%);
-      --accent: hsl(210 40% 96.1%);
-      --accent-foreground: hsl(222.2 47.4% 11.2%);
-      --destructive: hsl(0 84.2% 60.2%);
-      --destructive-foreground: hsl(210 40% 98%);
-      --border: hsl(214.3 31.8% 91.4%);
-      --input: hsl(214.3 31.8% 91.4%);
-      --ring: hsl(215.4 16.3% 46.9%);
-      --radius: 0.5rem;
-      
-      /* Chart colors */
-      --chart-1: hsl(210 100% 40%);
-      --chart-2: hsl(25 100% 50%);
-      --chart-3: hsl(142 72% 29%);
-      --chart-4: hsl(262 83% 58%);
-      --chart-5: hsl(0 84% 60%);
-      
-      /* Sidebar colors */
-      --sidebar-background: hsl(222.2 47.4% 11.2%);
-      --sidebar-foreground: hsl(210 40% 98%);
-      --sidebar-primary: hsl(210 100% 40%);
-      --sidebar-primary-foreground: hsl(210 40% 98%);
-      --sidebar-accent: hsl(210 60% 25%);
-      --sidebar-accent-foreground: hsl(210 40% 98%);
-      --sidebar-border: hsl(217.2 32.6% 17.5%);
-      --sidebar-ring: hsl(212.7 26.8% 83.9%);
-    }
-    
-    /* OPTIONAL: Dark mode support */
-    .dark {
-      --background: hsl(222.2 84% 4.9%);
-      --foreground: hsl(210 40% 98%);
-      --card: hsl(222.2 84% 4.9%);
-      --card-foreground: hsl(210 40% 98%);
-      --popover: hsl(222.2 84% 4.9%);
-      --popover-foreground: hsl(210 40% 98%);
-      --primary: hsl(210 100% 50%);
-      --primary-foreground: hsl(222.2 47.4% 11.2%);
-      --secondary: hsl(217.2 32.6% 17.5%);
-      --secondary-foreground: hsl(210 40% 98%);
-      --muted: hsl(217.2 32.6% 17.5%);
-      --muted-foreground: hsl(215 20.2% 65.1%);
-      --accent: hsl(217.2 32.6% 17.5%);
-      --accent-foreground: hsl(210 40% 98%);
-      --destructive: hsl(0 62.8% 30.6%);
-      --destructive-foreground: hsl(210 40% 98%);
-      --border: hsl(217.2 32.6% 17.5%);
-      --input: hsl(217.2 32.6% 17.5%);
-      --ring: hsl(212.7 26.8% 83.9%);
-    }
-
-    body {
-      font-family: var(--font-sans);
-    }
-    
-    /* Loading spinner */
-    #root:empty {
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #root:empty::before {
-      content: '';
-      width: 40px;
-      height: 40px;
-      border: 4px solid #e2e8f0;
-      border-top-color: hsl(210 100% 40%);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-  </style>
+  <meta property="twitter:image" content="/logo.svg" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div id="root"></div>

@@ -8,6 +8,7 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import ItemDetail from "@/pages/ItemDetail";
 import ItemListing from "@/pages/ItemListing";
+import ItemsList from "@/pages/ItemsList";
 import Profile from "@/pages/Profile";
 import Messages from "@/pages/Messages";
 import Notifications from "@/pages/Notifications";
@@ -28,6 +29,7 @@ function Router() {
           <Route path="/register" component={Register} />
           <ProtectedRoute path="/item/new" component={ItemListing} />
           <Route path="/item/:id" component={ItemDetail} />
+          <Route path="/items" component={ItemsList} />
           <ProtectedRoute path="/profile" component={Profile} />
           <ProtectedRoute path="/messages" component={Messages} />
           <ProtectedRoute path="/notifications" component={Notifications} />

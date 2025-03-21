@@ -9,10 +9,9 @@ export default function Footer() {
             <div className="inline-block mb-4 flex items-center">
               <Link href="/">
                 <img 
-                  src="/assets/images/bartertap-logo.png" 
+                  src="/logo.svg" 
                   alt="BarterTap.az" 
-                  className="h-8 mr-2 cursor-pointer"
-                  style={{ maxWidth: "160px" }}
+                  className="h-8 md:h-10 transition-transform hover:scale-105 duration-300"
                 />
               </Link>
             </div>

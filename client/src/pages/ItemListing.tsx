@@ -100,7 +100,7 @@ export default function ItemListing() {
         title: "Item created",
         description: "Your item has been successfully listed.",
       });
-      navigate(`/items/${data.id}`);
+      navigate(`/item/${data.id}`);
     },
     onError: (error) => {
       toast({

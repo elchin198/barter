@@ -28,12 +28,17 @@ const isAuthenticated = (req: Request, res: Response): boolean => {
 // Configure multer for file uploads
 const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'public/uploads/avatars');
+    // Check which type of upload (avatar or item image)
+    const uploadType = req.path.includes('/avatar') ? 'avatars' : 'items';
+    cb(null, `public/uploads/${uploadType}`);
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     const ext = path.extname(file.originalname);
-    cb(null, 'avatar-' + uniqueSuffix + ext);
+    
+    // Prefix filename based on upload type
+    const prefix = req.path.includes('/avatar') ? 'avatar-' : 'item-';
+    cb(null, prefix + uniqueSuffix + ext);
   }
 });
 
@@ -483,6 +488,47 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(image);
     } catch (error) {
       res.status(500).json({ message: 'Failed to add image' });
+    }
+  });
+  
+  // Direct image upload for items
+  app.post('/api/items/:id/upload', upload.single('image'), async (req, res) => {
+    if (!isAuthenticated(req, res)) return;
+    
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+    
+    try {
+      const itemId = parseInt(req.params.id);
+      const userId = req.session.userId!;
+      
+      // Check if item exists and belongs to user
+      const item = await dbStorage.getItem(itemId);
+      if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
+      
+      if (item.userId !== userId) {
+        return res.status(403).json({ message: 'You can only add images to your own items' });
+      }
+      
+      // Get the file path and set as main if it's the first image
+      const filePath = `/uploads/items/${req.file.filename}`;
+      
+      // Check if this is the first image (should be main)
+      const existingImages = await dbStorage.getImagesByItem(itemId);
+      const isMain = existingImages.length === 0;
+      
+      const image = await dbStorage.createImage({
+        itemId,
+        filePath,
+        isMain
+      });
+      
+      res.status(201).json(image);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to upload image' });
     }
   });
   

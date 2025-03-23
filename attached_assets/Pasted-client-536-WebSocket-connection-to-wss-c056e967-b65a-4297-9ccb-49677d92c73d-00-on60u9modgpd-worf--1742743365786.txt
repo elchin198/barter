@@ -1,0 +1,103 @@
+client:536 WebSocket connection to 'wss://c056e967-b65a-4297-9ccb-49677d92c73d-00-on60u9modgpd.worf.replit.dev/?token=JIJzEZBkx-NS' failed: 
+setupWebSocket @ client:536Understand this errorAI
+client:536 Uncaught (in promise) SyntaxError: Failed to construct 'WebSocket': The URL 'wss://localhost:undefined/?token=JIJzEZBkx-NS' is invalid.
+    at setupWebSocket (client:536:19)
+    at fallback (client:509:16)
+    at WebSocket.<anonymous> (client:555:7)Understand this errorAI
+chunk-WERSD76P.js?v=2e7c5b0e:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+/api/auth/me:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 (Unauthorized)Understand this errorAI
+/api/auth/me:1 
+            
+            
+           Failed to load resource: the server responded with a status of 401 (Unauthorized)Understand this errorAI
+queryClient.ts:32 
+            
+            
+           GET https://c056e967-b65a-4297-9ccb-49677d92c73d-00-on60u9modgpd.worf.replit.dev/api/notifications/count 401 (Unauthorized)
+(anonymous) @ queryClient.ts:32
+fetchFn @ @tanstack_react-query.js?v=2e7c5b0e:840
+run @ @tanstack_react-query.js?v=2e7c5b0e:494
+start @ @tanstack_react-query.js?v=2e7c5b0e:536
+fetch @ @tanstack_react-query.js?v=2e7c5b0e:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e7c5b0e:2211
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:2245Understand this errorAI
+queryClient.ts:32 
+            
+            
+           GET https://c056e967-b65a-4297-9ccb-49677d92c73d-00-on60u9modgpd.worf.replit.dev/api/notifications/count 401 (Unauthorized)
+(anonymous) @ queryClient.ts:32
+fetchFn @ @tanstack_react-query.js?v=2e7c5b0e:840
+run @ @tanstack_react-query.js?v=2e7c5b0e:494
+start @ @tanstack_react-query.js?v=2e7c5b0e:536
+fetch @ @tanstack_react-query.js?v=2e7c5b0e:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e7c5b0e:2211
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=2e7c5b0e:2243
+updateTimers_fn @ @tanstack_react-query.js?v=2e7c5b0e:2250
+onQueryUpdate @ @tanstack_react-query.js?v=2e7c5b0e:2206
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:998
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:997
+batch @ @tanstack_react-query.js?v=2e7c5b0e:583
+dispatch_fn @ @tanstack_react-query.js?v=2e7c5b0e:996
+onError @ @tanstack_react-query.js?v=2e7c5b0e:861
+reject @ @tanstack_react-query.js?v=2e7c5b0e:465
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:508
+Promise.catch
+run @ @tanstack_react-query.js?v=2e7c5b0e:498
+start @ @tanstack_react-query.js?v=2e7c5b0e:536
+fetch @ @tanstack_react-query.js?v=2e7c5b0e:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e7c5b0e:2211
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:2245Understand this errorAI
+queryClient.ts:32 
+            
+            
+           GET https://c056e967-b65a-4297-9ccb-49677d92c73d-00-on60u9modgpd.worf.replit.dev/api/notifications/count 401 (Unauthorized)
+(anonymous) @ queryClient.ts:32
+fetchFn @ @tanstack_react-query.js?v=2e7c5b0e:840
+run @ @tanstack_react-query.js?v=2e7c5b0e:494
+start @ @tanstack_react-query.js?v=2e7c5b0e:536
+fetch @ @tanstack_react-query.js?v=2e7c5b0e:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e7c5b0e:2211
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=2e7c5b0e:2243
+updateTimers_fn @ @tanstack_react-query.js?v=2e7c5b0e:2250
+onQueryUpdate @ @tanstack_react-query.js?v=2e7c5b0e:2206
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:998
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:997
+batch @ @tanstack_react-query.js?v=2e7c5b0e:583
+dispatch_fn @ @tanstack_react-query.js?v=2e7c5b0e:996
+onError @ @tanstack_react-query.js?v=2e7c5b0e:861
+reject @ @tanstack_react-query.js?v=2e7c5b0e:465
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:508
+Promise.catch
+run @ @tanstack_react-query.js?v=2e7c5b0e:498
+start @ @tanstack_react-query.js?v=2e7c5b0e:536
+fetch @ @tanstack_react-query.js?v=2e7c5b0e:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e7c5b0e:2211
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:2245
+setInterval
+updateRefetchInterval_fn @ @tanstack_react-query.js?v=2e7c5b0e:2243
+updateTimers_fn @ @tanstack_react-query.js?v=2e7c5b0e:2250
+onQueryUpdate @ @tanstack_react-query.js?v=2e7c5b0e:2206
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:998
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:997
+batch @ @tanstack_react-query.js?v=2e7c5b0e:583
+dispatch_fn @ @tanstack_react-query.js?v=2e7c5b0e:996
+onError @ @tanstack_react-query.js?v=2e7c5b0e:861
+reject @ @tanstack_react-query.js?v=2e7c5b0e:465
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:508
+Promise.catch
+run @ @tanstack_react-query.js?v=2e7c5b0e:498
+start @ @tanstack_react-query.js?v=2e7c5b0e:536
+fetch @ @tanstack_react-query.js?v=2e7c5b0e:926
+executeFetch_fn @ @tanstack_react-query.js?v=2e7c5b0e:2211
+(anonymous) @ @tanstack_react-query.js?v=2e7c5b0e:2245Understand this errorAI
+queryClient.ts:32 
+            
+            
+           GET https://c056e967-b65a-4297-9ccb-49677d92c73d-00-on60u9modgpd.worf.replit.dev/api/notifications/count 401 (Unauthorized)

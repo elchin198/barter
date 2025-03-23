@@ -73,7 +73,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   wss.on('connection', (ws: WebSocket, req) => {
-    const userId = parseInt(new URL(req.url || '', 'http://localhost').searchParams.get('userId') || '0');
+    // Extract userId from URL query parameters
+    const url = req.url || '';
+    const urlParams = new URLSearchParams(url.split('?')[1] || '');
+    const userId = parseInt(urlParams.get('userId') || '0');
     
     if (userId > 0) {
       clients.set(userId, ws);

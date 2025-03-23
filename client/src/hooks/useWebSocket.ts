@@ -18,11 +18,12 @@ export function useWebSocket() {
 
     const connect = () => {
       if (user && user.id && !socketRef.current) {
-        const wsUrl = new URL('/api/ws', window.location.href);
-        wsUrl.protocol = wsUrl.protocol.replace('http', 'ws');
-        wsUrl.searchParams.append('userId', user.id.toString());
+        // Use the current server and port for WebSocket connection
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const host = window.location.host; 
+        const wsUrl = `${protocol}//${host}/api/ws?userId=${user.id}`;
         
-        ws = new WebSocket(wsUrl.toString());
+        ws = new WebSocket(wsUrl);
         socketRef.current = ws;
 
         ws.addEventListener('open', () => {

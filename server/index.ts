@@ -6,6 +6,11 @@ import fs from "fs";
 import dotenv from "dotenv";
 import cors from "cors";
 import { configureSession } from "./session";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Load environment variables from .env file in production
 dotenv.config();
@@ -65,6 +70,10 @@ app.use((req, res, next) => {
 
   next();
 });
+
+// Serve locales folder for translations
+const localesPath = path.join(process.cwd(), 'public/locales');
+app.use('/locales', express.static(localesPath));
 
 (async () => {
   const server = await registerRoutes(app);

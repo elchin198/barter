@@ -1,18 +1,41 @@
-import { Link } from "wouter";
+import { useState } from "react";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Search, ArrowRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Search, ArrowRight, ShoppingBag, BarChart3, ShieldCheck, Clock } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function HeroSection() {
   const { user } = useAuth();
+  const [, setLocation] = useLocation();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [category, setCategory] = useState("");
+  const [city, setCity] = useState("");
+  
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const params = new URLSearchParams();
+    if (searchTerm) params.append("search", searchTerm);
+    if (category) params.append("category", category);
+    if (city) params.append("city", city);
+    
+    setLocation(`/items?${params.toString()}`);
+  };
   
   return (
-    <section className="py-16 md:py-24 overflow-hidden relative bg-gray-900 text-white">
+    <section className="pt-16 pb-20 md:pt-20 md:pb-28 overflow-hidden relative bg-gray-900 text-white">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 opacity-90 z-0"></div>
+      <div className="absolute inset-0 bg-[url('/barter-pattern.svg')] opacity-5 z-0"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
+            <Badge className="mb-6 bg-blue-700/50 text-blue-100 hover:bg-blue-700/60 py-1 px-3 rounded-full">
+              <Clock className="mr-1.5 h-3.5 w-3.5" />
+              Əşya mübadiləsi 24/7
+            </Badge>
+            
             <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
               <span className="text-blue-300">Əşyalarınızı dəyişdirin,</span> pul xərcləmədən istədiyinizi əldə edin
             </h1>
@@ -39,39 +62,49 @@ export default function HeroSection() {
               
               <Link href="/how-it-works">
                 <Button variant="outline" size="lg" className="border-white text-white hover:bg-blue-800">
-                  Daha Ətraflı <ArrowRight className="ml-2 h-4 w-4" />
+                  Necə İşləyir <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             </div>
             
-            <div className="mt-10 flex items-center">
-              <div className="flex -space-x-2">
-                <div className="w-10 h-10 rounded-full border-2 border-blue-300 bg-blue-700 flex items-center justify-center overflow-hidden">
-                  <span className="font-bold text-white text-xs">RN</span>
+            <div className="grid grid-cols-2 gap-4 mt-10">
+              <div className="flex items-start">
+                <div className="bg-blue-700/30 p-2 rounded-lg mr-3">
+                  <ShoppingBag className="h-5 w-5 text-blue-200" />
                 </div>
-                <div className="w-10 h-10 rounded-full border-2 border-blue-300 bg-blue-700 flex items-center justify-center overflow-hidden">
-                  <span className="font-bold text-white text-xs">LH</span>
-                </div>
-                <div className="w-10 h-10 rounded-full border-2 border-blue-300 bg-blue-700 flex items-center justify-center overflow-hidden">
-                  <span className="font-bold text-white text-xs">MK</span>
-                </div>
-                <div className="w-10 h-10 rounded-full border-2 border-blue-300 bg-blue-700 flex items-center justify-center overflow-hidden">
-                  <span className="font-bold text-white text-xs">AQ</span>
+                <div>
+                  <h3 className="font-medium text-white mb-1">Pulsuz mübadilə</h3>
+                  <p className="text-sm text-gray-300">Sadəcə elanlar yaradın və dəyişdirin</p>
                 </div>
               </div>
-              <div className="ml-4">
-                <p className="text-sm font-medium text-gray-200">1000+ istifadəçi artıq platformaya qoşulub</p>
-                <div className="flex mt-1">
-                  {[1, 2, 3, 4, 5].map((star) => (
-                    <svg 
-                      key={star}
-                      xmlns="http://www.w3.org/2000/svg" 
-                      className="h-4 w-4 text-yellow-300 fill-current" 
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
+              
+              <div className="flex items-start">
+                <div className="bg-blue-700/30 p-2 rounded-lg mr-3">
+                  <BarChart3 className="h-5 w-5 text-blue-200" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-white mb-1">Ən çox çeşid</h3>
+                  <p className="text-sm text-gray-300">Yüzlərlə kateqoriya, minlərlə əşya</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="bg-blue-700/30 p-2 rounded-lg mr-3">
+                  <ShieldCheck className="h-5 w-5 text-blue-200" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-white mb-1">Təhlükəsiz əməliyyat</h3>
+                  <p className="text-sm text-gray-300">İstifadəçi reytinq sistemi</p>
+                </div>
+              </div>
+              
+              <div className="flex items-start">
+                <div className="bg-blue-700/30 p-2 rounded-lg mr-3">
+                  <Clock className="h-5 w-5 text-blue-200" />
+                </div>
+                <div>
+                  <h3 className="font-medium text-white mb-1">24/7 Aktiv</h3>
+                  <p className="text-sm text-gray-300">Hər zaman və hər yerdə əlçatan</p>
                 </div>
               </div>
             </div>
@@ -81,58 +114,74 @@ export default function HeroSection() {
             <div className="absolute -top-6 -left-6 w-36 h-36 bg-blue-100 rounded-full filter blur-xl opacity-70"></div>
             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-indigo-100 rounded-full filter blur-xl opacity-70"></div>
             
-            <div className="relative bg-white p-6 rounded-2xl shadow-xl overflow-hidden">
+            <div className="relative bg-white p-8 rounded-2xl shadow-xl overflow-hidden">
               <div className="absolute -right-20 -top-20 w-40 h-40 bg-blue-50 rounded-full"></div>
               <div className="absolute -left-16 -bottom-16 w-36 h-36 bg-indigo-50 rounded-full"></div>
               
               <h3 className="font-bold text-xl mb-6 relative text-black">Nə axtarırsınız?</h3>
               
-              <div className="space-y-4 relative">
-                <div className="flex items-center border rounded-md px-3 py-2 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100">
+              <form onSubmit={handleSearch} className="space-y-4 relative">
+                <div className="flex items-center border rounded-md px-3 py-3 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-100">
                   <Search className="h-5 w-5 text-gray-400 mr-2" />
                   <input 
                     type="text"
                     placeholder="Axtarış sözləri..." 
                     className="flex-1 border-0 focus:ring-0 focus:outline-none text-gray-700"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                   />
                 </div>
                 
-                <select className="w-full border border-gray-300 rounded-md px-3 py-2 appearance-none focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-gray-700">
+                <select 
+                  className="w-full border border-gray-300 rounded-md px-3 py-3 appearance-none focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-gray-700"
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value)}
+                >
                   <option value="">Kateqoriya seçin</option>
-                  <option value="electronics">Elektronika</option>
-                  <option value="clothing">Geyim</option>
-                  <option value="books">Kitablar</option>
-                  <option value="home">Ev və bağ</option>
-                  <option value="sports">İdman</option>
-                  <option value="toys">Oyuncaqlar</option>
-                  <option value="vehicles">Nəqliyyat</option>
-                  <option value="collectibles">Kolleksiya</option>
+                  <option value="Elektronika">Elektronika</option>
+                  <option value="Geyim">Geyim</option>
+                  <option value="Kitablar">Kitablar</option>
+                  <option value="Ev və bağ">Ev və bağ</option>
+                  <option value="İdman">İdman</option>
+                  <option value="Oyuncaqlar">Oyuncaqlar</option>
+                  <option value="Nəqliyyat">Nəqliyyat</option>
+                  <option value="Kolleksiya">Kolleksiya</option>
                 </select>
                 
-                <select className="w-full border border-gray-300 rounded-md px-3 py-2 appearance-none focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-gray-700">
+                <select 
+                  className="w-full border border-gray-300 rounded-md px-3 py-3 appearance-none focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 text-gray-700"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                >
                   <option value="">Yer seçin</option>
-                  <option value="baku">Bakı</option>
-                  <option value="ganja">Gəncə</option>
-                  <option value="sumgait">Sumqayıt</option>
-                  <option value="mingachevir">Mingəçevir</option>
-                  <option value="other">Digər</option>
+                  <option value="Bakı">Bakı</option>
+                  <option value="Gəncə">Gəncə</option>
+                  <option value="Sumqayıt">Sumqayıt</option>
+                  <option value="Mingəçevir">Mingəçevir</option>
+                  <option value="Digər">Digər</option>
                 </select>
                 
-                <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
+                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-6">
                   Axtar
                 </Button>
-              </div>
+              </form>
               
               <div className="mt-6 pt-6 border-t border-gray-100 relative">
                 <p className="text-gray-600 text-sm mb-3">Populyar axtarışlar:</p>
                 <div className="flex flex-wrap gap-2">
                   {['Velosiped', 'Telefon', 'Kitab', 'Mebel', 'Geyim'].map((tag) => (
-                    <span 
+                    <button
                       key={tag}
-                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-2 rounded-full cursor-pointer transition"
+                      type="button"
+                      onClick={() => {
+                        setSearchTerm(tag);
+                        setCategory("");
+                        setCity("");
+                      }}
+                      className="text-xs bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-3 rounded-full cursor-pointer transition"
                     >
                       {tag}
-                    </span>
+                    </button>
                   ))}
                 </div>
               </div>

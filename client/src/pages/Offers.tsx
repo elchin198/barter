@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation, Link } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -353,6 +353,21 @@ function OfferCard({ offer, viewMode, onAccept, onReject, onComplete }: OfferCar
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [detailsOpen, setDetailsOpen] = useState(false);
+  const [canReview, setCanReview] = useState(false);
+  const [showReviewForm, setShowReviewForm] = useState(false);
+  
+  // Check if user can review offer
+  const { data: reviewData } = useQuery<{ canReview: boolean }>({
+    queryKey: [`/api/offers/${offer.id}/can-review`],
+    enabled: offer.status === "completed",
+  });
+  
+  // Update canReview state when data changes
+  useEffect(() => {
+    if (reviewData) {
+      setCanReview(reviewData.canReview);
+    }
+  }, [reviewData]);
   
   // Format date
   const formatDate = (date: Date) => {
@@ -397,6 +412,31 @@ function OfferCard({ offer, viewMode, onAccept, onReject, onComplete }: OfferCar
 
   return (
     <div>
+      {/* Review form dialog */}
+      <Dialog open={showReviewForm} onOpenChange={setShowReviewForm}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>{t('ratings.leaveReviewTitle')}</DialogTitle>
+            <DialogDescription>
+              {t('ratings.leaveReviewDescription')}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <ReviewForm 
+            offerId={offer.id} 
+            toUser={otherUser}
+            onReviewSubmitted={() => {
+              setShowReviewForm(false);
+              queryClient.invalidateQueries({ queryKey: [`/api/offers/${offer.id}/can-review`] });
+              toast({
+                title: t('ratings.reviewSubmitted'),
+                description: t('ratings.reviewSubmittedDescription'),
+              });
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+      
       <Card className="overflow-hidden">
         <CardHeader className="pb-2">
           <div className="flex justify-between items-start">
@@ -714,6 +754,21 @@ function OfferCard({ offer, viewMode, onAccept, onReject, onComplete }: OfferCar
                 >
                   <Check className="h-4 w-4 mr-1" />
                   {t('offers.markAsCompleted')}
+                </Button>
+              </>
+            ) : offer.status === "completed" && canReview ? (
+              <>
+                <Button variant="outline" onClick={() => setDetailsOpen(false)}>
+                  {t('common.close')}
+                </Button>
+                <Button 
+                  onClick={() => {
+                    setShowReviewForm(true);
+                    setDetailsOpen(false);
+                  }}
+                >
+                  <Star className="h-4 w-4 mr-1" />
+                  {t('ratings.leaveReview')}
                 </Button>
               </>
             ) : (

@@ -286,12 +286,16 @@ export default function HowItWorks() {
       <div className="mt-12 text-center">
         <h2 className="text-3xl font-bold mb-6">Barterlərə başlamağa hazırsınız?</h2>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button size="lg" className="px-8 bg-blue-600 hover:bg-blue-700">
-            Əşya Əlavə Et
-          </Button>
-          <Button variant="outline" size="lg" className="px-8 border-blue-600 text-blue-600 hover:bg-blue-50">
-            Əşyaları Gəz
-          </Button>
+          <Link href="/item/new">
+            <Button size="lg" className="px-8 bg-blue-600 hover:bg-blue-700">
+              Əşya Əlavə Et
+            </Button>
+          </Link>
+          <Link href="/items">
+            <Button variant="outline" size="lg" className="px-8 border-blue-600 text-blue-600 hover:bg-blue-50">
+              Əşyaları Gəz
+            </Button>
+          </Link>
         </div>
       </div>
       

@@ -1,0 +1,31 @@
+X-Powered-By: PHP/8.3.16 Content-type: text/html; charset=UTF-8
+PHP logo
+PHP Version 8.3.16
+System	Linux de-fra-web1800.main-hosting.eu 5.14.0-503.16.1.el9_5.x86_64 #1 SMP PREEMPT_DYNAMIC Fri Dec 13 01:47:05 EST 2024 x86_64
+Build Date	Jan 15 2025 00:00:00
+Build System	Linux buildfarm03-new.corp.cloudlinux.com 4.18.0-553.8.1.el8_10.x86_64 #1 SMP Tue Jul 2 07:26:33 EDT 2024 x86_64 x86_64 x86_64 GNU/Linux
+Configure Command	'./configure' '--disable-dependency-tracking' '--prefix=/usr' '--exec-prefix=/usr' '--bindir=/usr/bin' '--sbindir=/usr/sbin' '--sysconfdir=/etc' '--datadir=/usr/share' '--includedir=/usr/include' '--libdir=/usr/lib64' '--libexecdir=/usr/libexec' '--sharedstatedir=/var/lib' '--mandir=/usr/share/man' '--infodir=/usr/share/info' '--build=x86_64-redhat-linux-gnu' '--host=x86_64-redhat-linux-gnu' '--target=x86_64-redhat-linux-gnu' '--program-prefix=' '--prefix=/opt/alt/php83' '--exec-prefix=/opt/alt/php83' '--bindir=/opt/alt/php83/usr/bin' '--sbindir=/opt/alt/php83/usr/sbin' '--sysconfdir=/opt/alt/php83/etc' '--datadir=/opt/alt/php83/usr/share' '--includedir=/opt/alt/php83/usr/include' '--libdir=/opt/alt/php83/usr/lib64' '--libexecdir=/opt/alt/php83/usr/libexec' '--localstatedir=/var' '--sharedstatedir=/usr/com' '--mandir=/opt/alt/php83/usr/share/man' '--infodir=/opt/alt/php83/usr/share/info' '--cache-file=../config.cache' '--with-libdir=lib64' '--with-config-file-path=/opt/alt/php83/etc' '--with-config-file-scan-dir=/opt/alt/php83/link/conf' '--disable-debug' '--enable-calendar' '--enable-exif' '--enable-ftp' '--enable-huge-code-pages' '--enable-jit' '--enable-shared=yes' '--enable-shmop' '--enable-static=no' '--enable-xml' '--with-bz2' '--with-freetype=/usr' '--with-gettext' '--with-gmp=shared' '--with-gnu-ld=yes' '--with-iconv' '--with-jpeg=/usr' '--with-layout=GNU' '--with-mhash' '--with-password-argon2=/usr' '--with-pcre-jit' '--with-pic' '--with-readline' '--with-webp=/opt/alt/libwebp' '--with-xpm=/usr' '--with-zlib' '--with-zlib-dir=/usr' '--without-gdbm' '--without-pear' '--with-curl=/usr' '--with-openssl-dir=/usr' '--with-openssl=/usr' '--with-pcre-dir=/usr' '--with-avif' '--with-kerberos' '--with-apxs2' '--enable-fpm' '--with-fpm-systemd' '--enable-litespeed' '--enable-bcmath=shared' '--enable-dba=shared' '--with-db4=/usr' '--enable-dom=shared' '--enable-fileinfo=shared' '--enable-gd=shared' '--enable-intl=shared' '--enable-mbregex' '--enable-mbstring=shared' '--enable-mysqlnd=shared' '--enable-opcache' '--enable-pcntl' '--enable-pdo=shared' '--enable-phar=shared' '--enable-posix=shared' '--enable-soap=shared' '--enable-sockets=shared' '--enable-sysvsem=shared' '--enable-sysvshm=shared' '--enable-sysvmsg=shared' '--enable-xmlreader=shared' '--enable-xmlwriter=shared' '--with-enchant=shared,/usr' '--with-external-gd' '--with-mysql-sock=/var/lib/mysql/mysql.sock' '--with-mysqli=shared,mysqlnd' '--with-pdo-mysql=shared,mysqlnd' '--with-pdo-odbc=shared,unixODBC,/usr' '--with-pspell=shared' '--with-tidy=shared,/usr' '--with-unixODBC=shared,/usr' '--with-zip=shared' '--with-pdo-pgsql=shared,/usr' '--with-pgsql=shared,/usr' '--with-imap=shared,/usr' '--with-imap-ssl=/usr' '--with-ldap=shared,/usr' '--with-ldap-sasl' '--with-pdo-dblib=shared,/usr' '--with-snmp=shared,/usr' '--with-pdo-sqlite=shared,/opt/alt/sqlite/usr' '--with-sqlite3=/opt/alt/sqlite/usr' '--with-pdo-oci=shared,instantclient,/usr/lib/oracle/21/client64/lib' '--with-sodium=shared,/usr' '--with-ffi=shared,/usr' '--with-pdo-firebird=shared' '--with-xsl=shared,/usr' 'build_alias=x86_64-redhat-linux-gnu' 'host_alias=x86_64-redhat-linux-gnu' 'target_alias=x86_64-redhat-linux-gnu' 'PKG_CONFIG=/usr/bin/pkg-config' 'PKG_CONFIG_PATH=/opt/alt/sqlite/usr/lib64/pkgconfig:/opt/alt/libxml2/usr/lib64/pkgconfig:/opt/alt/libicu71/usr/lib64/pkgconfig:/opt/alt/libgd/lib64/pkgconfig::/usr/lib64/pkgconfig:/usr/share/pkgconfig' 'CFLAGS=-O2 -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -march=x86-64-v2 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -Dmp_bitcnt_t=long -fno-strict-aliasing -Wno-pointer-sign -I/opt/alt/libxml2/usr/include/libxml2 -I/opt/alt/libicu71/usr/include -I/opt/alt/libgd/include -I/usr/include/libpng16 -I/usr/include/freetype2 -I/usr/include/harfbuzz -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include/sysprof-4 -pthread -DAVIF_DLL -mshstk -fcf-protection' 'CXXFLAGS=-O2 -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -march=x86-64-v2 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection' 'KERBEROS_CFLAGS=-I/usr/include' 'KERBEROS_LIBS=-L/usr/lib64' 'WEBP_LIBS=-L/opt/alt/libwebp/lib64 -Wl,-rpath=/opt/alt/libwebp/lib64' 'SASL_CFLAGS=-I/usr/include' 'SASL_LIBS=-L/usr/lib64' 'LT_SYS_LIBRARY_PATH=/usr/lib64:'
+Server API	CGI/FastCGI
+Virtual Directory Support	disabled
+Configuration File (php.ini) Path	/opt/alt/php83/etc
+Loaded Configuration File	/opt/alt/php83/etc/php.ini
+Scan this dir for additional .ini files	/opt/alt/php83/link/conf
+Additional .ini files parsed	/opt/alt/php83/link/conf/alt_php.ini
+PHP API	20230831
+PHP Extension	20230831
+Zend Extension	420230831
+Zend Extension Build	API420230831,NTS
+PHP Extension Build	API20230831,NTS
+Debug Build	no
+Thread Safety	disabled
+Zend Signal Handling	enabled
+Zend Memory Manager	enabled
+Zend Multibyte Support	provided by mbstring
+Zend Max Execution Timers	disabled
+IPv6 Support	enabled
+DTrace Support	disabled
+Registered PHP Streams	https, ftps, compress.zlib, compress.bzip2, php, file, glob, data, http, ftp, phar, zip
+Registered Stream Socket Transports	tcp, udp, unix, udg, ssl, tls, tlsv1.0, tlsv1.1, tlsv1.2, tlsv1.3
+Registered Stream Filters	zlib.*, bzip2.*, convert.iconv.*, string.rot13, string.toupper, string.tolower, convert.*, consumed, dechunk
+Zend logoThis program makes use of the Zend Scripting Language Engine:
+Zend Engine v4.3.16, Copyright (c) Zend Technologies with Zend OPcache v8.3.16, Copyright (c), by Zend Technologies

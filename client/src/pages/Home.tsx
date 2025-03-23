@@ -1,35 +1,13 @@
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, Star } from "lucide-react";
 import { Link } from "wouter";
-import ItemCard from "../components/items/ItemCard";
-import { useAuth } from "../context/AuthContext";
-import { Item } from "@shared/schema";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import HeroSection from "@/components/home/HeroSection";
 import FeatureSection from "@/components/home/FeatureSection";
 import CategorySlider from "@/components/home/CategorySlider";
-
-const CATEGORIES = [
-  "Bütün kateqoriyalar",
-  "Elektronika",
-  "Geyim",
-  "Kitablar",
-  "Ev və bağ",
-  "İdman",
-  "Oyuncaqlar",
-  "Nəqliyyat",
-  "Kolleksiya",
-  "Digər"
-];
+import RecentItems from "@/components/home/RecentItems";
 
 export default function Home() {
-  // Filtered search query
-  const { data: items = [], isLoading } = useQuery<(Item & { mainImage?: string })[]>({
-    queryKey: ['/api/items'],
-  });
-  
   return (
     <div>
       {/* Hero section */}
@@ -53,51 +31,7 @@ export default function Home() {
       </section>
       
       {/* Recent items section */}
-      <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Son əlavə edilən əşyalar</h2>
-            <Link href="/items" className="text-blue-600 hover:underline flex items-center">
-              Hamısını göstər <ArrowRight className="ml-1 h-4 w-4" />
-            </Link>
-          </div>
-          
-          {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-                <Card key={i} className="overflow-hidden">
-                  <div className="h-48 bg-gray-200 animate-pulse" />
-                  <CardContent className="p-4">
-                    <div className="h-6 bg-gray-200 rounded animate-pulse mb-2" />
-                    <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4" />
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          ) : items.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {items.slice(0, 8).map((item) => (
-                <ItemCard key={item.id} item={item} />
-              ))}
-            </div>
-          ) : (
-            <div className="bg-white border border-dashed border-gray-300 rounded-xl p-12 text-center">
-              <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Star className="h-10 w-10 text-blue-400" />
-              </div>
-              <h3 className="text-xl font-bold mb-2">Hələ ki, heç bir əşya əlavə edilməyib</h3>
-              <p className="text-gray-600 mb-6">
-                İlk əşyanı əlavə edən siz olun və barterə başlayın!
-              </p>
-              <Link href="/items/new">
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  Əşya Əlavə Et
-                </Button>
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
+      <RecentItems />
       
       {/* How it works section */}
       <section className="py-16 bg-white">
@@ -159,7 +93,7 @@ export default function Home() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="bg-white overflow-visible relative">
+            <div className="bg-white overflow-visible relative rounded-xl shadow">
               <div className="absolute -top-5 left-1/2 transform -translate-x-1/2">
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -174,7 +108,7 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              <CardContent className="p-6 pt-10">
+              <div className="p-6 pt-10">
                 <p className="text-gray-700 italic mb-6">
                   "Artıq lazım olmayan əşyalarımı yeni şeylərə dəyişmək üçün mükəmməl platformadır. Platformanın istifadəsi çox rahat və intuitiv, mesajlaşma sistemi də çox əlverişlidir."
                 </p>
@@ -187,10 +121,10 @@ export default function Home() {
                     <p className="text-sm text-gray-500">Bakı, Azərbaycan</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
             
-            <Card className="bg-white overflow-visible relative">
+            <div className="bg-white overflow-visible relative rounded-xl shadow">
               <div className="absolute -top-5 left-1/2 transform -translate-x-1/2">
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -205,7 +139,7 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              <CardContent className="p-6 pt-10">
+              <div className="p-6 pt-10">
                 <p className="text-gray-700 italic mb-6">
                   "Köhnə velosipedimi yeni kompüter aksesuarlarına dəyişdim və pul xərcləmədən istədiyim əşyaları əldə etmək çox əla oldu. Təhlükəsizlik təminatları və dəstək xidməti də çox yaxşıdır."
                 </p>
@@ -218,10 +152,10 @@ export default function Home() {
                     <p className="text-sm text-gray-500">Gəncə, Azərbaycan</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
             
-            <Card className="bg-white overflow-visible relative">
+            <div className="bg-white overflow-visible relative rounded-xl shadow">
               <div className="absolute -top-5 left-1/2 transform -translate-x-1/2">
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((star) => (
@@ -236,7 +170,7 @@ export default function Home() {
                   ))}
                 </div>
               </div>
-              <CardContent className="p-6 pt-10">
+              <div className="p-6 pt-10">
                 <p className="text-gray-700 italic mb-6">
                   "BarterTap.az sayəsində uşaqlarım üçün oyuncaq və geyim tapmaq çox asan oldu. Eyni zamanda evdən istifadə etmədiyimiz əşyalardan da qurtulduq. Ətraf mühit üçün də faydalıdır!"
                 </p>
@@ -249,8 +183,8 @@ export default function Home() {
                     <p className="text-sm text-gray-500">Sumqayıt, Azərbaycan</p>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </section>

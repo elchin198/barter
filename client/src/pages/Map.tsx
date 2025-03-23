@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { Link } from "wouter";
 import LocationMap, { getCityCoordinates } from "@/components/map/LocationMap";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Search, MapPin } from "lucide-react";
+import { Search, MapPin, List, Info } from "lucide-react";
 import { Item } from "@shared/schema";
 import SEO from "@/components/SEO";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { formatRelativeTime } from "@/lib/utils";
 
 interface ItemWithImage extends Item {
   mainImage?: string;
@@ -137,19 +141,91 @@ export default function Map() {
           </Card>
         </div>
 
-        {/* Map */}
+        {/* Map and Items List with Tabs */}
         <div className="lg:col-span-3">
-          <Card>
-            <CardContent className="p-0 overflow-hidden">
-              <LocationMap 
-                markers={mapMarkers}
-                center={getCityCoordinates(selectedCity)}
-                zoom={selectedCity ? 13 : 8}
-                height="600px"
-                interactive={true}
-              />
-            </CardContent>
-          </Card>
+          <Tabs defaultValue="map" className="w-full">
+            <TabsList className="mb-4 grid w-full grid-cols-2">
+              <TabsTrigger value="map" className="flex items-center gap-2">
+                <MapPin className="h-4 w-4" />
+                {t('map.mapView', 'Xəritə görünüşü')}
+              </TabsTrigger>
+              <TabsTrigger value="list" className="flex items-center gap-2">
+                <List className="h-4 w-4" />
+                {t('map.listView', 'Siyahı görünüşü')}
+              </TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="map" className="mt-0 p-0">
+              <Card>
+                <CardContent className="p-0 overflow-hidden">
+                  <LocationMap 
+                    markers={mapMarkers}
+                    center={getCityCoordinates(selectedCity)}
+                    zoom={selectedCity ? 13 : 8}
+                    height="600px"
+                    interactive={true}
+                  />
+                </CardContent>
+              </Card>
+            </TabsContent>
+            
+            <TabsContent value="list" className="mt-0">
+              <Card>
+                <CardContent className="p-4">
+                  {isLoading ? (
+                    <div className="py-4 text-center">
+                      <p>{t('common.loading', 'Yüklənir...')}</p>
+                    </div>
+                  ) : filteredItems.length === 0 ? (
+                    <div className="text-center py-10">
+                      <Info className="h-10 w-10 mx-auto text-gray-400 mb-2" />
+                      <h3 className="font-medium text-lg mb-1">{t('map.noItemsFound', 'Əşya tapılmadı')}</h3>
+                      <p className="text-gray-500">{t('map.tryAdjustingFilters', 'Axtarış parametrlərini dəyişdirməyə çalışın')}</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {filteredItems.map(item => (
+                        <Card key={item.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                          <Link to={`/items/${item.id}`}>
+                            <div className="flex h-full">
+                              <div className="w-1/3 bg-gray-100">
+                                {item.mainImage ? (
+                                  <img 
+                                    src={item.mainImage} 
+                                    alt={item.title} 
+                                    className="h-full w-full object-cover"
+                                  />
+                                ) : (
+                                  <div className="h-full flex items-center justify-center">
+                                    <span className="text-gray-400 text-sm">{t('items.noImage', 'Şəkil yoxdur')}</span>
+                                  </div>
+                                )}
+                              </div>
+                              <div className="w-2/3 p-3">
+                                <div className="flex justify-between items-start mb-1">
+                                  <h3 className="font-medium line-clamp-1">{item.title}</h3>
+                                  <Badge variant="outline" className="ml-2 text-xs">
+                                    {item.category}
+                                  </Badge>
+                                </div>
+                                <p className="text-sm text-gray-600 line-clamp-2 mb-2">{item.description}</p>
+                                <div className="flex items-center text-xs text-gray-500 mt-auto">
+                                  <MapPin className="h-3 w-3 mr-1" />
+                                  <span>{item.city}</span>
+                                  <span className="mx-2">•</span>
+                                  <span>{formatRelativeTime(new Date(item.createdAt))}</span>
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>

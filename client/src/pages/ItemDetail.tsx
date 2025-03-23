@@ -546,6 +546,47 @@ export default function ItemDetail() {
         </div>
       </div>
 
+      {/* Xəritə inteqrasiyası */}
+      {item.city && (
+        <div className="mb-10">
+          <div className="flex items-center mb-4">
+            <MapPin className="mr-2 h-5 w-5 text-blue-600" />
+            <h2 className="text-xl font-semibold">{t('items.locationMap', 'Yerləşmə xəritəsi')}</h2>
+          </div>
+          <Card>
+            <CardContent className="p-4">
+              <div className="bg-gray-50 p-3 mb-4 rounded-md">
+                <p className="text-sm text-gray-700 flex items-center">
+                  <MapPin className="h-4 w-4 mr-1 text-blue-500" />
+                  <span>{item.city}</span>
+                </p>
+              </div>
+              <LocationMap 
+                markers={[{
+                  id: item.id,
+                  position: getCityCoordinates(item.city),
+                  title: item.title,
+                  city: item.city,
+                  imageUrl: item.images[0]?.filePath
+                }]}
+                center={getCityCoordinates(item.city)}
+                zoom={14}
+                height="350px"
+                singleMarker={true}
+              />
+              <div className="mt-3 flex justify-end">
+                <Button size="sm" variant="outline" asChild>
+                  <Link to="/map">
+                    <MapPin className="mr-1 h-4 w-4" />
+                    {t('items.viewAllOnMap', 'Bütün elanları xəritədə göstər')}
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {/* İstifadəçinin digər elanları */}
       <UserItems 
         userId={item.userId}

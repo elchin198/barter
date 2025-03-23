@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { useEffect, useRef, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap, ZoomControl } from 'react-leaflet';
 import * as L from 'leaflet';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
+import { ExternalLink, MapPin } from 'lucide-react';
 
 // Custom marker icon
 const customIcon = new L.Icon({
@@ -77,14 +78,31 @@ export default function LocationMap({
   const { t } = useTranslation();
   const mapRef = useRef(null);
 
+  const [isGoogleMapsOpen, setIsGoogleMapsOpen] = useState(false);
+  
+  // Open in Google Maps
+  const openInGoogleMaps = () => {
+    // For individual marker
+    if (markers.length === 1 && singleMarker) {
+      const [lat, lng] = markers[0].position;
+      window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+    } 
+    // For city center
+    else {
+      const [lat, lng] = center;
+      window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lng}`, '_blank');
+    }
+  };
+
   return (
-    <div style={{ height, width }} className="rounded-lg overflow-hidden border border-gray-200">
+    <div style={{ height, width }} className="rounded-lg overflow-hidden border border-gray-200 relative">
       <MapContainer 
         center={center} 
         zoom={zoom} 
         style={{ height: '100%', width: '100%' }} 
         scrollWheelZoom={interactive}
         dragging={interactive}
+        zoomControl={false}
         ref={mapRef}
       >
         <TileLayer
@@ -92,6 +110,7 @@ export default function LocationMap({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
+        <ZoomControl position="bottomright" />
         <SetViewOnLoad center={center} zoom={zoom} />
         
         {markers.map((marker) => (
@@ -104,7 +123,10 @@ export default function LocationMap({
               <div className="flex flex-col gap-2 py-1">
                 <h3 className="font-semibold text-sm">{marker.title}</h3>
                 {marker.city && (
-                  <p className="text-xs text-gray-600">{marker.city}</p>
+                  <p className="text-xs text-gray-600 flex items-center">
+                    <MapPin className="h-3 w-3 mr-1 text-blue-500" />
+                    {marker.city}
+                  </p>
                 )}
                 {marker.imageUrl && (
                   <div className="w-full h-20 overflow-hidden rounded-md mb-1">
@@ -115,18 +137,45 @@ export default function LocationMap({
                     />
                   </div>
                 )}
-                {!singleMarker && (
-                  <Button asChild size="sm" className="mt-1 w-full">
-                    <Link to={`/items/${marker.id}`}>
-                      {t('items.viewDetails')}
-                    </Link>
+                <div className="flex gap-2 mt-1">
+                  {!singleMarker && (
+                    <Button asChild size="sm" className="flex-1">
+                      <Link to={`/items/${marker.id}`}>
+                        {t('items.viewDetails', 'Ətraflı')}
+                      </Link>
+                    </Button>
+                  )}
+                  <Button 
+                    size="sm" 
+                    variant="outline" 
+                    className="flex items-center gap-1"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.open(`https://www.google.com/maps/search/?api=1&query=${marker.position[0]},${marker.position[1]}`, '_blank');
+                    }}
+                  >
+                    <ExternalLink className="h-3 w-3" />
+                    {t('map.googleMaps', 'Google Maps')}
                   </Button>
-                )}
+                </div>
               </div>
             </Popup>
           </Marker>
         ))}
       </MapContainer>
+      
+      {/* Google Maps button */}
+      {interactive && (
+        <Button 
+          variant="outline" 
+          size="sm" 
+          className="absolute top-3 right-3 z-[1000] bg-white shadow-md flex items-center gap-2"
+          onClick={openInGoogleMaps}
+        >
+          <ExternalLink className="h-3 w-3" />
+          {t('map.openInGoogleMaps', 'Google Maps-da aç')}
+        </Button>
+      )}
     </div>
   );
 }

@@ -14,6 +14,7 @@ import Messages from "@/pages/Messages";
 import Notifications from "@/pages/Notifications";
 import Offers from "@/pages/Offers";
 import HowItWorks from "@/pages/HowItWorks";
+import Map from "@/pages/Map";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProtectedRoute } from "@/lib/protected-route";
 import Navbar from "@/components/layout/Navbar";
@@ -47,6 +48,7 @@ function Router() {
           <Route path="/how-it-works" component={HowItWorks} />
           <Route path="/categories" component={ItemsList} />
           <Route path="/search" component={ItemsList} />
+          <Route path="/map" component={Map} />
           <Route path="/help" component={HowItWorks} />
           <Route component={NotFound} />
         </Switch>

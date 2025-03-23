@@ -202,10 +202,10 @@ export default function Navbar() {
                 <div className="mt-4 mb-6">
                   <Link href="/">
                     <img 
-                      src="/barter logo (1).png" 
+                      src="/barter-logo.png" 
                       alt="BarterTap.az" 
                       className="h-10 mb-4 object-contain"
-                      style={{ filter: 'brightness(1.2) contrast(1.2)' }}
+                      style={{ maxWidth: "180px" }}
                     />
                   </Link>
                 </div>

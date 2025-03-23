@@ -31,9 +31,13 @@ function Router() {
           <Route path="/item/:id" component={ItemDetail} />
           <Route path="/items" component={ItemsList} />
           <ProtectedRoute path="/profile" component={Profile} />
+          <ProtectedRoute path="/my-items" component={Profile} />
           <ProtectedRoute path="/messages" component={Messages} />
           <ProtectedRoute path="/notifications" component={Notifications} />
           <Route path="/how-it-works" component={HowItWorks} />
+          <Route path="/categories" component={ItemsList} />
+          <Route path="/search" component={ItemsList} />
+          <Route path="/help" component={HowItWorks} />
           <Route component={NotFound} />
         </Switch>
       </main>

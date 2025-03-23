@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
@@ -19,11 +20,13 @@ import {
 import { Bell, Menu, MessageSquare, LogOut, User, Plus, Heart, Package, Loader2, HelpCircle, Search } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { Badge } from "@/components/ui/badge";
+import LanguageSwitcher from "./LanguageSwitcher";
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [, navigate] = useLocation();
   const { user, logout } = useAuth();
+  const { t } = useTranslation();
 
   // Get notification count
   const { data: notificationData } = useQuery<{ count: number }>({
@@ -77,28 +80,28 @@ export default function Navbar() {
             <nav className="hidden md:flex items-center gap-6">
               <Link href="/">
                 <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
-                  Ana Səhifə
+                  {t('common.home', 'Ana Səhifə')}
                 </span>
               </Link>
               <Link href="/items">
                 <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
-                  Bütün Əşyalar
+                  {t('common.allItems', 'Bütün Əşyalar')}
                 </span>
               </Link>
               <Link href="/categories">
                 <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
-                  Kateqoriyalar
+                  {t('common.categories', 'Kateqoriyalar')}
                 </span>
               </Link>
               <Link href="/how-it-works">
                 <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
-                  Necə İşləyir
+                  {t('common.howItWorks', 'Necə İşləyir')}
                 </span>
               </Link>
               {user && (
                 <Link href="/items/new">
                   <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
-                    Əşya Əlavə Et
+                    {t('common.addItem', 'Əşya Əlavə Et')}
                   </span>
                 </Link>
               )}
@@ -181,11 +184,16 @@ export default function Navbar() {
               </>
             ) : (
               <div className="hidden md:flex items-center gap-4">
+                <LanguageSwitcher />
                 <Link href="/login">
-                  <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">Daxil ol</Button>
+                  <Button variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">
+                    {t('common.login', 'Daxil ol')}
+                  </Button>
                 </Link>
                 <Link href="/register">
-                  <Button className="bg-blue-600 hover:bg-blue-700">Qeydiyyat</Button>
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    {t('common.register', 'Qeydiyyat')}
+                  </Button>
                 </Link>
               </div>
             )}

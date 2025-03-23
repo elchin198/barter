@@ -5,6 +5,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
+// Import i18n config
+import "./i18n";
 
 // Get system theme preference on first load
 const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;

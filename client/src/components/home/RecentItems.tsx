@@ -49,7 +49,7 @@ export default function RecentItems() {
             <p className="text-gray-600 mb-6">
               İlk əşyanı əlavə edən siz olun və barterə başlayın!
             </p>
-            <Link href="/items/new">
+            <Link href="/item/new">
               <Button className="bg-blue-600 hover:bg-blue-700">
                 Əşya Əlavə Et
               </Button>

@@ -85,11 +85,13 @@ export default function CategorySlider() {
   const nextRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <section className="bg-white pt-4 pb-8 relative">
+    <section className="bg-white pt-6 pb-10 relative">
       <div className="container mx-auto px-4">
-        <div className="relative">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-2xl font-bold text-gray-800">Populyar Kateqoriyalar</h2>
+          
           {/* Navigation buttons */}
-          <div className="absolute right-2 top-0 z-10 flex gap-2 mb-4 md:mb-0">
+          <div className="flex gap-2">
             <Button
               ref={prevRef}
               variant="outline"
@@ -111,48 +113,67 @@ export default function CategorySlider() {
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
-
-          {/* Swiper */}
-          <Swiper
-            modules={[Navigation]}
-            spaceBetween={16}
-            slidesPerView="auto"
-            freeMode={true}
-            grabCursor={true}
-            onSwiper={setSwiperInstance}
-            onSlideChange={(swiper) => {
-              setIsBeginning(swiper.isBeginning);
-              setIsEnd(swiper.isEnd);
-            }}
-            className="mt-4"
-          >
-            {DEFAULT_CATEGORIES.map((category, index) => (
-              <SwiperSlide key={index} style={{ width: 'auto' }}>
-                <Link href={index === 0 ? "/items" : `/items?category=${encodeURIComponent(category.name)}`}>
-                  <div className="flex flex-col items-center">
-                    <div className={`w-16 h-16 rounded-full ${index === 0 ? 'bg-blue-50' : 'bg-gray-50'} flex items-center justify-center mb-2 hover:bg-blue-100 transition-colors duration-300`}>
-                      {typeof category.icon === 'string' ? (
-                        <img 
-                          src={category.icon} 
-                          alt={category.name} 
-                          className="w-8 h-8"
-                          onError={(e) => {
-                            // If image fails to load, show fallback icon
-                            const target = e.target as HTMLImageElement;
-                            target.src = 'https://placehold.co/32x32/667eea/ffffff?text=' + category.name.charAt(0);
-                          }}
-                        />
-                      ) : (
-                        category.icon
-                      )}
-                    </div>
-                    <span className="text-xs font-medium text-center line-clamp-1 max-w-[80px]">{category.name}</span>
-                  </div>
-                </Link>
-              </SwiperSlide>
-            ))}
-          </Swiper>
         </div>
+
+        {/* Swiper */}
+        <Swiper
+          modules={[Navigation]}
+          spaceBetween={16}
+          slidesPerView="auto"
+          freeMode={true}
+          grabCursor={true}
+          onSwiper={setSwiperInstance}
+          onSlideChange={(swiper) => {
+            setIsBeginning(swiper.isBeginning);
+            setIsEnd(swiper.isEnd);
+          }}
+          className="mt-4"
+        >
+          {DEFAULT_CATEGORIES.map((category, index) => (
+            <SwiperSlide key={index} style={{ width: 'auto' }}>
+              <Link href={index === 0 ? "/items" : `/items?category=${encodeURIComponent(category.name)}`}>
+                <div className="flex flex-col items-center group">
+                  <div 
+                    className={`w-20 h-20 rounded-xl ${
+                      index === 0 
+                        ? 'bg-blue-100' 
+                        : index % 5 === 1 
+                          ? 'bg-indigo-100' 
+                          : index % 5 === 2 
+                            ? 'bg-green-100' 
+                            : index % 5 === 3 
+                              ? 'bg-amber-100' 
+                              : 'bg-rose-100'
+                    } flex items-center justify-center mb-3 
+                    shadow-sm group-hover:shadow-md transition-all duration-300
+                    group-hover:scale-105`}
+                  >
+                    {typeof category.icon === 'string' ? (
+                      <img 
+                        src={category.icon} 
+                        alt={category.name} 
+                        className="w-10 h-10"
+                        onError={(e) => {
+                          // If image fails to load, show fallback icon
+                          const target = e.target as HTMLImageElement;
+                          target.src = 'https://placehold.co/32x32/667eea/ffffff?text=' + category.name.charAt(0);
+                        }}
+                      />
+                    ) : (
+                      category.icon
+                    )}
+                  </div>
+                  <span className="text-sm font-medium text-center line-clamp-1 max-w-[90px] group-hover:text-blue-600 transition-colors">
+                    {category.name}
+                  </span>
+                  <span className="text-xs text-gray-500 hidden md:inline-block">
+                    {index === 0 ? '200+ elan' : `${(10 - index) * 15}+ elan`}
+                  </span>
+                </div>
+              </Link>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </section>
   );

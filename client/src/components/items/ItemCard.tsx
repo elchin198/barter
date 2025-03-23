@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, Edit, Trash2 } from "lucide-react";
+import { Heart, Edit, Trash2, Clock } from "lucide-react";
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
+import { formatRelativeTime } from "@/lib/utils";
 import { Item } from "@shared/schema";
 import { useAuth } from "../../context/AuthContext";
 
@@ -117,24 +118,24 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
   const getStatusBadge = () => {
     switch (item.status) {
       case 'active':
-        return <Badge className="bg-green-500">Active</Badge>;
+        return <Badge className="bg-green-500">Aktiv</Badge>;
       case 'pending':
-        return <Badge className="bg-yellow-500">Pending</Badge>;
+        return <Badge className="bg-yellow-500">Gözləyir</Badge>;
       case 'completed':
-        return <Badge className="bg-blue-500">Completed</Badge>;
+        return <Badge className="bg-blue-500">Tamamlanıb</Badge>;
       default:
         return null;
     }
   };
 
   return (
-    <Card className="overflow-hidden h-full flex flex-col">
+    <Card className="overflow-hidden h-full flex flex-col hover:shadow-lg transition-shadow duration-300">
       <Link href={`/items/${item.id}`}>
         <div className="block relative pt-[70%] overflow-hidden bg-gray-100 cursor-pointer">
           <img 
             src={imageUrl} 
             alt={item.title}
-            className="absolute inset-0 w-full h-full object-cover transition-transform hover:scale-105"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 hover:scale-105"
           />
           <div className="absolute top-2 right-2">
             {getStatusBadge()}
@@ -156,13 +157,17 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
               {item.category}
             </span>
             <span className="text-sm text-gray-600 block">
-              Condition: {item.condition}
+              Vəziyyəti: {item.condition}
             </span>
             {item.city && (
               <span className="text-sm text-gray-600 block">
-                Location: {item.city}
+                Yerləşdiyi yer: {item.city}
               </span>
             )}
+            <div className="flex items-center text-sm text-gray-500 mt-2">
+              <Clock className="h-3.5 w-3.5 mr-1" />
+              <span>Yayımlandı: {formatRelativeTime(item.createdAt)}</span>
+            </div>
           </div>
         </div>
       </CardContent>
@@ -171,7 +176,7 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
         {!showActions ? (
           <>
             <Link href={`/items/${item.id}`}>
-              <Button variant="outline" size="sm">View Details</Button>
+              <Button variant="outline" size="sm">Ətraflı bax</Button>
             </Link>
             <Button
               variant="ghost"
@@ -180,7 +185,7 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
                 e.preventDefault();
                 handleFavoriteToggle();
               }}
-              className={favorited ? "text-red-500" : "text-gray-400"}
+              className={favorited ? "text-red-500" : "text-gray-400 hover:text-red-500 transition-colors"}
             >
               <Heart className="h-5 w-5" fill={favorited ? "currentColor" : "none"} />
             </Button>
@@ -188,7 +193,7 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
         ) : (
           <div className="flex gap-2 w-full">
             <Link href={`/items/${item.id}`}>
-              <Button variant="outline" size="sm" className="flex-1">View</Button>
+              <Button variant="outline" size="sm" className="flex-1">Bax</Button>
             </Link>
             <Link href={`/items/edit/${item.id}`}>
               <Button variant="ghost" size="icon">
@@ -203,15 +208,15 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogTitle>Əminsiniz?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete your item listing.
+                    Bu əməliyyat geri qaytarıla bilməz. Bu elanınızı birdəfəlik siləcək.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogCancel>Ləğv et</AlertDialogCancel>
                   <AlertDialogAction onClick={handleDeleteItem} className="bg-red-500 hover:bg-red-600">
-                    Delete
+                    Sil
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>

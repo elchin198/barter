@@ -15,6 +15,7 @@ import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "../context/AuthContext";
 import { Item, User as UserType } from "@shared/schema";
 import StarRating from "@/components/ratings/StarRating";
+import UserItems from "@/components/items/UserItems";
 import SEO from "@/components/SEO";
 import { useTranslation } from "react-i18next";
 
@@ -268,7 +269,7 @@ export default function ItemDetail() {
         pathName={location}
         ogImage={images[0]?.filePath}
       />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Images */}
         <div className="space-y-4">
           <div className="aspect-w-4 aspect-h-3 bg-gray-100 rounded-lg overflow-hidden">
@@ -526,6 +527,14 @@ export default function ItemDetail() {
           )}
         </div>
       </div>
+
+      {/* İstifadəçinin digər elanları */}
+      <UserItems 
+        userId={item.userId}
+        username={item.owner.username} 
+        excludeItemId={item.id}
+        limit={3}
+      />
     </div>
   );
 }

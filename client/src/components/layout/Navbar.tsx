@@ -153,36 +153,36 @@ export default function Navbar() {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Mənim Hesabım</DropdownMenuLabel>
+                    <DropdownMenuLabel>{t('navbar.myAccount', 'Mənim Hesabım')}</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => navigate("/profile")}>
                       <User className="mr-2 h-4 w-4" />
-                      <span>Profil</span>
+                      <span>{t('common.myProfile', 'Profil')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/items/new")}>
                       <Plus className="mr-2 h-4 w-4" />
-                      <span>Əşya Əlavə Et</span>
+                      <span>{t('common.addItem', 'Əşya Əlavə Et')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/messages")}>
                       <MessageSquare className="mr-2 h-4 w-4" />
-                      <span>Mesajlar</span>
+                      <span>{t('common.messages', 'Mesajlar')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/profile?tab=favorites")}>
                       <Heart className="mr-2 h-4 w-4" />
-                      <span>Seçilmişlər</span>
+                      <span>{t('common.favorites', 'Seçilmişlər')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate("/my-items")}>
                       <Package className="mr-2 h-4 w-4" />
-                      <span>Mənim Əşyalarım</span>
+                      <span>{t('common.myItems', 'Mənim Əşyalarım')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => navigate("/help")}>
                       <HelpCircle className="mr-2 h-4 w-4" />
-                      <span>Kömək</span>
+                      <span>{t('common.help', 'Kömək')}</span>
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={handleLogout}>
                       <LogOut className="mr-2 h-4 w-4" />
-                      <span>Çıxış</span>
+                      <span>{t('common.logout', 'Çıxış')}</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -225,22 +225,22 @@ export default function Navbar() {
                 <nav className="flex flex-col gap-4">
                   <Link href="/">
                     <span className="text-lg font-medium hover:text-blue-600 cursor-pointer block py-2">
-                      Ana Səhifə
+                      {t('common.home', 'Ana Səhifə')}
                     </span>
                   </Link>
                   <Link href="/items">
                     <span className="text-lg font-medium hover:text-blue-600 cursor-pointer block py-2">
-                      Bütün Əşyalar
+                      {t('common.allItems', 'Bütün Əşyalar')}
                     </span>
                   </Link>
                   <Link href="/categories">
                     <span className="text-lg font-medium hover:text-blue-600 cursor-pointer block py-2">
-                      Kateqoriyalar
+                      {t('common.categories', 'Kateqoriyalar')}
                     </span>
                   </Link>
                   <Link href="/how-it-works">
                     <span className="text-lg font-medium hover:text-blue-600 cursor-pointer block py-2">
-                      Necə İşləyir
+                      {t('common.howItWorks', 'Necə İşləyir')}
                     </span>
                   </Link>
                   
@@ -256,31 +256,31 @@ export default function Navbar() {
                       <Link href="/profile">
                         <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <User className="mr-2 h-5 w-5" />
-                          Profil
+                          {t('common.myProfile', 'Profil')}
                         </span>
                       </Link>
                       <Link href="/items/new">
                         <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <Plus className="mr-2 h-5 w-5" />
-                          Əşya Əlavə Et
+                          {t('common.addItem', 'Əşya Əlavə Et')}
                         </span>
                       </Link>
                       <Link href="/my-items">
                         <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <Package className="mr-2 h-5 w-5" />
-                          Mənim Əşyalarım
+                          {t('common.myItems', 'Mənim Əşyalarım')}
                         </span>
                       </Link>
                       <Link href="/messages">
                         <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <MessageSquare className="mr-2 h-5 w-5" />
-                          Mesajlar
+                          {t('common.messages', 'Mesajlar')}
                         </span>
                       </Link>
                       <Link href="/notifications">
                         <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <Bell className="mr-2 h-5 w-5" />
-                          Bildirişlər
+                          {t('common.notifications', 'Bildirişlər')}
                           {notificationCount > 0 && (
                             <Badge variant="destructive" className="ml-2">
                               {notificationCount}
@@ -291,13 +291,13 @@ export default function Navbar() {
                       <Link href="/profile?tab=favorites">
                         <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <Heart className="mr-2 h-5 w-5" />
-                          Seçilmişlər
+                          {t('common.favorites', 'Seçilmişlər')}
                         </span>
                       </Link>
                       <Link href="/help">
                         <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <HelpCircle className="mr-2 h-5 w-5" />
-                          Kömək
+                          {t('common.help', 'Kömək')}
                         </span>
                       </Link>
                       
@@ -308,19 +308,19 @@ export default function Navbar() {
                         onClick={handleLogout}
                       >
                         <LogOut className="mr-2 h-5 w-5" />
-                        Çıxış
+                        {t('common.logout', 'Çıxış')}
                       </button>
                     </>
                   ) : (
                     <>
                       <Link href="/login">
                         <Button variant="outline" className="w-full border-blue-600 text-blue-600 hover:bg-blue-50 mb-2">
-                          Daxil ol
+                          {t('common.login', 'Daxil ol')}
                         </Button>
                       </Link>
                       <Link href="/register">
                         <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                          Qeydiyyat
+                          {t('common.register', 'Qeydiyyat')}
                         </Button>
                       </Link>
                     </>

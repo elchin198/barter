@@ -1,7 +1,10 @@
 import { Link } from "wouter";
 import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon, MapPinIcon, PhoneIcon, MailIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
+  
   return (
     <footer className="bg-gray-100 border-t">
       <div className="container mx-auto px-4 py-12">
@@ -17,8 +20,7 @@ export default function Footer() {
               </Link>
             </div>
             <p className="text-gray-600 mb-4 max-w-md">
-              BarterTap.az, Azərbaycanda ən böyük pulsuz əşya mübadiləsi platformasıdır. 
-              Ehtiyacınız olmayan əşyaları istədiyiniz şeylərə dəyişmək və pul xərcləmədən yeni əşyalar əldə etmək imkanı yaradır.
+              {t('footer.description', 'BarterTap.az, Azərbaycanda ən böyük pulsuz əşya mübadiləsi platformasıdır. Ehtiyacınız olmayan əşyaları istədiyiniz şeylərə dəyişmək və pul xərcləmədən yeni əşyalar əldə etmək imkanı yaradır.')}
             </p>
             <div className="flex space-x-4 mt-6">
               <a href="#" className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-full transition">
@@ -37,93 +39,97 @@ export default function Footer() {
           </div>
           
           <div className="md:col-span-1">
-            <h3 className="font-medium text-lg mb-4 text-blue-600">Sürətli Keçidlər</h3>
+            <h3 className="font-medium text-lg mb-4 text-blue-600">{t('footer.quickLinks', 'Sürətli Keçidlər')}</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Ana Səhifə
+                  {t('common.home', 'Ana Səhifə')}
                 </Link>
               </li>
               <li>
                 <Link href="/items" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Bütün Əşyalar
+                  {t('common.allItems', 'Bütün Əşyalar')}
                 </Link>
               </li>
               <li>
                 <Link href="/categories" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Kateqoriyalar
+                  {t('common.categories', 'Kateqoriyalar')}
                 </Link>
               </li>
               <li>
                 <Link href="/how-it-works" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Necə İşləyir
+                  {t('common.howItWorks', 'Necə İşləyir')}
                 </Link>
               </li>
               <li>
                 <Link href="/items/new" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Əşya Əlavə Et
+                  {t('common.addItem', 'Əşya Əlavə Et')}
                 </Link>
               </li>
             </ul>
           </div>
           
           <div className="md:col-span-1">
-            <h3 className="font-medium text-lg mb-4 text-blue-600">Hesab</h3>
+            <h3 className="font-medium text-lg mb-4 text-blue-600">{t('footer.account', 'Hesab')}</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/login" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Daxil ol
+                  {t('common.login', 'Daxil ol')}
                 </Link>
               </li>
               <li>
                 <Link href="/register" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Qeydiyyat
+                  {t('common.register', 'Qeydiyyat')}
                 </Link>
               </li>
               <li>
                 <Link href="/profile" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Mənim Profilim
+                  {t('common.myProfile', 'Mənim Profilim')}
                 </Link>
               </li>
               <li>
                 <Link href="/messages">
-                  <span className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer">Mesajlar</span>
+                  <span className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer">
+                    {t('common.messages', 'Mesajlar')}
+                  </span>
                 </Link>
               </li>
               <li>
                 <Link href="/my-items">
-                  <span className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer">Mənim Əşyalarım</span>
+                  <span className="text-gray-600 hover:text-blue-600 transition-colors cursor-pointer">
+                    {t('common.myItems', 'Mənim Əşyalarım')}
+                  </span>
                 </Link>
               </li>
             </ul>
           </div>
           
           <div className="md:col-span-1">
-            <h3 className="font-medium text-lg mb-4 text-blue-600">Kömək və Dəstək</h3>
+            <h3 className="font-medium text-lg mb-4 text-blue-600">{t('footer.helpSupport', 'Kömək və Dəstək')}</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/faq" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Tez-tez verilən suallar
+                  {t('footer.faq', 'Tez-tez verilən suallar')}
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Bizimlə əlaqə
+                  {t('footer.contact', 'Bizimlə əlaqə')}
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  İstifadə şərtləri
+                  {t('footer.terms', 'İstifadə şərtləri')}
                 </Link>
               </li>
               <li>
                 <Link href="/privacy" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Gizlilik siyasəti
+                  {t('footer.privacy', 'Gizlilik siyasəti')}
                 </Link>
               </li>
               <li>
                 <Link href="/help" className="text-gray-600 hover:text-blue-600 transition-colors">
-                  Kömək mərkəzi
+                  {t('footer.helpCenter', 'Kömək mərkəzi')}
                 </Link>
               </li>
             </ul>
@@ -147,7 +153,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-center text-gray-600">
-              &copy; {new Date().getFullYear()} BarterTap.az. Bütün hüquqlar qorunur.
+              &copy; {new Date().getFullYear()} BarterTap.az. {t('footer.copyright', 'Bütün hüquqlar qorunur.')}
             </p>
           </div>
         </div>

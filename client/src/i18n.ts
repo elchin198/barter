@@ -13,6 +13,7 @@ i18n
   .use(initReactI18next)
   // Initialize i18next
   .init({
+    initAsync: true,
     fallbackLng: 'az',
     debug: true,
     supportedLngs: ['az', 'ru', 'en'],
@@ -24,7 +25,7 @@ i18n
       caches: ['localStorage'],
     },
 
-    // Configure backend
+    // Configure backend for loading translations from public/locales folder
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
@@ -32,23 +33,6 @@ i18n
     // React does not need escaping
     interpolation: {
       escapeValue: false,
-    },
-
-    // Initialize with empty resources to avoid warnings on first load
-    resources: {
-      az: {
-        translation: {
-          common: {
-            home: 'Ana Səhifə',
-            allItems: 'Bütün Əşyalar',
-            categories: 'Kateqoriyalar',
-            howItWorks: 'Necə İşləyir',
-            addItem: 'Əşya Əlavə Et',
-            login: 'Daxil ol',
-            register: 'Qeydiyyat'
-          }
-        }
-      }
     }
   });
 

@@ -115,6 +115,11 @@ export default function Navbar() {
               </Button>
             </Link>
             
+            {/* Language switcher visible always */}
+            <div className="hidden md:flex">
+              <LanguageSwitcher />
+            </div>
+            
             {user ? (
               <>
                 <div className="hidden md:flex items-center gap-4">
@@ -240,6 +245,11 @@ export default function Navbar() {
                   </Link>
                   
                   <div className="border-t my-2"></div>
+
+                  {/* Mobile language switcher */}
+                  <div className="py-2">
+                    <LanguageSwitcher />
+                  </div>
 
                   {user ? (
                     <>

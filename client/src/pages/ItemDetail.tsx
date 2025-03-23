@@ -357,7 +357,7 @@ export default function ItemDetail() {
             <CardContent className="p-0">
               <div className="bg-gray-50 p-3 border-b border-gray-100">
                 <h3 className="text-sm font-medium flex items-center">
-                  <User className="h-4 w-4 mr-2 text-gray-500" />
+                  <UserCircle className="h-4 w-4 mr-2 text-gray-500" />
                   Bu elanı yerləşdirən
                 </h3>
               </div>

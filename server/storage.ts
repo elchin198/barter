@@ -119,6 +119,7 @@ export class MemStorage implements IStorage {
     this.notifications = new Map();
     this.favorites = new Map();
     this.pushSubscriptions = new Map();
+    this.reviews = new Map();
     
     this.currentUserId = 1;
     this.currentItemId = 1;
@@ -130,6 +131,7 @@ export class MemStorage implements IStorage {
     this.currentNotificationId = 1;
     this.currentFavoriteId = 1;
     this.currentPushSubscriptionId = 1;
+    this.currentReviewId = 1;
     
     // Create some demo users
     this.createUser({
@@ -173,7 +175,17 @@ export class MemStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentUserId++;
     const createdAt = new Date();
-    const user: User = { id, ...insertUser, createdAt };
+    const user: User = { 
+      id, 
+      username: insertUser.username,
+      password: insertUser.password,
+      email: insertUser.email,
+      fullName: insertUser.fullName || null,
+      avatar: insertUser.avatar || null,
+      bio: insertUser.bio || null,
+      phone: insertUser.phone || null,
+      createdAt 
+    };
     this.users.set(id, user);
     return user;
   }
@@ -233,7 +245,17 @@ export class MemStorage implements IStorage {
     const id = this.currentItemId++;
     const createdAt = new Date();
     const updatedAt = new Date();
-    const item: Item = { id, ...insertItem, createdAt, updatedAt };
+    const item: Item = { 
+      id, 
+      userId: insertItem.userId,
+      title: insertItem.title,
+      description: insertItem.description,
+      category: insertItem.category,
+      condition: insertItem.condition,
+      status: insertItem.status || "active",
+      createdAt, 
+      updatedAt 
+    };
     this.items.set(id, item);
     return item;
   }
@@ -262,13 +284,19 @@ export class MemStorage implements IStorage {
   async createImage(insertImage: InsertImage): Promise<Image> {
     const id = this.currentImageId++;
     const createdAt = new Date();
-    const image: Image = { id, ...insertImage, createdAt };
+    const image: Image = { 
+      id, 
+      itemId: insertImage.itemId,
+      filePath: insertImage.filePath,
+      isMain: insertImage.isMain || false,
+      createdAt 
+    };
     
     // If this is the first image or isMain is true, make it the main image
-    if (insertImage.isMain) {
+    if (image.isMain) {
       // Reset other main images for this item
       Array.from(this.images.values())
-        .filter(img => img.itemId === insertImage.itemId && img.isMain)
+        .filter(img => img.itemId === image.itemId && img.isMain)
         .forEach(img => {
           this.images.set(img.id, { ...img, isMain: false });
         });
@@ -390,7 +418,7 @@ export class MemStorage implements IStorage {
     
     const conversation: Conversation = {
       id,
-      ...insertConversation,
+      itemId: insertConversation.itemId || null,
       lastMessageAt,
       createdAt
     };
@@ -463,7 +491,10 @@ export class MemStorage implements IStorage {
     
     const message: Message = {
       id,
-      ...insertMessage,
+      conversationId: insertMessage.conversationId,
+      senderId: insertMessage.senderId,
+      content: insertMessage.content,
+      status: insertMessage.status || 'sent',
       createdAt
     };
     
@@ -517,7 +548,12 @@ export class MemStorage implements IStorage {
     
     const offer: Offer = {
       id,
-      ...insertOffer,
+      conversationId: insertOffer.conversationId,
+      fromUserId: insertOffer.fromUserId,
+      toUserId: insertOffer.toUserId,
+      fromItemId: insertOffer.fromItemId,
+      toItemId: insertOffer.toItemId,
+      status: insertOffer.status || 'pending',
       createdAt,
       updatedAt
     };
@@ -696,6 +732,111 @@ export class MemStorage implements IStorage {
     if (!subscription) return false;
     
     return this.pushSubscriptions.delete(subscription.id);
+  }
+
+  // Review methods for reputation system
+  async getReviewById(id: number): Promise<ReviewWithDetails | undefined> {
+    const review = this.reviews.get(id);
+    if (!review) return undefined;
+
+    return this.enrichReview(review);
+  }
+
+  async getReviewsByUser(userId: number, asReviewer: boolean = false): Promise<ReviewWithDetails[]> {
+    const reviews = Array.from(this.reviews.values())
+      .filter(review => asReviewer ? review.fromUserId === userId : review.toUserId === userId);
+    
+    return Promise.all(reviews.map(review => this.enrichReview(review)));
+  }
+
+  async getReviewsByOffer(offerId: number): Promise<ReviewWithDetails[]> {
+    const reviews = Array.from(this.reviews.values())
+      .filter(review => review.offerId === offerId);
+    
+    return Promise.all(reviews.map(review => this.enrichReview(review)));
+  }
+
+  async createReview(insertReview: InsertReview): Promise<Review> {
+    const id = this.currentReviewId++;
+    const createdAt = new Date();
+    
+    const review: Review = {
+      id,
+      fromUserId: insertReview.fromUserId,
+      toUserId: insertReview.toUserId,
+      offerId: insertReview.offerId,
+      rating: insertReview.rating,
+      comment: insertReview.comment || null,
+      createdAt
+    };
+    
+    this.reviews.set(id, review);
+    return review;
+  }
+
+  async canReviewOffer(offerId: number, userId: number): Promise<boolean> {
+    // Get the offer
+    const offer = await this.getOffer(offerId);
+    if (!offer) return false;
+    
+    // Check if user is related to this offer
+    if (offer.fromUserId !== userId && offer.toUserId !== userId) {
+      return false;
+    }
+    
+    // Check if offer is completed
+    if (offer.status !== 'completed') {
+      return false;
+    }
+    
+    // Check if user already reviewed this offer
+    const existingReviews = Array.from(this.reviews.values())
+      .filter(review => 
+        review.offerId === offerId && 
+        review.fromUserId === userId
+      );
+    
+    return existingReviews.length === 0;
+  }
+
+  async getUserRating(userId: number): Promise<UserWithRating> {
+    const user = await this.getUser(userId);
+    if (!user) throw new Error('User not found');
+    
+    // Get all reviews for this user
+    const reviews = Array.from(this.reviews.values())
+      .filter(review => review.toUserId === userId);
+    
+    if (reviews.length === 0) {
+      return {
+        ...user,
+        averageRating: 0,
+        reviewCount: 0
+      };
+    }
+    
+    // Calculate average rating
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const averageRating = totalRating / reviews.length;
+    
+    return {
+      ...user,
+      averageRating,
+      reviewCount: reviews.length
+    };
+  }
+
+  private async enrichReview(review: Review): Promise<ReviewWithDetails> {
+    const fromUser = this.users.get(review.fromUserId)!;
+    const toUser = this.users.get(review.toUserId)!;
+    const offer = this.offers.get(review.offerId)!;
+    
+    return {
+      ...review,
+      fromUser,
+      toUser,
+      offer
+    };
   }
 }
 

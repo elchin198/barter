@@ -20,8 +20,8 @@ export default function Home() {
       <section className="py-10 bg-white">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-bold">Kateqoriyalar üzrə göz atın</h2>
-            <Link href="/items" className="text-blue-600 hover:underline flex items-center text-sm">
+            <h2 className="text-2xl font-bold text-black">Kateqoriyalar üzrə göz atın</h2>
+            <Link href="/items" className="text-blue-600 hover:underline flex items-center text-sm font-medium bg-white rounded-lg px-3 py-1 shadow-sm border border-gray-100">
               Hamısını göstər <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </div>

@@ -16,8 +16,8 @@ export default function RecentItems() {
     <section className="py-12 bg-gray-50">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold">Son əlavə edilən əşyalar</h2>
-          <Link href="/items" className="text-blue-600 hover:underline flex items-center">
+          <h2 className="text-3xl font-bold text-black">Son əlavə edilən əşyalar</h2>
+          <Link href="/items" className="text-blue-600 hover:underline flex items-center font-medium bg-white rounded-lg px-4 py-2 shadow-sm border border-gray-100">
             Hamısını göstər <ArrowRight className="ml-1 h-4 w-4" />
           </Link>
         </div>

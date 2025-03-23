@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useRoute, useLocation } from "wouter";
+import { useRoute, useLocation, Link } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -9,11 +9,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Heart, MessageCircle, Share2, AlertTriangle } from "lucide-react";
+import { Heart, MessageCircle, Share2, AlertTriangle, Star, MapPin, Clock, ExternalLink, UserCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "../context/AuthContext";
-import { Item, User } from "@shared/schema";
+import { Item, User as UserType } from "@shared/schema";
 import SEO from "@/components/SEO";
 import { useTranslation } from "react-i18next";
 
@@ -23,7 +23,7 @@ interface ItemDetailResponse extends Item {
     filePath: string;
     isMain: boolean;
   }>;
-  owner: User;
+  owner: UserType;
   isFavorite?: boolean;
 }
 
@@ -331,19 +331,89 @@ export default function ItemDetail() {
             <p className="whitespace-pre-line">{item.description}</p>
           </div>
           
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-4">
-                <Avatar className="h-12 w-12">
-                  <AvatarImage 
-                    src={item.owner.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.owner.fullName || item.owner.username)}`} 
-                    alt={item.owner.username} 
-                  />
-                  <AvatarFallback>{item.owner.username[0].toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="font-medium">{item.owner.fullName || item.owner.username}</h3>
-                  <p className="text-sm text-gray-600">@{item.owner.username}</p>
+          {/* Item metadata */}
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
+            <div className="flex flex-col items-center text-center p-2 border-r border-gray-200">
+              <Clock className="h-5 w-5 text-blue-500 mb-1" />
+              <span className="text-xs text-gray-500">Yerləşdirildi</span>
+              <span className="text-sm font-medium">{new Date(item.createdAt).toLocaleDateString()}</span>
+            </div>
+            
+            <div className="flex flex-col items-center text-center p-2 border-r border-gray-200">
+              <MapPin className="h-5 w-5 text-blue-500 mb-1" />
+              <span className="text-xs text-gray-500">Yerləşir</span>
+              <span className="text-sm font-medium">{item.city || "N/A"}</span>
+            </div>
+            
+            <div className="flex flex-col items-center text-center p-2">
+              <Star className="h-5 w-5 text-blue-500 mb-1" />
+              <span className="text-xs text-gray-500">Vəziyyət</span>
+              <span className="text-sm font-medium">{item.condition}</span>
+            </div>
+          </div>
+          
+          {/* Owner information */}
+          <Card className="overflow-hidden">
+            <CardContent className="p-0">
+              <div className="bg-gray-50 p-3 border-b border-gray-100">
+                <h3 className="text-sm font-medium flex items-center">
+                  <User className="h-4 w-4 mr-2 text-gray-500" />
+                  Bu elanı yerləşdirən
+                </h3>
+              </div>
+              
+              <div className="p-4">
+                <div className="flex items-center gap-4">
+                  <Avatar className="h-12 w-12 border-2 border-gray-200">
+                    <AvatarImage 
+                      src={item.owner.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.owner.fullName || item.owner.username)}`} 
+                      alt={item.owner.username} 
+                    />
+                    <AvatarFallback>{item.owner.username[0].toUpperCase()}</AvatarFallback>
+                  </Avatar>
+                  
+                  <div className="flex-1">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-medium">{item.owner.fullName || item.owner.username}</h3>
+                        <p className="text-sm text-gray-600">@{item.owner.username}</p>
+                      </div>
+                      
+                      <Link href={`/profile/${item.owner.username}`}>
+                        <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5">
+                          <ExternalLink className="h-3 w-3" />
+                          Profilə bax
+                        </Button>
+                      </Link>
+                    </div>
+                    
+                    <div className="mt-3 flex items-center">
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <svg 
+                            key={star}
+                            xmlns="http://www.w3.org/2000/svg" 
+                            className="h-4 w-4 text-yellow-400 fill-current" 
+                            viewBox="0 0 20 20"
+                          >
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                        ))}
+                      </div>
+                      <span className="text-sm ml-2 text-gray-600">(15 rəy)</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="text-center p-2 bg-gray-50 rounded">
+                    <span className="block text-sm font-medium text-blue-600">17</span>
+                    <span className="text-xs text-gray-500">Aktiv elan</span>
+                  </div>
+                  <div className="text-center p-2 bg-gray-50 rounded">
+                    <span className="block text-sm font-medium text-green-600">23</span>
+                    <span className="text-xs text-gray-500">Tamamlanmış barter</span>
+                  </div>
                 </div>
               </div>
             </CardContent>

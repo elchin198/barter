@@ -1,0 +1,1932 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="title" content="Main page Nextbarter">
+  <meta name="description" content="Main page Nextbarter">
+  <meta name="author" content="Main page Nextbarter">
+  <meta name="csrf-token" content="eZ4Hn57BRpptTp5ZpWSwBA9N0yWyWIi9VXtRTFAM">
+
+  <title>Main page Nextbarter </title>
+
+  <meta property="og:url" content="/">
+  <meta property="og:title" content="Main page Nextbarter">
+  <meta property="og:description" content="Main page Nextbarter">
+  <meta property="og:image" content="/uploads/images/favicon-1708159924.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="60">
+  <meta property="og:image:height" content="60">
+  <meta name="csrf-token" content="eZ4Hn57BRpptTp5ZpWSwBA9N0yWyWIi9VXtRTFAM">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://admin.nextbarter.com/storage/uploads/images/favicon-1708159924.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://admin.nextbarter.com/storage/uploads/images/favicon-1708159924.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="https://admin.nextbarter.com/storage/uploads/images/favicon-1708159924.png" />
+  <link rel="manifest" href="/front/media/site.webmanifest" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Link Swiper's CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.css">
+  <link rel="stylesheet" href="/front/style/style.css?v=165" />
+  
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7BEJGNX86H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-7BEJGNX86H');
+</script>
+
+<script type="text/javascript" class="flasher-js">(function() {    var rootScript = 'https://cdn.jsdelivr.net/npm/@flasher/flasher@1.2.4/dist/flasher.min.js';    var FLASHER_FLASH_BAG_PLACE_HOLDER = {};    var options = mergeOptions([], FLASHER_FLASH_BAG_PLACE_HOLDER);    function mergeOptions(first, second) {        return {            context: merge(first.context || {}, second.context || {}),            envelopes: merge(first.envelopes || [], second.envelopes || []),            options: merge(first.options || {}, second.options || {}),            scripts: merge(first.scripts || [], second.scripts || []),            styles: merge(first.styles || [], second.styles || []),        };    }    function merge(first, second) {        if (Array.isArray(first) && Array.isArray(second)) {            return first.concat(second).filter(function(item, index, array) {                return array.indexOf(item) === index;            });        }        return Object.assign({}, first, second);    }    function renderOptions(options) {        if(!window.hasOwnProperty('flasher')) {            console.error('Flasher is not loaded');            return;        }        requestAnimationFrame(function () {            window.flasher.render(options);        });    }    function render(options) {        if ('loading' !== document.readyState) {            renderOptions(options);            return;        }        document.addEventListener('DOMContentLoaded', function() {            renderOptions(options);        });    }    if (1 === document.querySelectorAll('script.flasher-js').length) {        document.addEventListener('flasher:render', function (event) {            render(event.detail);        });    }    if (window.hasOwnProperty('flasher') || !rootScript || document.querySelector('script[src="' + rootScript + '"]')) {        render(options);    } else {        var tag = document.createElement('script');        tag.setAttribute('src', rootScript);        tag.setAttribute('type', 'text/javascript');        tag.onload = function () {            render(options);        };        document.head.appendChild(tag);    }})();</script>
+
+
+<body>
+
+  <!-- header begin -->
+  <header>
+    <div class="headerLayer"></div>
+    <div class="mobileMenu">
+      <div class="mobileMenuInner">
+        <div class="menuTop">
+          <div class="logo">
+                          <img src="https://admin.nextbarter.com/storage/uploads/images/logo-1708159924.png" alt="Next Barter" />
+                        </div>
+          <button class="closeMenu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 8L8 16M8 8L16 16" stroke="#020817" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="menuAuto">
+
+                    <div class="menuAutoInner">
+            <ul>
+              <li>Company</li>
+              <li>
+                <a href="https://nextbarter.com/blogs"> Blog </a>
+              </li>
+              <li>
+                <a href="https://nextbarter.com/privacy-policy">Privacy & Policy</a>
+              </li>
+              <li>
+                <a href="https://nextbarter.com/terms-conditions">Terms & Conditions</a>
+              </li>
+            </ul>
+            <ul>
+              <li>Learn about us</li>
+              <li>
+                <a href="https://nextbarter.com/about"> About </a>
+              </li>
+              <li>
+                <a href="https://nextbarter.com/contact">Contact</a>
+              </li>
+              <li>
+                <a href="https://nextbarter.com/faq">FAQ</a>
+              </li>
+            </ul>
+          </div>
+          <div class="socials">
+            <a href="https://www.facebook.com/nextbarter">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="#020817" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+            <a href="https://www.instagram.com/nextbartercom/">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17.5 6.5H17.51M7 2H17C19.7614 2 22 4.23858 22 7V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V7C2 4.23858 4.23858 2 7 2ZM16 11.37C16.1234 12.2022 15.9813 13.0522 15.5938 13.799C15.2063 14.5458 14.5931 15.1514 13.8416 15.5297C13.0901 15.9079 12.2384 16.0396 11.4078 15.9059C10.5771 15.7723 9.80976 15.3801 9.21484 14.7852C8.61992 14.1902 8.22773 13.4229 8.09407 12.5922C7.9604 11.7616 8.09207 10.9099 8.47033 10.1584C8.84859 9.40685 9.45419 8.79374 10.201 8.40624C10.9478 8.01874 11.7978 7.87659 12.63 8C13.4789 8.12588 14.2649 8.52146 14.8717 9.12831C15.4785 9.73515 15.8741 10.5211 16 11.37Z" stroke="#020817" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="headerInner">
+        <div class="menuButton">
+          <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 6C0 2.68629 2.68629 0 6 0H34C37.3137 0 40 2.68629 40 6V34C40 37.3137 37.3137 40 34 40H6C2.68629 40 0 37.3137 0 34V6Z" fill="white" />
+            <path d="M12 20H28M12 14H28M12 26H28" stroke="#020817" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <div class="headerLeft">
+          <div class="logo">
+                        <img src="https://admin.nextbarter.com/storage/uploads/images/logo-1708159924.png" alt="Next Barter" />
+                        </div>
+<form action="https://nextbarter.com/search-result" class="searchParent" autocomplete="off">
+    <input type="text" name="search_text" placeholder="Search for something to barter" />
+    <button type="submit" class="searchB">
+        <img src="/front/media/search.svg" alt="search" />
+    </button>
+    <div class="searchList"></div>
+</form>
+        </div>
+        
+
+
+
+                <div class="headerRight">
+          <a href="https://nextbarter.com/login" class="loginButton"> Log in </a>
+          <a href="https://nextbarter.com/register" class="signUpButton"> Sign up </a>
+        </div>
+
+        
+
+      </div>
+    </div>
+
+
+
+  </header>
+  <!-- header end --><section>
+    <!-- mobile search begin -->
+
+    <form action="https://nextbarter.com/search-result" class="searchParent" autocomplete="off">
+    <input type="text" name="search_text" placeholder="Search for something to barter" />
+    <button type="submit" class="searchB">
+        <img src="/front/media/search.svg" alt="search" />
+    </button>
+    <div class="searchList"></div>
+</form>
+        <!-- mobile search end -->
+    <!-- category begin -->
+    <div class="category">
+        <div class="container">
+            <div class="swiper categorySlide">
+                <div class="swiper-wrapper">
+
+                    <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products" class="categorySlideCard allCategoryCard">
+                            <div class="img">
+                                <img src="/front/media/home.svg" alt="Next barter" />
+                            </div>
+                            <p>All</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/services" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/services-1713289350.png" alt="Services" />
+                            </div>
+                            <p>Services</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/books" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1709300347.png" alt="Books" />
+                            </div>
+                            <p>Books</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/electronics" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1710796192.png" alt="Electronics" />
+                            </div>
+                            <p>Electronics</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/vehicles" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1710796151.png" alt="Vehicles" />
+                            </div>
+                            <p>Vehicles</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/clothing" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1710796139.png" alt="Clothing" />
+                            </div>
+                            <p>Clothing</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/real-estate" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1709300425.png" alt="Real estate" />
+                            </div>
+                            <p>Real estate</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/garden" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1709300433.png" alt="Garden" />
+                            </div>
+                            <p>Garden</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/games" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1709300443.png" alt="Games" />
+                            </div>
+                            <p>Games</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/furniture" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1709300450.png" alt="Furniture" />
+                            </div>
+                            <p>Furniture</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/sports" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1709300459.png" alt="Sports" />
+                            </div>
+                            <p>Sports</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/musical" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1709300466.png" alt="Musical" />
+                            </div>
+                            <p>Musical</p>
+                        </a>
+                    </div>
+                                        <div class="swiper-slide">
+                        <a href="https://nextbarter.com/barter-products/other" class="categorySlideCard">
+                            <div class="img">
+                                <img src="https://admin.nextbarter.com/storage/uploads/images/category/-1709300473.png" alt="Other" />
+                            </div>
+                            <p>Other</p>
+                        </a>
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    </div>
+    <!-- category end -->
+    <!-- offers begin -->
+    <div class="offers">
+        <div class="container">
+            <div class="sectionTitle">
+                <a href="https://nextbarter.com/barter-products">All offers</a>
+                <a href="https://nextbarter.com/login" class="blueButton">
+    <img src="/front/media/plus.svg" alt="" />
+    List a new item
+</a>
+            </div>
+            <div class="row">
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2562" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/iphone-12-pro-max-2562" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/iphone-12-pro-max-01734084025.jpg" alt="Next Barter Iphone 12 Pro Max" />
+            <div class="badges blue">Arber Hajrizaj&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$400</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Iphone 12 Pro Max
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Florida</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2561" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/corporate-finance-core-applications-and-principles-2nd-edition-2561" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/corporate-finance-core-applications-and-principles-2nd-edition-01731210678.jpg" alt="Next Barter Corporate Finance: Core Applications and Principles 2nd Edition" />
+            <div class="badges blue">Raul&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$25</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Corporate Finance: Core Applications and Principles 2nd Edition
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Purdue University (Main Campus)</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2560" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/principles-of-managerial-finance-13th-edition-2560" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/principles-of-managerial-finance-13th-edition-01731210046.jpeg" alt="Next Barter Principles of Managerial Finance 13th Edition" />
+            <div class="badges blue">Raul&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$20</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Principles of Managerial Finance 13th Edition
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Purdue University (Main Campus)</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2558" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/corporate-finance-instructor-2558" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/corporate-finance-instructor-01731191347.jpg" alt="Next Barter Corporate Finance Instructor" />
+            <div class="badges blue">Robert&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$100</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Corporate Finance Instructor
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Purdue University (Main Campus)</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2557" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/cengage-learning-india-linear-algebra-and-its-applications-4th-edition-2557" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/cengage-learning-india-linear-algebra-and-its-applications-4th-edition-01731190783.jpg" alt="Next Barter Cengage Learning India Linear Algebra And Its Applications, 4Th Edition" />
+            <div class="badges blue">Susanna&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$25</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Cengage Learning India Linear Algebra And Its Applications, 4Th Edition
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Purdue University (Main Campus)</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2556" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/calculus-early-transcendentals-by-james-stewart-2556" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/calculus-early-transcendentals-by-james-stewart-01731190493.jpg" alt="Next Barter Calculus: Early Transcendentals&quot; by James Stewart" />
+            <div class="badges blue">Kamila&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$220</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Calculus: Early Transcendentals&quot; by James Stewart
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Purdue University (Main Campus)</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2553" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/physical-chemistry-a-molecular-approach-1st-edition-2553" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/physical-chemistry-a-molecular-approach-1st-edition-01731190042.jpg" alt="Next Barter Physical Chemistry: A Molecular Approach 1st Edition" />
+            <div class="badges blue">David&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$77</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Physical Chemistry: A Molecular Approach 1st Edition
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Purdue University (Main Campus)</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2552" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/engineering-of-mathematics-2552" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/engineering-of-mathematics-01731189426.jpg" alt="Next Barter Engineering of mathematics" />
+            <div class="badges blue">amanda&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$38</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Engineering of mathematics
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Purdue University (Main Campus)</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2551" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/reconceptualizing-mathematics-2551" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/reconceptualizing-mathematics-01731188818.jpg" alt="Next Barter Reconceptualizing Mathematics" />
+            <div class="badges blue">Marcus&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$100</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Reconceptualizing Mathematics
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Purdue University (Main Campus)</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2550" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/organic-chemistry-plus-mastering-chemistry-with-pearsonaccess-card-package-8th-edition-2550" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/organic-chemistry-plus-mastering-chemistry-with-pearsonaccess-card-package-8th-edition-01731188356.jpg" alt="Next Barter Organic Chemistry Plus Mastering Chemistry with Pearson,Access Card Package (8th Edition)" />
+            <div class="badges blue">Amasti&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$146</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Organic Chemistry Plus Mastering Chemistry with Pearson,Access Card Package (8th Edition)
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Indiana</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2541" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/apple-airpods-with-charging-case-2nd-generation-2541" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/apple-airpods-with-charging-case-2nd-generation-01729061813.jpg" alt="Next Barter Apple AirPods with charging case 2nd generation" />
+            <div class="badges blue">Melissa&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$129</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Apple AirPods with charging case 2nd generation
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Texas</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2535" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/starbucks-cup-2535" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/starbucks-cup-01727647184.png" alt="Next Barter Starbucks cup" />
+            <div class="badges blue">Turgut&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$5</strong> </span> <span>💸 Partial Cash </span> </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Starbucks cup
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2527" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/the-last-version-of-nexus-with-samples-2527" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/the-last-version-of-nexus-with-samples-01727396855.jpg" alt="Next Barter The last version of Nexus WITH SAMPLES" />
+            <div class="badges blue">Arslan&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$450</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                The last version of Nexus WITH SAMPLES
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2526" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/ableton-11-with-a-key-2526" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/ableton-11-with-a-key-01727396757.jpg" alt="Next Barter Ableton 11 WITH A KEY" />
+            <div class="badges blue">Arslan&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$120</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Ableton 11 WITH A KEY
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2525" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/learn-how-to-produce-a-music-2525" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/learn-how-to-produce-a-music-01727396635.jpg" alt="Next Barter Learn how to produce a Music" />
+            <div class="badges blue">Arslan&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$30</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Learn how to produce a Music
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2524" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/707-sample-pack-2524" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/707-sample-pack-01727396518.jpg" alt="Next Barter 707 Sample pack" />
+            <div class="badges blue">Arslan&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$10</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                707 Sample pack
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2521" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/download-the-ableton-with-key-2521" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/download-the-ableton-with-key-01727396042.jpg" alt="Next Barter Download the Ableton with Key" />
+            <div class="badges blue">Arslan&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$80</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Download the Ableton with Key
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2496" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/bio-202-exam-1-notes-2496" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/bio-202-exam-1-notes-01727392396.jpg" alt="Next Barter Bio-202 Exam 1 Notes" />
+            <div class="badges blue">Arslan&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$25</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Bio-202 Exam 1 Notes
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2495" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/bio-202-exam-1-preparation-2495" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/bio-202-exam-1-preparation-01727392336.jpg" alt="Next Barter Bio-202 Exam 1 preparation" />
+            <div class="badges blue">Arslan&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$50</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Bio-202 Exam 1 preparation
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2494" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/michael-kors-wallet-2494" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/michael-kors-wallet-01727392099.jpg" alt="Next Barter Michael Kors wallet" />
+            <div class="badges blue">Arslan&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$55</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                Michael Kors wallet
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                                <div class="xl-4 lg-4 md-4 sm-12">
+                    <div class="offerCard  product-data">
+    <input type="hidden" value="2493" class="prod-id">
+    <div class="offerCardTop">
+                <a href="https://nextbarter.com/barter-product/the-arabian-nights-2493" class="img">
+            <img src="https://nextbarter.com/storage/uploads/product-images/the-arabian-nights-01727391859.jpg" alt="Next Barter The Arabian Nights" />
+            <div class="badges blue">Arslan&#039;s offer</div>
+        </a>
+                        <a href="https://nextbarter.com/login" class="offerCardAdd">
+            <img src="/front/media/plus+.svg" alt="plus" />
+            <div class="badges purple">Make an offer</div>
+        </a>
+            </div>
+    <div class="offerCardBody">
+        <div class="offerCardBodyTop">
+            <div class="priceTopBody"><span> valued: <strong>$10</strong> </span>  </div>
+            <p></p>
+        </div>
+        <div class="offerCardBodyBottom">
+            <span>
+                The Arabian Nights
+            </span>
+
+            <div>
+                <img src="/front/media/pin.svg" alt="pin" />
+                <p>Arizona State University</p>
+            </div>
+
+            
+
+
+        </div>
+
+        
+        
+        
+            </div>
+</div>                </div>
+                            </div>
+            <a href="https://nextbarter.com/barter-products" class="seeMore blueButton">All offers </a>
+        </div>
+    </div>
+    <!-- offers end -->
+    <!-- seo begin -->
+
+    <div class="container">
+        <div class="seoDescription">
+            <h2>Welcome to NextBarter: Your Ultimate Platform for Product Barter and Goods Exchange</h2>
+            <div class="seoDescriptionInner">
+                <p>
+                <p>At NextBarter, we believe in the power of exchange to create new opportunities, foster connections, and unlock value. Our platform is your gateway to a vibrant community of traders, where products become currency, and goods find new homes through seamless exchanges.</p>
+<h3>Explore Endless Possibilities:</h3>
+<p>Discover the endless possibilities of product barter and goods exchange on NextBarter. Whether you're looking to declutter your space, find unique treasures, or simply connect with like-minded individuals, our platform offers a diverse marketplace where goods of all kinds find their match.</p>
+<h3>Join Our Thriving Community:</h3>
+<p>Become part of our thriving community of traders and enthusiasts. Connect with individuals who share your passion for exchange and collaboration. Our barter marketplace is fueled by the energy of our members, each bringing their own unique offerings and expertise to the table.</p>
+<h3>Experience Seamless Trading:</h3>
+<p>With NextBarter, trading goods has never been easier. Our intuitive platform makes it simple to list your items, browse offerings from others, and initiate trades with just a few clicks. Say goodbye to the hassle of traditional buying and selling and hello to a new way of exchanging goods.</p>
+<h3>Unlock Value in Every Exchange:</h3>
+<p>Every exchange on NextBarter is an opportunity to unlock value. Whether you're trading goods for goods, services, or experiences, each transaction creates value for both parties involved. Join us in reshaping the economy of exchange and unlocking the potential of every product.</p>
+<h3>Join NextBarter Today:</h3>
+<p>Ready to embark on your journey of product barter and goods exchange? Join NextBarter today and become part of a dynamic community of traders, innovators, and collaborators. Whether you're a seasoned trader or new to the world of barter, there's a place for you on our platform. Sign up now and start exploring the possibilities with NextBarter.</p>
+                </p>
+            </div>
+            <button type="button" class="blueButton"><span class="more">more</span><span class="less">less</span></button>
+        </div>
+    </div>
+    <!-- seo end -->
+    </section>
+
+<!-- barter add offers popup begin -->
+<div class="popup addPopup">
+    <div class="layer"></div>
+    <div class="popupContainRight">
+        <div class="popupContainRightInner">
+            <div class="popupContainRighTop">
+                <div class="closeButton mobileClose">
+                    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 6C0 2.68629 2.68629 0 6 0H34C37.3137 0 40 2.68629 40 6V34C40 37.3137 37.3137 40 34 40H6C2.68629 40 0 37.3137 0 34V6Z" fill="#F1F5F9" />
+                        <path d="M15.9999 17.3335L13.3333 20.0002M13.3333 20.0002L15.9999 22.6668M13.3333 20.0002H26.6666" stroke="#0F172A" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </div>
+                <span>List a new item</span>
+                <button type="button" class="closeButton">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18 6L6 18M6 6L18 18" stroke="#020817" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                </button>
+            </div>
+            <div class="popupContainRightBody">
+                <div class="popupContainRightAuto">
+                    <form class="editPopupInner"  id="addProductForm" method="POST" action="https://nextbarter.com/new-product" enctype="multipart/form-data">
+                        <input type="hidden" name="_token" value="eZ4Hn57BRpptTp5ZpWSwBA9N0yWyWIi9VXtRTFAM">                        <div class="imgSection">
+                            <div class="upload__btn">
+                                <input type="file" id="files" name="files[]"  class=" upload__inputfile" multiple required accept="image/png, image/jpeg, image/jpg"/>
+                                
+                                                                <svg width="33" height="32" viewBox="0 0 33 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M0.5 16C0.5 7.16344 7.66344 0 16.5 0C25.3366 0 32.5 7.16344 32.5 16C32.5 24.8366 25.3366 32 16.5 32C7.66344 32 0.5 24.8366 0.5 16Z" fill="#F1F5F9" fill-opacity="0.5" />
+                                    <path d="M16.5 11.3335V20.6668M11.8334 16.0002H21.1667" stroke="#020817" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <p>max 8 images (4mb per image)</p>
+                        </div>
+                        <div class="inputChild">
+                            <label for="product_name">Product name</label>
+                            <input type="text" id="product_name" name="product_name" value="" maxlength="121" class="input " />
+
+                            <div class="the-count_comment">
+                                <span class="current_comment">0</span>
+                                <p class="maximum_comment">/120</p>
+                            </div>
+                                                    </div>
+                        <div class="inputChild">
+                            <label for="description">Description</label>
+                            <textarea id="description" name="description" class="input "></textarea>
+                            <div class="the-count_comment">
+                                <span class="current_comment">0</span>
+                                <p class="maximum_comment">/800</p>
+                            </div>
+                                                    </div>
+                        <div class="inputChild">
+                            <label for="price">Price</label>
+                            <input type="number" id="price" name="price"  class="input " onkeydown="return event.keyCode !== 69"  />
+                            <div class="dollar">$</div>
+                                                    </div>
+                        <div class="check_new">
+                            <div class="checkbox-parent">
+                                <p>I agree to receive or make partial cash payments to complete barter exchanges when the values of the items or services differ.</p>
+                                <input type="checkbox" name="check_new" value="1" class="acceptCheck" />
+                                <span class="checkmark"></span>
+                            </div>
+                        </div>
+                        <div class="inputChild">
+                            <label for="category_id">Category</label>
+                            <div class="selectBox">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 6L8 10L12 6" stroke="#09090B" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+
+                                <select id="category_id" name="category_id" class="input " >
+                                    <option value=""></option>
+                                                                        <option value="475" >Services</option>
+                                                                        <option value="463" >Books</option>
+                                                                        <option value="464" >Electronics</option>
+                                                                        <option value="465" >Vehicles</option>
+                                                                        <option value="466" >Clothing</option>
+                                                                        <option value="467" >Real estate</option>
+                                                                        <option value="468" >Garden</option>
+                                                                        <option value="469" >Games</option>
+                                                                        <option value="470" >Furniture</option>
+                                                                        <option value="471" >Sports</option>
+                                                                        <option value="472" >Musical</option>
+                                                                        <option value="473" >Other</option>
+                                                                    </select>
+                            </div>
+                                                    </div>
+                        <div class="inputChild">
+                            <label for="condition">Condition</label>
+                            <div class="selectBox">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 6L8 10L12 6" stroke="#09090B" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+
+                                <select id="condition" name="condition" class="input " >
+                                    <option value="" ></option>
+                                    <option value="new" >New</option>
+                                    <option value="old">Used</option>
+                                </select>
+                            </div>
+                                                    </div>
+                        <div class="inputChild">
+                            <label for="city_id">State</label>
+                            <div class="selectBox">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M4 6L8 10L12 6" stroke="#09090B" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+
+                               <select id="city_id" name="city_id" class="input ">
+                                    <option value=""></option>
+                                                                                                                                                                                                                                                                                                                                                            <option value="76" style="background-color: #f0f0f0; color: #333; font-weight: bold;">
+                                                Arizona State University
+                                            </option>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+                                                                                                                        <option value="27">Alabama</option>
+                                                                                                                                                                <option value="28">Alaska</option>
+                                                                                                                                                                <option value="25">Arizona</option>
+                                                                                                                                                                                                                                            <option value="29">Arkansas</option>
+                                                                                                                                                                <option value="30">California</option>
+                                                                                                                                                                <option value="31">Colorado</option>
+                                                                                                                                                                <option value="32">Connecticut</option>
+                                                                                                                                                                <option value="33">Delaware</option>
+                                                                                                                                                                <option value="34">District of Columbia</option>
+                                                                                                                                                                <option value="35">Florida</option>
+                                                                                                                                                                <option value="36">Georgia</option>
+                                                                                                                                                                <option value="37">Hawaii</option>
+                                                                                                                                                                <option value="26">Idaho</option>
+                                                                                                                                                                <option value="38">Illinois</option>
+                                                                                                                                                                <option value="39">Indiana</option>
+                                                                                                                                                                <option value="40">Iowa</option>
+                                                                                                                                                                <option value="41">Kansas</option>
+                                                                                                                                                                <option value="42">Kentucky</option>
+                                                                                                                                                                <option value="43">Louisiana</option>
+                                                                                                                                                                <option value="44">Maine</option>
+                                                                                                                                                                <option value="45">Maryland</option>
+                                                                                                                                                                <option value="46">Massachusetts</option>
+                                                                                                                                                                <option value="47">Michigan</option>
+                                                                                                                                                                <option value="48">Minnesota</option>
+                                                                                                                                                                <option value="49">Mississippi</option>
+                                                                                                                                                                <option value="50">Missouri</option>
+                                                                                                                                                                <option value="51">Montana</option>
+                                                                                                                                                                <option value="52">Nebraska</option>
+                                                                                                                                                                <option value="53">Nevada</option>
+                                                                                                                                                                <option value="54">New Hampshire</option>
+                                                                                                                                                                <option value="55">New Jersey</option>
+                                                                                                                                                                <option value="56">New Mexico</option>
+                                                                                                                                                                <option value="57">New York</option>
+                                                                                                                                                                <option value="58">North Carolina</option>
+                                                                                                                                                                <option value="59">North Dakota</option>
+                                                                                                                                                                <option value="60">Ohio</option>
+                                                                                                                                                                <option value="61">Oklahoma</option>
+                                                                                                                                                                <option value="62">Oregon</option>
+                                                                                                                                                                <option value="63">Pennsylvania</option>
+                                                                                                                                                                <option value="77">Purdue University (Main Campus)</option>
+                                                                                                                                                                <option value="64">Rhode Island</option>
+                                                                                                                                                                <option value="65">South Carolina</option>
+                                                                                                                                                                <option value="66">South Dakota</option>
+                                                                                                                                                                <option value="67">Tennessee</option>
+                                                                                                                                                                <option value="68">Texas</option>
+                                                                                                                                                                <option value="69">Utah</option>
+                                                                                                                                                                <option value="70">Vermont</option>
+                                                                                                                                                                <option value="71">Virginia</option>
+                                                                                                                                                                <option value="72">Washington</option>
+                                                                                                                                                                <option value="73">West Virginia</option>
+                                                                                                                                                                <option value="74">Wisconsin</option>
+                                                                                                                                                                <option value="75">Wyoming</option>
+                                                                                                            </select>
+
+                            </div>
+                                                    </div>
+                        <div class="accceptParentPopup">
+                            <div class="accept">
+                                <div class="checkbox-parent">
+                                    <p>Accept that people may offer products with lower prices than your offer</p>
+                                    <input type="checkbox" name="accept_check" class="acceptCheck" />
+                                    <span class="checkmark"></span>
+                                </div>
+                            </div>
+                            <button type="submit" class="blueButton deactive">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M13.3333 4L6 11.3333L2.66666 8" stroke="#F8FAFC" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                List item
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- barter add popup end -->
+
+
+
+
+
+<div class="popup acceptPopup">
+    <div class="layer"></div>
+    <div class="popupContainRight">
+      <div class="popupContainRightInner">
+        <div class="popupContainRighTop">
+          <div class="closeButton mobileClose">
+            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 6C0 2.68629 2.68629 0 6 0H34C37.3137 0 40 2.68629 40 6V34C40 37.3137 37.3137 40 34 40H6C2.68629 40 0 37.3137 0 34V6Z" fill="#F1F5F9"></path>
+              <path d="M15.9999 17.3335L13.3333 20.0002M13.3333 20.0002L15.9999 22.6668M13.3333 20.0002H26.6666" stroke="#0F172A" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <span> Accepted item</span>
+          <button type="button" class="closeButton">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18 6L6 18M6 6L18 18" stroke="#020817" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </button>
+        </div>
+        <div class="acceptPopupContent">
+          <div class="acceptedItem">
+            <div class="badge">Accepted</div>
+            <p>
+              This is offerer contact information. You can access this
+              information within the
+              <strong> Accepted Offers </strong> section at any time.
+            </p>
+            <div class="infoCard">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M19 21V19C19 17.9391 18.5786 16.9217 17.8284 16.1716C17.0783 15.4214 16.0609 15 15 15H9C7.93913 15 6.92172 15.4214 6.17157 16.1716C5.42143 16.9217 5 17.9391 5 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#020817" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <div id="name_surname"></div>
+              
+            </div>
+            <a id="tel_href" href="tel:+1345334543453" class="infoCard">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14.0501 2.0001C16.0883 2.21487 17.9922 3.11889 19.4469 4.56268C20.9016 6.00646 21.8199 7.90351 22.0501 9.9401M14.0501 6.0001C15.0336 6.19403 15.9361 6.67912 16.6404 7.39241C17.3448 8.10569 17.8185 9.01423 18.0001 10.0001M22.0001 16.9201V19.9201C22.0012 20.1986 21.9441 20.4743 21.8326 20.7294C21.721 20.9846 21.5574 21.2137 21.3521 21.402C21.1469 21.5902 20.9046 21.7336 20.6408 21.8228C20.377 21.912 20.0974 21.9452 19.8201 21.9201C16.7429 21.5857 13.7871 20.5342 11.1901 18.8501C8.77388 17.3148 6.72539 15.2663 5.19006 12.8501C3.50003 10.2413 2.4483 7.27109 2.12006 4.1801C2.09507 3.90356 2.12793 3.62486 2.21656 3.36172C2.30518 3.09859 2.44763 2.85679 2.63482 2.65172C2.82202 2.44665 3.04986 2.28281 3.30385 2.17062C3.55783 2.05843 3.8324 2.00036 4.11006 2.0001H7.11006C7.59536 1.99532 8.06585 2.16718 8.43382 2.48363C8.80179 2.80008 9.04213 3.23954 9.11005 3.7201C9.23668 4.68016 9.47151 5.62282 9.81006 6.5301C9.9446 6.88802 9.97372 7.27701 9.89396 7.65098C9.81421 8.02494 9.62892 8.36821 9.36005 8.6401L8.09006 9.9101C9.51361 12.4136 11.5865 14.4865 14.0901 15.9101L15.3601 14.6401C15.6319 14.3712 15.9752 14.1859 16.3492 14.1062C16.7231 14.0264 17.1121 14.0556 17.4701 14.1901C18.3773 14.5286 19.32 14.7635 20.2801 14.8901C20.7658 14.9586 21.2095 15.2033 21.5266 15.5776C21.8437 15.9519 22.0122 16.4297 22.0001 16.9201Z" stroke="#020817" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+             
+              <div id="tel"></div>
+            </a>
+            <a id="email_href" href="/cdn-cgi/l/email-protection#d3babdb5bc93bdb6aba7b1b2a1a7b6a1fdb0bcbe" class="infoCard">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22 7L13.03 12.7C12.7213 12.8934 12.3643 12.996 12 12.996C11.6357 12.996 11.2787 12.8934 10.97 12.7L2 7M4 4H20C21.1046 4 22 4.89543 22 6V18C22 19.1046 21.1046 20 20 20H4C2.89543 20 2 19.1046 2 18V6C2 4.89543 2.89543 4 4 4Z" stroke="#020817" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+
+              <div id="email"></div>
+            </a>
+            <button type="button" class="match-detail senfOfferDetail" id="user_info">
+              View offer details
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="#020817" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </button>
+          </div>
+          <div class="purpleSection">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="#9747FF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+
+            When you contact, tell offerer that you got the information from
+            Nextbarter
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- footer begin -->
+<footer>
+  <div class="container">
+    <div class="footerTop">
+      <div class="row">
+        <div class="xl-4 lg-4 md-4 sm-12">
+          <div class="footerTopLeft">
+            <div class="logo">
+                            <img src="/front/media/logoW.svg" alt="Next Barter" />
+                          </div>
+            <p>
+              Get the stuff you love in exchange for selling your unwanted items.
+            </p>
+                
+            <form method="POST" class="inputSub" action="https://nextbarter.com/email-post">
+                <input type="hidden" name="_token" value="eZ4Hn57BRpptTp5ZpWSwBA9N0yWyWIi9VXtRTFAM">              <input type="email" name="email" placeholder="Email address" />
+              <button type="submit">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3.3335 8.00016H12.6668M12.6668 8.00016L8.00016 3.3335M12.6668 8.00016L8.00016 12.6668" stroke="#E2E8F0" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </form>
+            <div class="socials">
+              <a href="https://www.facebook.com/nextbarter" target="_blank">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 2H15C13.6739 2 12.4021 2.52678 11.4645 3.46447C10.5268 4.40215 10 5.67392 10 7V10H7V14H10V22H14V14H17L18 10H14V7C14 6.73478 14.1054 6.48043 14.2929 6.29289C14.4804 6.10536 14.7348 6 15 6H18V2Z" stroke="#E2E8F0" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+              <a href="https://www.instagram.com/nextbartercom/" target="_blank">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M17.5 6.5H17.51M7 2H17C19.7614 2 22 4.23858 22 7V17C22 19.7614 19.7614 22 17 22H7C4.23858 22 2 19.7614 2 17V7C2 4.23858 4.23858 2 7 2ZM16 11.37C16.1234 12.2022 15.9813 13.0522 15.5938 13.799C15.2063 14.5458 14.5931 15.1514 13.8416 15.5297C13.0901 15.9079 12.2384 16.0396 11.4078 15.9059C10.5771 15.7723 9.80976 15.3801 9.21484 14.7852C8.61992 14.1902 8.22773 13.4229 8.09407 12.5922C7.9604 11.7616 8.09207 10.9099 8.47033 10.1584C8.84859 9.40685 9.45419 8.79374 10.201 8.40624C10.9478 8.01874 11.7978 7.87659 12.63 8C13.4789 8.12588 14.2649 8.52146 14.8717 9.12831C15.4785 9.73515 15.8741 10.5211 16 11.37Z" stroke="#E2E8F0" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="xl-2 lg-2 md-2 sm-12"></div>
+        <div class="xl-3 lg-3 md-3 sm-12">
+          <ul>
+            <li>Learn about us</li>
+            <li><a href="https://nextbarter.com/about"> About </a></li>
+            <li><a href="https://nextbarter.com/contact"> Contact </a></li>
+            <li><a href="https://nextbarter.com/faq"> FAQ </a></li>
+          </ul>
+        </div>
+        <div class="xl-3 lg-3 md-3 sm-12">
+          <ul>
+            <li>Company</li>
+            <li><a href="https://nextbarter.com/blogs"> BLOG </a></li>
+            <li><a href="https://nextbarter.com/privacy-policy"> Privacy &amp; Policy </a></li>
+            <li><a href="https://nextbarter.com/terms-conditions"> Terms &amp; Conditions </a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footerBottom">
+    <div class="container">
+      <span>© All Rights Reserved | 2025 - www.nextbarter.com</span>
+      <a href="https://one.az/" target="_blank"> One Studio </a>
+    </div>
+  </div>
+</footer>
+<!-- footer end -->
+<!-- Swiper JS -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
+<script src="/front/script/mask.js?v=2"></script>
+<script src="/front/script/swiper.js?v=5"></script>
+<script src="/front/script/imageUpload.js?v=233"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+<script src="/front/script/main.js?v=48"></script>
+<script>
+  $(document).ready(function() {
+    $("#phone").inputmask({
+      mask: "+1(999)-999-9999",
+    });
+  });
+</script>
+
+
+
+
+
+<script>
+    $(document).ready(function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        
+
+        $(document).on('click', '.add-to-wishlist', function(e) {
+            e.preventDefault();
+            // alert('add');
+            var prod_id = $(this).closest('.product-data').find('.prod-id').val();
+            // alert(prod_id);
+            $.ajax({
+                method: "POST",
+                url: 'https://nextbarter.com/add-to-wishlist',
+                data: {
+                    'prod_id': prod_id,
+                },
+                success: function(response) {
+                  
+                  $('#wishlist-'+prod_id).prop('checked', true);
+                    $('#wishlist-'+prod_id).attr('class', 'delete-wishlist');
+                    // $('#count_wishlist').text(response.count_wishlist);
+                    // $('.data_wishlist').html(response.data_wishlist);
+                    // $('#wishlist-icon-'+prod_id).attr('class', 'icon an an-heart');
+                    // $('#wishlist-a-'+prod_id).attr('class', 'btn-icon wishlist delete-wishlist rounded');
+                    // $('#wishlist-a-'+prod_id).attr('data-id', prod_id);
+                    // toastr.success('Bəyəndikərimə Əlavə Olundu');
+                    // $('#minicart-drawer').modal('show');
+                }
+            });
+        })
+
+        $(document).on('click', '.delete-wishlist', function(e) {
+            e.preventDefault();
+            // alert('delete');
+            var prod_id = $(this).closest('.product-data').find('.prod-id').val();
+            $.ajax({
+                method: "POST",
+                url: 'https://nextbarter.com/delete-from-wishlist',
+                data: {
+                    'prod_id': prod_id,
+                },
+                success: function(response) {
+                  $('#wishlist-'+prod_id).prop('checked', false);
+                    $('#wishlist-'+prod_id).attr('class', 'add-to-wishlist');
+                    // $('#count_wishlist').text(response.count_wishlist);
+                    // $('.data_wishlist').html(response.data_wishlist);
+                    // $('#wishlist-icon-'+prod_id).attr('class', 'icon an an-heart-l');
+                    // $('#wishlist-a-'+prod_id).attr('class', 'btn-icon wishlist add-to-wishlist rounded');
+                    // $('#wishlist-a-'+prod_id).attr('data-id', prod_id);
+                    // toastr.success('Siyahıdan Silindi');
+
+
+                }
+            });
+        })
+    });
+
+
+
+    
+</script>
+
+
+
+<script>
+    function setProductId(productId) {
+        // Tüm gizli input alanlarının değerlerini güncelle
+        var inputFields = document.querySelectorAll("[class^='select_offer_prod_id_1']");
+        inputFields.forEach(function(inputField) {
+            inputField.value = productId;
+        });
+    }
+    
+    
+</script>
+
+
+
+
+
+
+<!-- match popup begin -->
+  <div class="popup matchPopup">
+      <div class="layer"></div>
+      <div class="popupContainRight" id="matchPopup">
+
+      </div>
+  </div>
+  <!-- match popup end -->
+<!-- success mobile alert -->
+<div class="popup successMobile">
+  <div class="layer"></div>
+  <div class="alertPopup">
+    <div class="closeButton">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M26 14L14 26M14 14L26 26" stroke="#020817" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <span> Successful </span>
+    <p>
+      Your item has been successfully listed. Now, other users can make
+      offers on your item.
+    </p>
+    <div class="successButton">
+      <div class="blueButton">Back to Home</div>
+      <div class="listAdd">
+        <svg width="17" height="16" viewBox="0 0 17 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.50016 3.3335V12.6668M3.8335 8.00016H13.1668" stroke="#0F172A" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+
+        List another item
+      </div>
+    </div>
+  </div>
+</div>
+<!-- success mobile  alert --><!-- delete alert -->
+<div class="popup deleteAlert  ">
+  <div class="layer"></div>
+  <div class="alertPopup">
+    <div class="closeButton">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="#020817" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <span> Success </span>
+    <p></p>
+
+  </div>
+</div>
+<!-- delete alert -->
+
+
+
+
+<!-- delete alert -->
+<div class="popup deleteAlert  ">
+  <div class="layer"></div>
+  <div class="alertPopup">
+    <div class="closeButton">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6L18 18" stroke="#020817" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <span> Error </span>
+    <p></p>
+
+  </div>
+</div>
+<!-- delete alert -->
+
+
+
+<script>
+function infoPopup(page, offer, prod_1, prod_2) {
+    var url = "https://nextbarter.com/get-offer-ajax";
+    $.ajax({
+        type: 'GET',
+        url: url,
+        data: {
+            page: page,
+            offer: offer,
+            prod_1: prod_1,
+            prod_2: prod_2,
+        },
+        success: function(response) {
+            $('#matchPopup').html(response);
+            // Here you need to properly attach onclick event
+            $('#user_info').attr('onclick', "infoPopup('" + page + "','" + offer + "','" + prod_1 + "','" + prod_2 + "')");
+            $('.matchPopup').selectpicker('refresh');
+        }
+    });
+}
+
+
+
+    $(document).ready(function() {
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+
+
+        $(document).on('click', '.deleteOffers', function(e) {
+            e.preventDefault();
+
+            id_1 = $(this)[0].getAttribute('prod-id-1');
+            id_2 = $(this)[0].getAttribute('prod-id-2');
+
+            var url = "https://nextbarter.com/offer-delete";
+
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    prod_id_1: id_1,
+                    prod_id_2: id_2,
+                },
+                success: function(data) {
+
+                }
+            });
+        })
+
+        $(document).on('click', '.offer-info', function(e) {
+            e.preventDefault();
+
+            id = $(this)[0].getAttribute('data-id');
+
+            var url = "https://nextbarter.com/offer-show/:id";
+            url = url.replace(':id', id);
+
+
+            $.ajax({
+                type: 'GET',
+                url: url,
+                success: function(data) {
+                    $(".acceptPopup").addClass('active');
+                    // $("#editForm").attr({
+                    //     action: action_url
+                    // });
+                    $('#name_surname').text(data.name + ' ' + data.surname);
+                    $('#tel_href').attr('href', 'tel:' + data.tel);
+                    $('#tel').text(data.tel);
+                    $('#email_href').attr('href', 'mailto:' + data.email);
+                    $('#email').text(data.email);
+                    // $('#order_by').val(data.order_by);
+                    // $('#editFormModal').modal();
+                }
+            });
+        })
+
+
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+<!-- JavaScript Dosyaları Birleştirme -->
+<script>
+
+$('document').ready(function () {
+    $(".upload__inputfile").change(function () {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            var thisButton = $(this).parent(".upload__btn")
+            reader.onload = function (e) {
+               var file = e.target;
+                 $(
+                '<div class="pip">' +
+                  '<img class="imageThumb" src="' +
+                  e.target.result +
+                  '" title="' +
+                  file.name +
+                  '"/>' +
+                  '<br/><div class="remove"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 6C0 2.68629 2.68629 0 6 0H18C21.3137 0 24 2.68629 24 6V18C24 21.3137 21.3137 24 18 24H6C2.68629 24 0 21.3137 0 18V6Z" fill="#F1F5F9"/><path d="M16 8L8 16M8 8L16 16" stroke="#2563EB" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'
+                  +
+                  "</div>").insertBefore(thisButton)
+            }
+            reader.readAsDataURL(this.files[this.files.length - 1]);
+        }
+                        console.log(this.files[this.files.length - 1])
+        
+    });
+});
+
+
+
+
+const fileInput = document.getElementById('files');
+
+let allFiles = [];
+
+fileInput.addEventListener('change', function (e) {
+    const newFiles = Array.from(e.target.files);
+
+    allFiles = [...allFiles, ...newFiles];
+
+    const dataTransfer = new DataTransfer();
+    allFiles.forEach(file => dataTransfer.items.add(file));
+
+    fileInput.files = dataTransfer.files;
+});
+
+document.getElementById('addMoreFiles').addEventListener('click', function () {
+    fileInput.click(); 
+});
+
+</script>
+
+<script>
+$(document).ready(function() {
+    $('.remove').click(function() { 
+        var imageId = $(this).data('id'); 
+        var pip = $(this).closest('.pip'); 
+
+        $.ajax({
+            url: `/delete-image/${imageId}`,
+            type: 'DELETE', 
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') 
+            },
+            success: function(response) { 
+                if (response.status === 'success') {
+                    pip.hide(); 
+                } else {
+                    console.error('success');
+                }
+            },
+            error: function(xhr, status, error) { 
+                console.error('Error:', error); 
+            }
+        });
+    });
+});
+</script>
+
+<script>
+$('#addProductForm').on('submit', function(event) {
+    event.preventDefault(); 
+
+    $('.alert-danger').remove();
+
+    var formData = new FormData($(this)[0]);
+
+   
+    var files = $('#files')[0].files;
+
+// console.log(files);
+
+
+    $.ajax({
+        url: $(this).attr('action'), 
+        type: $(this).attr('method'), 
+        data: formData, 
+        processData: false, 
+        contentType: false, 
+        success: function(response) {
+            
+// console.log(response);
+            location.reload(); 
+        },
+        error: function(xhr, status, error) {
+            var errors = xhr.responseJSON.errors; // Backend'den gelen hatalar
+            $.each(errors, function(key, value) {
+                $('#' + key).siblings('.alert-danger').remove(); // Eski hataları kaldır
+                $('#' + key).after('<div class="alert alert-danger" style="color: red;">' + value + '</div>'); // Hata mesajını ekle
+            });
+        }
+    });
+
+    return false; // Formun yeniden gönderilmesini engellemek için
+});
+
+</script>
+<script>
+$('#editProductForm').on('submit', function(event) {
+    event.preventDefault(); 
+    
+    $('.alert-danger').remove();
+
+    var formData = new FormData($(this)[0]); 
+
+    var files = $('#files')[0].files;
+    $.ajax({
+        url: $(this).attr('action'), 
+        type: $(this).attr('method'), 
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            location.reload();
+        },
+        error: function(xhr, status, error) {
+            var errors = xhr.responseJSON.errors;
+            $.each(errors, function(key, value) {
+                $('#' + key).siblings('.alert-danger').remove(); 
+                $('#' + key).after('<div class="alert alert-danger" style="color: red;">' + value + '</div>'); 
+            });
+        }
+    });
+    return true; 
+});
+//     $(document).ready(function () {
+
+ 
+//         $(".editBarterSetting").click((e)=>{
+//             var edit =  $(e.target).parent(".barterSettings").parent(".dot").parent
+//             (".barterCard").parent(".xl-3").children("form").children(".editPopup").children
+//             (".popupContainRight").children(".popupContainRightInner").children
+//             (".popupContainRightBody").children(".popupContainRightAuto").children(".imgSection").children(".prodId").val()
+//                 console.log(edit)
+
+//         })
+            
+
+//       if (window.File && window.FileList && window.FileReader) {
+//         $("#filesEdit").on("change", function (e) {
+//           var files = e.target.files,
+//             filesLength = files.length;
+//           for (var i = 0; i < filesLength; i++) {
+//             var f = files[i];
+//             var fileReader = new FileReader();
+//             fileReader.onload = function (e) {
+//               var file = e.target;
+//               $(
+//                 '<div class="pip">' +
+//                   '<img class="imageThumb" src="' +
+//                   e.target.result +
+//                   '" title="' +
+//                   file.name +
+//                   '"/>' +
+//                   '<br/><div class="remove"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 6C0 2.68629 2.68629 0 6 0H18C21.3137 0 24 2.68629 24 6V18C24 21.3137 21.3137 24 18 24H6C2.68629 24 0 21.3137 0 18V6Z" fill="#F1F5F9"/><path d="M16 8L8 16M8 8L16 16" stroke="#2563EB" stroke-linecap="round" stroke-linejoin="round"/></svg></div>' +
+//                   "</div>"
+//               ).insertBefore(".fieldEdit");
+//               $(".remove").click(function () {
+//                 $(this).parent(".pip").remove();
+//                 var image = document.getElementsByClassName(".fieldEdit .pip");
+    
+//                 if (image.length == 0) {
+//                   $(".fieldEdit").removeClass("active");
+//                 }
+//               });
+//               $(".fieldEdit").addClass("active");
+//             };
+//             fileReader.readAsDataURL(f);
+//           }
+//         });
+//       } else {
+//         alert("Your browser doesn't support to File API");
+//       }
+
+//   $(".fieldEdit").addClass("active");
+// });
+
+</script>
+
+
+        <script>
+            $(document).ready(function() {
+    $('.searchParent input[name="search_text"]').keyup(function() {
+        var query = $(this).val();
+        if(query.length > 2) {
+            $.ajax({
+                url: 'https://nextbarter.com/smart-search',
+                type: 'GET',
+                data: {query: query},
+                success: function(response) {
+                    $('.searchList').html(response.search_list);
+                }
+            });
+        }
+    });
+});
+
+        </script>
+</body>
+
+</html>

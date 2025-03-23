@@ -2,7 +2,21 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'wouter';
 import { Navigation } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { 
+  ChevronLeft, 
+  ChevronRight,
+  Layers,
+  Smartphone, 
+  BookOpen, 
+  Shirt,
+  Car, 
+  Home, 
+  Flower, 
+  Gamepad2,
+  Sofa,
+  Dumbbell, 
+  Briefcase 
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 // Import Swiper styles
@@ -19,47 +33,47 @@ interface Category {
 const DEFAULT_CATEGORIES: Category[] = [
   {
     name: 'Hamısı',
-    icon: '/icons/category-all.svg',
+    icon: <Layers className="w-7 h-7 text-blue-600" />,
   },
   {
     name: 'Elektronika',
-    icon: '/icons/category-electronics.svg',
+    icon: <Smartphone className="w-7 h-7 text-indigo-600" />,
   },
   {
     name: 'Kitablar',
-    icon: '/icons/category-books.svg',
+    icon: <BookOpen className="w-7 h-7 text-amber-600" />,
   },
   {
     name: 'Geyim',
-    icon: '/icons/category-clothing.svg',
+    icon: <Shirt className="w-7 h-7 text-pink-600" />,
   },
   {
     name: 'Maşınlar',
-    icon: '/icons/category-vehicles.svg',
+    icon: <Car className="w-7 h-7 text-red-600" />,
   },
   {
     name: 'Daşınmaz Əmlak',
-    icon: '/icons/category-real-estate.svg',
+    icon: <Home className="w-7 h-7 text-green-600" />,
   },
   {
     name: 'Bağ',
-    icon: '/icons/category-garden.svg',
+    icon: <Flower className="w-7 h-7 text-emerald-600" />,
   },
   {
     name: 'Oyunlar',
-    icon: '/icons/category-games.svg',
+    icon: <Gamepad2 className="w-7 h-7 text-purple-600" />,
   },
   {
     name: 'Mebel',
-    icon: '/icons/category-furniture.svg',
+    icon: <Sofa className="w-7 h-7 text-orange-600" />,
   },
   {
     name: 'İdman',
-    icon: '/icons/category-sports.svg',
+    icon: <Dumbbell className="w-7 h-7 text-blue-700" />,
   },
   {
     name: 'Xidmətlər',
-    icon: '/icons/category-services.svg',
+    icon: <Briefcase className="w-7 h-7 text-gray-700" />,
   }
 ];
 

@@ -25,7 +25,16 @@ export interface IStorage {
   // Item methods
   getItem(id: number): Promise<Item | undefined>;
   getItemsByUser(userId: number): Promise<Item[]>;
-  getItems(options?: { category?: string, search?: string, status?: string, limit?: number, offset?: number }): Promise<Item[]>;
+  getItems(options?: { 
+    category?: string, 
+    search?: string, 
+    status?: string, 
+    city?: string,
+    condition?: string,
+    sort?: 'newest' | 'oldest' | 'title_asc' | 'title_desc',
+    limit?: number, 
+    offset?: number 
+  }): Promise<Item[]>;
   createItem(item: InsertItem): Promise<Item>;
   updateItem(id: number, data: Partial<InsertItem>): Promise<Item | undefined>;
   deleteItem(id: number): Promise<boolean>;
@@ -210,9 +219,19 @@ export class MemStorage implements IStorage {
     );
   }
   
-  async getItems(options?: { category?: string, search?: string, status?: string, limit?: number, offset?: number }): Promise<Item[]> {
+  async getItems(options?: { 
+    category?: string, 
+    search?: string, 
+    status?: string, 
+    city?: string,
+    condition?: string,
+    sort?: 'newest' | 'oldest' | 'title_asc' | 'title_desc',
+    limit?: number, 
+    offset?: number 
+  }): Promise<Item[]> {
     let items = Array.from(this.items.values());
     
+    // Apply filters
     if (options?.category) {
       items = items.filter(item => item.category === options.category);
     }
@@ -229,9 +248,39 @@ export class MemStorage implements IStorage {
       items = items.filter(item => item.status === options.status);
     }
     
-    // Default sorting: newest first
-    items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    if (options?.city) {
+      items = items.filter(item => item.city === options.city);
+    }
     
+    if (options?.condition) {
+      items = items.filter(item => item.condition === options.condition);
+    }
+    
+    // Apply sorting
+    if (options?.sort) {
+      switch (options.sort) {
+        case 'newest':
+          items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+          break;
+        case 'oldest':
+          items.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+          break;
+        case 'title_asc':
+          items.sort((a, b) => a.title.localeCompare(b.title));
+          break;
+        case 'title_desc':
+          items.sort((a, b) => b.title.localeCompare(a.title));
+          break;
+        default:
+          // Default sorting: newest first
+          items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+      }
+    } else {
+      // Default sorting: newest first
+      items.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    }
+    
+    // Apply pagination
     if (options?.offset && options?.limit) {
       return items.slice(options.offset, options.offset + options.limit);
     } else if (options?.limit) {
@@ -252,6 +301,7 @@ export class MemStorage implements IStorage {
       description: insertItem.description,
       category: insertItem.category,
       condition: insertItem.condition,
+      city: insertItem.city || null,
       status: insertItem.status || "active",
       createdAt, 
       updatedAt 

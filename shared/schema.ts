@@ -26,6 +26,7 @@ export const items = pgTable("items", {
   description: text("description").notNull(),
   category: text("category").notNull(),
   condition: text("condition").notNull(),
+  city: text("city"),
   status: text("status").notNull().default("active"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

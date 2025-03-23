@@ -17,7 +17,7 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Bell, Menu, MessageSquare, LogOut, User, Plus, Heart, Package, Loader2, HelpCircle, Search } from "lucide-react";
+import { Bell, Menu, MessageSquare, LogOut, User, Plus, Heart, Package, Loader2, HelpCircle, Search, RefreshCcw } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { Badge } from "@/components/ui/badge";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -175,6 +175,10 @@ export default function Navbar() {
                       <Package className="mr-2 h-4 w-4" />
                       <span>{t('common.myItems', 'Mənim Əşyalarım')}</span>
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/offers")}>
+                      <RefreshCcw className="mr-2 h-4 w-4" />
+                      <span>{t('common.offers', 'Təkliflər')}</span>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() => navigate("/help")}>
                       <HelpCircle className="mr-2 h-4 w-4" />
@@ -292,6 +296,12 @@ export default function Navbar() {
                         <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <Heart className="mr-2 h-5 w-5" />
                           {t('common.favorites', 'Seçilmişlər')}
+                        </span>
+                      </Link>
+                      <Link href="/offers">
+                        <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
+                          <RefreshCcw className="mr-2 h-5 w-5" />
+                          {t('common.offers', 'Təkliflər')}
                         </span>
                       </Link>
                       <Link href="/help">

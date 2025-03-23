@@ -9,6 +9,7 @@ import { useAuth } from "../context/AuthContext";
 import { Item } from "@shared/schema";
 import HeroSection from "@/components/home/HeroSection";
 import FeatureSection from "@/components/home/FeatureSection";
+import CategorySlider from "@/components/home/CategorySlider";
 
 const CATEGORIES = [
   "Bütün kateqoriyalar",
@@ -37,29 +38,18 @@ export default function Home() {
       {/* Features section */}
       <FeatureSection />
       
-      {/* Featured Categories */}
-      <section className="py-12 bg-white">
+      {/* Categories Slider */}
+      <section className="py-10 bg-white">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">Kateqoriyalar üzrə göz atın</h2>
-            <Link href="/categories" className="text-blue-600 hover:underline flex items-center">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">Kateqoriyalar üzrə göz atın</h2>
+            <Link href="/items" className="text-blue-600 hover:underline flex items-center text-sm">
               Hamısını göstər <ArrowRight className="ml-1 h-4 w-4" />
             </Link>
           </div>
-          
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            {CATEGORIES.slice(1, 7).map((category) => (
-              <Link key={category} href={`/items?category=${category}`}>
-                <div className="bg-white border border-gray-200 hover:border-blue-400 hover:shadow-md rounded-xl p-5 text-center transition-all duration-300 cursor-pointer h-full flex flex-col items-center justify-center group">
-                  <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center mb-4 group-hover:bg-blue-200 transition-colors">
-                    <Star className="h-7 w-7 text-blue-600" />
-                  </div>
-                  <span className="font-medium text-gray-800 group-hover:text-blue-600 transition-colors">{category}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
         </div>
+        
+        <CategorySlider />
       </section>
       
       {/* Recent items section */}

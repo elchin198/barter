@@ -1,0 +1,71 @@
+Dərin Analizdən Sonra Göstərilən Təkmilləşdirilməli və Əlavə Edilə Biləcək Hissələr
+1. 🧾 Barter Təkliflərinin Ətraflı Görünüşü
+Problem: Hələ ki yalnız status və mesaj görünür, lakin barterin özü (elanın detayı, qarşı tərəf və b.) detallı deyil.
+
+📌 Tövsiyə:
+
+Təklif detallarını genişləndir:
+
+Kimdən gəlib
+
+Hansı elana gəlib
+
+Öz təklif etdiyin elanın şəkli və adı
+
+Qarşı tərəfin elanı da əks olunsun (linklə detallara keçid)
+
+2. 🔄 Təklif Cavabı Əməliyyatlarının Backend-ə Əlaqəsi
+Problem: Frontend-də "accept/reject" düymələri olsa belə, əgər backend bunu əməldə yazmayıbsa dəyişmir.
+
+📌 Tövsiyə:
+
+PATCH /offers/:id endpoint yaradaraq status dəyişdir
+
+Frontend bu düymələrlə həmin endpoint-ə status: accepted və ya status: rejected göndərsin
+
+UI real-time dəyişsin
+
+3. 🗂️ Elanlar və Təkliflər Üçün Filter Sistemi
+Problem: İstifadəçi çox təklif və elan içində axtarış və ya filtrasiya edə bilmir.
+
+📌 Tövsiyə:
+
+Kateqoriya, status (accepted, pending) və tarixə görə süzgəc
+
+Axtarış inputu əlavə et (includes(title) və s.)
+
+API tərəfdə query parametrlərlə GET /offers?status=pending kimi endpointlər qur
+
+4. 🗃️ Təklif Tarixi və Təsdiq Prosesi
+Problem: Təklifin nə vaxt göndərildiyi, hansı gündə qəbul/reject olduğu görünmür.
+
+📌 Tövsiyə:
+
+Təklif modelinə createdAt, updatedAt sahələri əlavə et
+
+UI-də göstər:
+
+"Göndərildi: 23 mart 2025"
+
+"Qəbul edildi: 24 mart 2025"
+
+5. 📱 Mobil Responsivlikdə Bəzi Uyğunsuzluqlar
+Problem: Bəzi səhifələrdə (xüsusilə təklif listi) content overflow və margin problemi var.
+
+📌 Tövsiyə:
+
+Tailwind max-w-full, overflow-x-auto, flex-wrap və gap-2 optimizasiyaları
+
+Hər kart mobilə uyğun p-2, rounded-md, text-sm ilə tənzimlənsin
+
+6. 🎯 Barterin "Tamamlandı" Statusu və İstifadəçi Reputasiyası
+Problem: Razılaşma qəbul edildikdən sonra istifadəçilər qarşılıqlı “barter tamamlandı” demirlər və bu görünmür.
+
+📌 Tövsiyə:
+
+“Barter tamamlandı” düyməsi → hər iki tərəf təsdiqləyərsə status: completed olur
+
+Profil səhifəsində “Tamamlanmış barter sayı: 3” kimi göstər
+
+Gələcəkdə reputasiya (ulduz + rəy) sistemi əlavə et
+

@@ -18,6 +18,8 @@ import StarRating from "@/components/ratings/StarRating";
 import UserItems from "@/components/items/UserItems";
 import SEO from "@/components/SEO";
 import { useTranslation } from "react-i18next";
+import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 interface ItemDetailResponse extends Item {
   images: Array<{
@@ -227,6 +229,16 @@ export default function ItemDetail() {
   const images = item.images.length > 0 
     ? item.images 
     : [{ id: 0, filePath: "https://placehold.co/600x400/e2e8f0/64748b?text=No+Image", isMain: true }];
+    
+  // Prepare image gallery configuration
+  const galleryOptions = {
+    showPlayButton: false,
+    showFullscreenButton: true,
+    showNav: images.length > 1,
+    thumbnailPosition: "bottom" as "bottom",
+    useBrowserFullscreen: true,
+    lazyLoad: true,
+  };
   
   // Get status badge
   const getStatusBadge = () => {
@@ -270,32 +282,21 @@ export default function ItemDetail() {
         ogImage={images[0]?.filePath}
       />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        {/* Images */}
+        {/* Images with Gallery */}
         <div className="space-y-4">
-          <div className="aspect-w-4 aspect-h-3 bg-gray-100 rounded-lg overflow-hidden">
-            <img 
-              src={images[selectedImageIndex]?.filePath} 
-              alt={item.title}
-              className="w-full h-full object-contain"
-            />
-          </div>
-          
-          {images.length > 1 && (
-            <div className="flex gap-2 overflow-x-auto pb-2">
-              {images.map((image, index) => (
-                <button
-                  key={image.id}
-                  className={`relative w-20 h-20 border-2 rounded overflow-hidden flex-shrink-0
-                    ${selectedImageIndex === index ? 'border-blue-600' : 'border-transparent'}`}
-                  onClick={() => setSelectedImageIndex(index)}
-                >
-                  <img 
-                    src={image.filePath} 
-                    alt={`${item.title} - image ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
+          {images.length > 0 && (
+            <div className="aspect-w-4 aspect-h-3 bg-gray-100 rounded-lg overflow-hidden">
+              <ImageGallery
+                items={images.map(image => ({
+                  original: image.filePath,
+                  thumbnail: image.filePath,
+                  originalAlt: item.title,
+                  thumbnailAlt: `${item.title} - thumbnail`,
+                  originalClass: "w-full h-full object-contain max-h-[400px]"
+                }))}
+                {...galleryOptions}
+                additionalClass="item-gallery"
+              />
             </div>
           )}
         </div>

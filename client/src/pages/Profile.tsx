@@ -18,10 +18,10 @@ import ItemCard from "../components/items/ItemCard";
 import { Item } from "@shared/schema";
 
 const profileSchema = z.object({
-  fullName: z.string().min(2, "Full name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  avatar: z.string().url("Please enter a valid URL").optional(),
-  bio: z.string().max(500, "Bio must not exceed 500 characters").optional(),
+  fullName: z.string().min(2, "Ad soyad ən azı 2 simvol olmalıdır"),
+  email: z.string().email("Düzgün e-poçt ünvanı daxil edin"),
+  avatar: z.string().optional(),
+  bio: z.string().max(500, "Bioqrafiya 500 simvoldan çox olmamalıdır").optional(),
   phone: z.string().optional(),
 });
 

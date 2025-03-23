@@ -50,6 +50,44 @@ git branch -M main
 git push -u origin main
 ```
 
+## GitHub Repositoridən serverə birbaşa deploy
+
+Hostinger serveriniz SSH girişi təmin edir, ona görə də GitHub-dan birbaşa çəkib ala bilərsiniz:
+
+```bash
+# Hostinger serverinə SSH ilə qoşulun
+ssh -p 65002 u726371272@46.202.156.134
+
+# public_html qovluğuna keçin
+cd ~/public_html
+
+# Əgər artıq fayl varsa və yeni quraşdırma etmək istəyirsinizsə, qovluğu təmizləyin
+# Diqqət: Bu prosesi yalnız yeni quraşdırma üçün edin və mövcud sayt varsa, əvvəlcə yedəkləyin
+# rm -rf *
+
+# GitHub repositorini klonlaştırın
+git clone https://github.com/elchin198/barter-backend.git .
+
+# Asılılıqları quraşdırın
+npm install --production
+
+# .env faylını yaradın
+cat > .env << EOL
+NODE_ENV=production
+PORT=5000
+SESSION_SECRET=<güclü bir sesiya şifrəsi>
+DATABASE_URL=mysql://u726371272_barter_db:<şifrə>@localhost:3306/u726371272_barter_db
+EOL
+
+# PM2 process manager-i quraşdırın (əgər quraşdırılmayıbsa)
+npm install -g pm2
+
+# Tətbiqi başladın
+pm2 start ecosystem.config.js
+pm2 save
+pm2 startup
+```
+
 ## Yerləşdirmə Təlimatları
 
 Repo əlavə ediləndən sonra Hostinger-də yerləşdirmə bəzi seçimlə edilə bilər:

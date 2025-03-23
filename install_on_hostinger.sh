@@ -8,7 +8,8 @@ echo "=== BarterTap.az Hostinger Quraşdırma Təlimatları ==="
 echo ""
 
 echo "1. İlk olaraq SSH vasitəsilə serverə qoşulun:"
-echo "   ssh u726371272@46.202.156.134"
+echo "   ssh -p 65002 u726371272@46.202.156.134"
+echo "   (SSH şifrənizi daxil edin)"
 echo ""
 
 echo "2. Ana kataloqa keçin və mövcud faylları yedəkləyin (əgər varsa):"

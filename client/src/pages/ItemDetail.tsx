@@ -16,6 +16,7 @@ import { useAuth } from "../context/AuthContext";
 import { Item, User as UserType } from "@shared/schema";
 import StarRating from "@/components/ratings/StarRating";
 import UserItems from "@/components/items/UserItems";
+import MessageModal from "@/components/messaging/MessageModal";
 import SEO from "@/components/SEO";
 import { useTranslation } from "react-i18next";
 import ImageGallery from "react-image-gallery";
@@ -42,6 +43,7 @@ export default function ItemDetail() {
   const [message, setMessage] = useState("");
   const [selectedItemForOffer, setSelectedItemForOffer] = useState<number | null>(null);
   const [favorited, setFavorited] = useState(false);
+  const [openMessageModal, setOpenMessageModal] = useState(false);
   
   // Redirect if no id
   if (!params || !params.id) {
@@ -427,6 +429,20 @@ export default function ItemDetail() {
                     <span className="text-xs text-gray-500">Tamamlanmış barter</span>
                   </div>
                 </div>
+
+                {/* Message Button */}
+                {!isOwner && user && (
+                  <div className="mt-4">
+                    <Button 
+                      variant="outline" 
+                      className="w-full flex items-center justify-center gap-2"
+                      onClick={() => setOpenMessageModal(true)}
+                    >
+                      <MessageCircle className="h-4 w-4" />
+                      {t('message.sendNewMessage')}
+                    </Button>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>

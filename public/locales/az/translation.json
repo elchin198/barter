@@ -144,6 +144,27 @@
     "typeMessage": "Mesajınızı yazın...",
     "send": "Göndər"
   },
+  "message": {
+    "sendMessageTo": "Mesaj göndər:",
+    "aboutItem": "Elan: \"{item}\" haqqında",
+    "directMessage": "Birbaşa mesaj",
+    "from": "Göndərən",
+    "to": "Qəbul edən",
+    "message": "Mesaj",
+    "placeholder": "Mesajınızı buraya yazın...",
+    "characters": "simvol",
+    "send": "Göndər",
+    "sending": "Göndərilir...",
+    "sentSuccess": "Mesaj göndərildi",
+    "sentSuccessDescription": "Mesajınız uğurla göndərildi",
+    "sentError": "Mesaj göndərilmədi",
+    "emptyMessage": "Boş mesaj",
+    "emptyMessageDescription": "Zəhmət olmasa, mesaj mətnini daxil edin",
+    "viewAll": "Bütün mesajlara baxın",
+    "replyToMessage": "Mesaja cavab verin",
+    "deleteMessage": "Mesajı silin",
+    "sendNewMessage": "Yeni mesaj göndərin"
+  },
   "errors": {
     "required": "Bu sahə mütləqdir",
     "invalidEmail": "Etibarlı e-poçt daxil edin",

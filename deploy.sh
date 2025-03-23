@@ -1,70 +1,98 @@
 #!/bin/bash
 
-# Exit on error
-set -e
+# BarterTap.az Yerləşdirmə Skripti
+# Bu skript proyekti Hostinger'ə yerləşdirmək üçün istifadə olunur.
+# Lokal kompüterdə bu skripti işlətməzdən əvvəl chmod +x deploy.sh əmri ilə icazələri təyin edin.
 
-# Variables
+echo "=== BarterTap.az Yerləşdirmə Skripti ==="
+echo "Bu skript proyektinizi build edib Hostinger serverinə yükləyəcək."
+echo ""
+
+# Konfiqurasiya
 HOSTINGER_USER="u726371272"
-HOSTINGER_HOST="ftp.bartertap.az"
-HOSTINGER_TARGET="/home/$HOSTINGER_USER/public_html"
-BUILD_DIR="dist"
+HOSTINGER_HOST="46.202.156.134"
+HOSTINGER_PORT="65002"
+REMOTE_DIR="public_html"
+APP_NAME="bartertap-app"
 
-echo "=== BarterTap.az Deployment Script ==="
-echo "This script will build and deploy the application to Hostinger"
-
-# 1. Build the application
-echo -e "\n=== Building application ==="
+echo "1. Asılılıqları yükləyir..."
 npm install
+
+echo "2. Proyekti build edir..."
 npm run build
 
-# 2. Prepare the production files
-echo -e "\n=== Preparing production files ==="
+if [ $? -ne 0 ]; then
+    echo "Build prosesi zamanı xəta baş verdi!"
+    exit 1
+fi
 
-# Ensure the pm2 config exists
-if [ ! -f ecosystem.config.js ]; then
-  echo "Creating PM2 ecosystem.config.js file"
-  cat > ecosystem.config.js << EOF
-module.exports = {
-  apps: [{
-    name: "bartertap",
-    script: "dist/server.js",
-    env: {
-      NODE_ENV: "production",
-      PORT: 5000
-    },
-    instances: 1,
-    exec_mode: "fork"
-  }]
-};
+echo "3. Lazımi faylları zip arxivinə əlavə edir..."
+mkdir -p deploy
+cp -r dist deploy/
+cp package.json deploy/
+cp package-lock.json deploy/
+cp ecosystem.config.js deploy/
+cp nginx.conf deploy/
+cp .htaccess deploy/
+cp -r public deploy/
+
+# PHP fayllarını əlavə et
+if [ -d "php" ]; then
+    cp -r php deploy/
+fi
+
+# Lazımi qovluqları yarat
+mkdir -p deploy/logs
+mkdir -p deploy/uploads
+touch deploy/.env
+
+cat > deploy/.env << EOL
+NODE_ENV=production
+PORT=5000
+SESSION_SECRET=changeme_with_strong_secret
+DATABASE_URL=mysql://u726371272_barter_db:password@localhost:3306/u726371272_barter_db
+EOL
+
+cd deploy && zip -r ../bartertap-deployment.zip * .env .htaccess
+cd ..
+
+echo "4. Serverdə yedək yaradır və arxivi köçürür..."
+ssh -p $HOSTINGER_PORT $HOSTINGER_USER@$HOSTINGER_HOST "mkdir -p ~/backups && zip -r ~/backups/backup-\$(date +%Y%m%d-%H%M%S).zip ~/$REMOTE_DIR/* > /dev/null 2>&1 || true"
+
+echo "5. Faylları serverə köçürür..."
+scp -P $HOSTINGER_PORT bartertap-deployment.zip $HOSTINGER_USER@$HOSTINGER_HOST:~/
+
+echo "6. Arxivi çıxarır və node.js tətbiqini başladır..."
+ssh -p $HOSTINGER_PORT $HOSTINGER_USER@$HOSTINGER_HOST << EOF
+  cd ~/$REMOTE_DIR
+  unzip -o ~/bartertap-deployment.zip
+  rm ~/bartertap-deployment.zip
+  
+  # PHP 8.3 konfiqurasiyasını təyin et
+  echo "php_value upload_max_filesize 20M" > .user.ini
+  echo "php_value post_max_size 20M" >> .user.ini
+  echo "php_value memory_limit 256M" >> .user.ini
+  echo "php_value max_execution_time 300" >> .user.ini
+
+  # Node.js asılılıqlarını quraşdır və tətbiqi başlat
+  npm install --production
+  
+  # PM2 quraşdır (əgər artıq quraşdırılmayıbsa)
+  npm install -g pm2 || true
+  
+  # Tətbiqi dayandır və yenidən başlat
+  pm2 stop $APP_NAME || true
+  pm2 delete $APP_NAME || true
+  pm2 start ecosystem.config.js
+  pm2 save
 EOF
-fi
 
-# Copy .env.production to .env in the build directory
-if [ -f .env.production ]; then
-  echo "Copying .env.production to $BUILD_DIR/.env"
-  cp .env.production $BUILD_DIR/.env
-fi
+echo "7. Təmizləmə işləri yerinə yetirilir..."
+rm -rf deploy
+rm bartertap-deployment.zip
 
-# Create placeholder directories in the build folder for uploads
-mkdir -p $BUILD_DIR/public/uploads/avatars
-mkdir -p $BUILD_DIR/public/uploads/items
-
-# 3. Upload to Hostinger
-echo -e "\n=== Uploading to Hostinger ==="
-echo "This step should be performed manually via FTP client or Hostinger file manager"
-echo "Upload the following directories and files to $HOSTINGER_TARGET:"
-echo "- dist/ (all contents)"
-echo "- ecosystem.config.js"
-echo "- package.json"
-echo "- package-lock.json"
-
-# 4. Instructions for setting up on Hostinger
-echo -e "\n=== Post-deployment steps ==="
-echo "1. SSH into your Hostinger server"
-echo "2. Navigate to $HOSTINGER_TARGET"
-echo "3. Install dependencies: npm install --production"
-echo "4. Start the application with PM2: pm2 start ecosystem.config.js"
-echo "5. Ensure that the database has been set up correctly"
-
-echo -e "\n=== Deployment preparation complete ==="
-echo "You can now upload the files to Hostinger and follow the post-deployment steps."
+echo "=== Yerləşdirmə tamamlandı! ==="
+echo "Saytı yoxlamaq üçün: https://bartertap.az"
+echo "Hər hansı bir problem yaranarsa, serverə bağlanıb journalları yoxlaya bilərsiniz:"
+echo "ssh -p $HOSTINGER_PORT $HOSTINGER_USER@$HOSTINGER_HOST"
+echo "pm2 logs $APP_NAME"

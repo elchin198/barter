@@ -66,10 +66,10 @@ export default function Navbar() {
             <div className="flex items-center">
               <Link href="/">
                 <img 
-                  src="/logo.png" 
+                  src="/barter-logo.png" 
                   alt="BarterTap.az" 
-                  className="h-8 md:h-10 transition-transform hover:scale-105 duration-300"
-                  style={{ filter: 'brightness(1.2) contrast(1.2)' }}
+                  className="h-8 md:h-10 object-contain transition-transform hover:scale-105 duration-300"
+                  style={{ maxWidth: "200px" }}
                 />
               </Link>
             </div>
@@ -202,9 +202,9 @@ export default function Navbar() {
                 <div className="mt-4 mb-6">
                   <Link href="/">
                     <img 
-                      src="/logo.png" 
+                      src="/barter logo (1).png" 
                       alt="BarterTap.az" 
-                      className="h-10 mb-4"
+                      className="h-10 mb-4 object-contain"
                       style={{ filter: 'brightness(1.2) contrast(1.2)' }}
                     />
                   </Link>

@@ -12,6 +12,10 @@ export function Logo({ variant = "dark" }: LogoProps) {
         src="/logo.svg" 
         alt="BarterTap.az" 
         className="h-8" 
+        onError={(e) => {
+          e.currentTarget.src = "/barter-logo.png";
+          e.currentTarget.onerror = null;
+        }}
       />
     </Link>
   );

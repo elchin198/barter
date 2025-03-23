@@ -1,0 +1,137 @@
+⚙️ Texnologiyalar
+Komponent	Texnologiya
+Frontend	ReactJS + Tailwind CSS
+Backend	Python (FastAPI tövsiyə olunur)
+DB	SQLite və ya PostgreSQL
+Auth	JWT Token ilə qeydiyyat
+Host	Replit.com
+Localization	i18next və ya manuel JSON-based sistem
+🧱 Verilənlər Bazası Struktur (Schema)
+🔸 users
+sql
+Copy
+Edit
+id | username | email | password_hash | city | language | created_at
+🔸 listings
+sql
+Copy
+Edit
+id | user_id | title | description | category | image_url | city | created_at
+🔸 offers
+sql
+Copy
+Edit
+id | sender_user_id | receiver_user_id | offer_listing_id | target_listing_id | status | message | created_at
+🧩 Saytın Bölmələri və Səhifə Detalları
+1. 🏠 Ana Səhifə (Homepage)
+Loqo və navbar (🇦🇿 | 🇷🇺 | 🇬🇧 dil seçimi)
+
+Axtarış input (məhsul adı ilə)
+
+Elan kateqoriyaları: Geyim, Elektronika, Avtomobil, Kitab, Ev əşyaları, Xidmət
+
+Son elanlar (kardlarla)
+
+“Elan yerləşdir” (Yalnız daxil olmuş istifadəçilər üçün)
+
+“Barter necə işləyir?” təlimatı
+
+Mobil uyumlu dizayn
+
+2. 🔐 Qeydiyyat və Giriş (Register & Login)
+Qeydiyyat:
+
+İstifadəçi adı, Email, Şifrə, Şəhər, Dil seçimi
+
+Giriş:
+
+Email və şifrə ilə JWT token yaradılır
+
+Şifrə bərpa sistemi (opsional)
+
+3. 📋 Elanlar Səhifəsi (Listings Page)
+Elan kartları (şəkil, başlıq, kateqoriya, şəhər, istifadəçi adı)
+
+“Təklif et” düyməsi
+
+Filtr:
+
+Kateqoriya
+
+Şəhər
+
+Tarix (ən yeni – ən köhnə)
+
+Axtarış çubuğu
+
+4. ➕ Yeni Elan Səhifəsi (Add Listing)
+Form sahələri:
+
+Başlıq
+
+Təsvir
+
+Kateqoriya
+
+Şəkil yüklə
+
+Şəhər
+
+Göndər (POST API)
+
+5. 🔄 Təklif Et Səhifəsi (Make Offer)
+Öz elanlarından birini seç
+
+Qarşı tərəfin elanı görünür
+
+Qısa mesaj yaz
+
+Təklif et düyməsi
+
+Təkliflər bazada qeyd olunur, status pending olur
+
+6. 📬 Barterlərim (My Trades)
+Tabs:
+
+Göndərilən təkliflər (pending, accepted, rejected)
+
+Alınan təkliflər
+
+Tamamlanmış barterlər
+
+Qəbul və ya rədd et düymələri
+
+7. 👤 Profil Səhifəsi (Profile)
+İstifadəçi məlumatları
+
+Elanların idarə edilməsi
+
+Təklif və tarixçə görüntüləməsi
+
+Dil seçimini dəyişmək (profil ayarlarında)
+
+8. ⚙️ Admin Panel (Opsional)
+İstifadəçilərin monitorinqi
+
+Elan və barter təkliflərinin idarəsi
+
+Statistika: ümumi barter sayı, aktiv elanlar və s.
+
+📱 Mobil Uyğunluq və UI Tələbləri
+Bütün səhifələr Tailwind ilə responsive olacaq
+
+Navbar mobil görünüşə uyğun collapsible menyu olacaq
+
+Modal ilə elan yerləşdirmə və təklif göndərmə
+
+Touch-friendly düymələr
+
+🔐 Təhlükəsizlik və Performans
+JWT token istifadə
+
+SQL injection və XSS qorunması
+
+Replitdə .env ilə gizli açarlar
+
+Şəkil yükləmə təhlükəsizliyi (Base64 və ya trusted URL)
+

@@ -1,0 +1,77 @@
+“Bizim sayt (BarterTap) ilə klon etmək istədiyimiz NextBarter.com saytı nə ilə fərqlənir? Və daha çox oxşar görünməsi üçün nələr əlavə olunmalı, dəyişməlidir?”
+
+⚖️ Fərqlərin Ətraflı Qarşılaşdırılması və Uyğunlaşdırma Planı
+Funksiya / Xüsusiyyət	BarterTap (Sənin saytın)	NextBarter.com	Tövsiyə / Ediləcəklər
+🌐 Çoxdillilik	✅ 3 dildə tam işlək	❌ Yalnız Azərbaycan dilində	✅ Üstünlük səndədir
+📲 Mobil uyğun dizayn	✅ Tailwind ilə responsive	✅ Mobil optimizasiya yaxşıdır	UI polish + dark/light mode tövsiyə olunur
+🧾 Elan yerləşdirmə	✅ Var, yaxşı dizaynlı	✅ Var	✅ Tamamlanmış
+🔁 Təklif göndərmək	✅ Tam proses var	✅ Sadə seçim var	UI olaraq daha aydın təklif yönləndirici əlavə et
+✅ Təklifin statusu (pending, accept…)	✅ Tam şəkildə var	✅ Var	✅ Oxşardır
+🏁 Barter tamamlandı funksiyası	✅ Tam işlək	❌ Məlumat yoxdur	✅ Üstünlük səndədir
+⭐ İstifadəçi reytinqi və rəy	✅ Var (tamamlanandan sonra rəy)	❌ Məlumat yoxdur	✅ Üstünlük səndədir
+📍 Şəhər və kateqoriya üzrə filtrasiya	❌ Hazır deyil	✅ Mövcuddur	🛠️ Əlavə olunmalıdır – filter by city & category
+🔍 Axtarış sistemi	❌ Hələ yoxdur	✅ Başlıq və təsvir üzrə	🛠️ Axtarış input + filter backend implementasiya
+❤️ Elan bəyənmək / yadda saxlamaq	❌ Yox	✅ “Seçilmişlərə əlavə et” mövcuddur	➕ Bəyəndiklər (favorites) əlavə edilə bilər
+👤 İstifadəçi profil səhifəsi	✅ Profil var, təkliflər/elanlar var	✅ Daha geniş: reytinq, barter sayı	🔧 Profilə barter sayı + reytinq əlavə et
+🧮 Statistika / rəqəmsal göstəricilər	❌ Yox	✅ “Sayt üzrə statistika” mövcuddur	➕ Ana səhifəyə rəqəmlər: barter sayı, istifadəçi sayı və s.
+📸 Elan şəkil idarəsi	✅ Base64 və ya Cloudinary dəstəyi	✅ Şəkillər çox keyfiyyətlidir	📷 Daha yaxşı preview + çoxlu şəkil yükləmə (gallery)
+🔐 Email doğrulama / şifrə bərpa	❌ Məlumat yoxdur	❌ Görünmür	🔒 E-mail doğrulama və “şifrəni unutdunmu?” əlavə et (optional)
+📩 E-poçt bildirişləri	❌ Yox	❌ Yox	➕ Təklif gəldikdə e-mail göndər (future plan)
+🗺️ Xəritə ilə elan göstərimi	❌ Yox	✅ Elanlar şəhər əsasında xəritədə göstərilir	➕ Google Maps və ya OpenStreet xəritə dəstəyi əlavə edilə bilər
+💬 Canlı mesajlaşma / chat	❌ Yox	❌ Yox	➕ Socket.io və ya sadə çat (messaging) əlavə edilə bilər
+✍️ Ediləcəklər Planı (NextBarter klonuna uyğunlaşdırmaq üçün)
+✅ Mütləq əlavə edilməli:
+Axtarış və Filtrləmə Sistemi
+
+Başlıq/təsvir üzrə axtarış
+
+Kateqoriya və şəhərə görə filtr
+
+“Seçilmişlərə əlavə et” (Bəyəndiklərim)
+
+Elan kartında “❤” simvolu
+
+Profil səhifəsində ayrıca görünməli
+
+Ana səhifəyə Statistika modulu
+
+Ümumi istifadəçi sayı
+
+Yerləşdirilən elan sayı
+
+Tamamlanmış barter sayı
+
+Sadə API: /api/statistics
+
+Profil Səhifəsinin Təkmilləşdirilməsi
+
+Reytinq ortalaması
+
+Tamamlanan barter sayı
+
+Seçilmiş elanlar
+
+➕ Tövsiyə olunan əlavə xüsusiyyətlər:
+Elanlara çoxlu şəkil yükləmə (slider/gösterici)
+
+Google Maps və ya OpenStreet ilə xəritə dəstəyi
+
+Şərh sistemi: tamamlanan barterə rəy + mesaj
+
+Admin panel (stats, user manage, report system)
+
+📍 Nəticə
+✅ Sənin sayt artıq funksionallıq baxımından NextBarter-dən daha güclüdür (reytinq, tamamlanmış barter, çoxdillilik, SEO).
+
+🔧 Ancaq NextBarter-ə vizual və UX baxımından oxşar olmaq üçün:
+
+Filter + axtarış
+
+Seçilmişlər
+
+Statistika blokları
+
+Xəritə dəstəyi
+
+Daha zəngin profil və UI polishing
+

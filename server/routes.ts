@@ -2,7 +2,7 @@ import express, { type Express, Request, Response, NextFunction } from "express"
 import { createServer, type Server } from "http";
 import { storage as dbStorage } from "./storage";
 import { z } from "zod";
-import { insertUserSchema, insertItemSchema, insertMessageSchema, insertOfferSchema, insertFavoriteSchema, insertNotificationSchema, insertPushSubscriptionSchema } from "@shared/schema";
+import { insertUserSchema, insertItemSchema, insertMessageSchema, insertOfferSchema, insertFavoriteSchema, insertNotificationSchema, insertPushSubscriptionSchema, insertReviewSchema } from "@shared/schema";
 import { WebSocketServer } from 'ws';
 import multer from 'multer';
 import path from 'path';
@@ -1239,6 +1239,127 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(200).json({ message: 'Unsubscribed from push notifications' });
     } catch (error) {
       res.status(500).json({ message: 'Failed to unsubscribe from push notifications' });
+    }
+  });
+
+  // Review routes
+  // Get user rating
+  app.get('/api/users/:id/rating', async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      
+      const userRating = await dbStorage.getUserRating(userId);
+      if (!userRating) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      // Don't send password
+      const { password, ...userWithoutPassword } = userRating;
+      res.status(200).json(userWithoutPassword);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to get user rating' });
+    }
+  });
+  
+  // Get reviews for a user
+  app.get('/api/users/:id/reviews', async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const asReviewer = req.query.asReviewer === 'true';
+      
+      const reviews = await dbStorage.getReviewsByUser(userId, asReviewer);
+      res.status(200).json(reviews);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to get user reviews' });
+    }
+  });
+  
+  // Get reviews for an offer
+  app.get('/api/offers/:id/reviews', async (req, res) => {
+    try {
+      const offerId = parseInt(req.params.id);
+      
+      const reviews = await dbStorage.getReviewsByOffer(offerId);
+      res.status(200).json(reviews);
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to get offer reviews' });
+    }
+  });
+  
+  // Check if user can review offer
+  app.get('/api/offers/:id/can-review', async (req, res) => {
+    if (!isAuthenticated(req, res)) return;
+    
+    try {
+      const offerId = parseInt(req.params.id);
+      const userId = req.session.userId!;
+      
+      const canReview = await dbStorage.canReviewOffer(offerId, userId);
+      res.status(200).json({ canReview });
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to check if user can review offer' });
+    }
+  });
+  
+  // Create a review
+  app.post('/api/offers/:id/reviews', async (req, res) => {
+    if (!isAuthenticated(req, res)) return;
+    
+    try {
+      const offerId = parseInt(req.params.id);
+      const userId = req.session.userId!;
+      
+      // Check if user can review this offer
+      const canReview = await dbStorage.canReviewOffer(offerId, userId);
+      if (!canReview) {
+        return res.status(403).json({ 
+          message: 'You cannot review this offer. Either it is not completed, or you have already reviewed it, or you are not part of this offer.' 
+        });
+      }
+      
+      // Get the offer to determine who is being reviewed
+      const offer = await dbStorage.getOffer(offerId);
+      if (!offer) {
+        return res.status(404).json({ message: 'Offer not found' });
+      }
+      
+      // Determine who is the reviewer and who is being reviewed
+      const toUserId = offer.fromUserId === userId ? offer.toUserId : offer.fromUserId;
+      
+      // Create review data
+      const reviewData = insertReviewSchema.parse({
+        ...req.body,
+        fromUserId: userId,
+        toUserId,
+        offerId
+      });
+      
+      const review = await dbStorage.createReview(reviewData);
+      
+      // Create a notification for the user being reviewed
+      await dbStorage.createNotification({
+        userId: toUserId,
+        type: 'review',
+        referenceId: review.id,
+        content: `You've received a new review`
+      });
+      
+      // Send notification via WebSocket if user is connected
+      if (clients.has(toUserId)) {
+        const client = clients.get(toUserId);
+        const count = await dbStorage.getUnreadNotificationsCount(toUserId);
+        client?.send(JSON.stringify({
+          type: 'notification_count',
+          count
+        }));
+      }
+      
+      res.status(201).json(review);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: error.errors[0].message });
+      }
+      res.status(500).json({ message: 'Failed to create review' });
     }
   });
 

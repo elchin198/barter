@@ -607,7 +607,10 @@ export class MemStorage implements IStorage {
     
     const notification: Notification = {
       id,
-      ...insertNotification,
+      userId: insertNotification.userId,
+      type: insertNotification.type,
+      content: insertNotification.content,
+      referenceId: insertNotification.referenceId || null,
       isRead: false,
       createdAt
     };

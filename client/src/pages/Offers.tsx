@@ -92,10 +92,20 @@ export default function Offers() {
   const handleOfferCompletion = (offer: OfferWithDetails) => {
     setSelectedOffer(offer);
     setActionType("complete");
-    updateOfferMutation.mutate({
-      id: offer.id,
-      status: "completed"
-    });
+    
+    try {
+      updateOfferMutation.mutate({
+        id: offer.id,
+        status: "completed"
+      });
+    } catch (err) {
+      const error = err as Error;
+      toast({
+        title: t('offers.updateFailed'),
+        description: error.message || t('offers.unknownError'),
+        variant: "destructive"
+      });
+    }
   };
 
   // Confirm action
@@ -334,10 +344,13 @@ interface OfferCardProps {
   viewMode: "sent" | "received";
   onAccept?: () => void;
   onReject?: () => void;
+  onComplete?: () => void;
 }
 
-function OfferCard({ offer, viewMode, onAccept, onReject }: OfferCardProps) {
+function OfferCard({ offer, viewMode, onAccept, onReject, onComplete }: OfferCardProps) {
   const { t } = useTranslation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   const [detailsOpen, setDetailsOpen] = useState(false);
   
   // Format date
@@ -514,30 +527,9 @@ function OfferCard({ offer, viewMode, onAccept, onReject }: OfferCardProps) {
             </Alert>
             
             {/* Mark as completed button for accepted offers */}
-            {offer.status === "accepted" && (
+            {offer.status === "accepted" && onComplete && (
               <Button 
-                onClick={() => {
-                  // Get queryClient and mutation functionality from Offers parent
-                  const queryClient = useQueryClient();
-                  const updateStatus = async () => {
-                    try {
-                      await apiRequest('PUT', `/api/offers/${offer.id}/status`, { status: 'completed' });
-                      queryClient.invalidateQueries({ queryKey: ['/api/offers'] });
-                      queryClient.invalidateQueries({ queryKey: ['/api/items'] });
-                      toast({
-                        title: t('offers.completed'),
-                        description: t('offers.completedDescription')
-                      });
-                    } catch (error) {
-                      toast({
-                        title: t('offers.updateFailed'),
-                        description: error.message,
-                        variant: "destructive"
-                      });
-                    }
-                  };
-                  updateStatus();
-                }}
+                onClick={onComplete}
                 className="w-full"
                 size="sm"
                 variant="outline"
@@ -708,15 +700,14 @@ function OfferCard({ offer, viewMode, onAccept, onReject }: OfferCardProps) {
                   {t('offers.reject')}
                 </Button>
               </>
-            ) : offer.status === "accepted" ? (
+            ) : offer.status === "accepted" && onComplete ? (
               <>
                 <Button variant="outline" onClick={() => setDetailsOpen(false)}>
                   {t('common.close')}
                 </Button>
                 <Button 
                   onClick={() => {
-                    /* Mark as completed logic will go here */
-                    console.log("Mark as completed", offer.id);
+                    onComplete();
                     setDetailsOpen(false);
                   }}
                 >

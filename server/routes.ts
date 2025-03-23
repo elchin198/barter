@@ -1,6 +1,6 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
-import { storage } from "./storage";
+import { storage as dbStorage } from "./storage";
 import { z } from "zod";
 import { insertUserSchema, insertItemSchema, insertMessageSchema, insertOfferSchema, insertFavoriteSchema, insertNotificationSchema, insertPushSubscriptionSchema } from "@shared/schema";
 import { WebSocketServer } from 'ws';
@@ -24,6 +24,33 @@ const isAuthenticated = (req: Request, res: Response): boolean => {
   }
   return true;
 };
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/uploads/avatars');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    cb(null, 'avatar-' + uniqueSuffix + ext);
+  }
+});
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB max file size
+  },
+  fileFilter: (req, file, cb) => {
+    // Accept only image files
+    if (file.mimetype.startsWith('image/')) {
+      cb(null, true);
+    } else {
+      cb(new Error('Only image files are allowed!'));
+    }
+  }
+});
 
 // WebSocket clients 
 const clients = new Map<number, WebSocket>();
@@ -238,6 +265,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(200).json(userWithoutPassword);
     } catch (error) {
       res.status(500).json({ message: 'Failed to update user' });
+    }
+  });
+  
+  // Avatar upload route
+  app.post('/api/users/me/avatar', upload.single('avatar'), async (req, res) => {
+    if (!isAuthenticated(req, res)) return;
+    
+    if (!req.file) {
+      return res.status(400).json({ message: 'No file uploaded' });
+    }
+    
+    try {
+      const userId = req.session.userId!;
+      const user = await storage.getUser(userId);
+      
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      // If user already has an avatar, delete the old file to save space
+      if (user.avatar && user.avatar.startsWith('/uploads/avatars/')) {
+        const oldAvatarPath = path.join('public', user.avatar);
+        try {
+          if (fs.existsSync(oldAvatarPath)) {
+            fs.unlinkSync(oldAvatarPath);
+          }
+        } catch (err) {
+          console.error('Failed to delete old avatar:', err);
+        }
+      }
+      
+      // Save the new avatar path to the user's record
+      const avatarUrl = `/uploads/avatars/${req.file.filename}`;
+      const updatedUser = await storage.updateUser(userId, { avatar: avatarUrl });
+      
+      if (!updatedUser) {
+        return res.status(500).json({ message: 'Failed to update user avatar' });
+      }
+      
+      // Return user data without password
+      const { password, ...userWithoutPassword } = updatedUser;
+      res.status(200).json({ ...userWithoutPassword, avatarUrl });
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to upload avatar' });
     }
   });
   

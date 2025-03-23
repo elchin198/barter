@@ -7,17 +7,17 @@ export default function HeroSection() {
   const { user } = useAuth();
   
   return (
-    <section className="py-16 md:py-24 overflow-hidden relative bg-gray-900 text-white">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-800 to-indigo-900 opacity-90 z-0"></div>
+    <section className="py-16 md:py-24 overflow-hidden relative">
+      <div className="absolute inset-0 bg-gray-900 z-0"></div>
       
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
+          <div className="p-6 bg-black/80 rounded-lg">
             <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight text-white">
               <span className="text-blue-300">Əşyalarınızı dəyişdirin,</span> pul xərcləmədən istədiyinizi əldə edin
             </h1>
             
-            <p className="text-xl text-gray-200 mb-8">
+            <p className="text-xl text-white mb-8">
               BarterTap.az - Azərbaycanın ən böyük əşya mübadiləsi platformasında artıq istifadə etmədiyiniz əşyaları ehtiyacınız 
               olan əşyalara dəyişin. Sürətli, təhlükəsiz və tamamilə pulsuz!
             </p>

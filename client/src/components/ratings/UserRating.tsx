@@ -23,13 +23,13 @@ export default function UserRating({ userId, displayUser }: UserRatingProps) {
   });
   
   // Get reviews received by user
-  const { data: receivedReviews = [], isLoading: receivedLoading } = useQuery({
+  const { data: receivedReviews = [], isLoading: receivedLoading } = useQuery<any[]>({
     queryKey: [`/api/users/${userId}/reviews`, { asReviewer: false }],
     enabled: !!userId,
   });
   
   // Get reviews given by user
-  const { data: givenReviews = [], isLoading: givenLoading } = useQuery({
+  const { data: givenReviews = [], isLoading: givenLoading } = useQuery<any[]>({
     queryKey: [`/api/users/${userId}/reviews`, { asReviewer: true }],
     enabled: !!userId,
   });

@@ -9,13 +9,14 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Package, Check, X, ArrowRightLeft, Clock, ShieldCheck, ShieldX, Eye, Calendar, MapPin, Tag, User as UserIcon, MessageSquare } from "lucide-react";
+import { Package, Check, X, ArrowRightLeft, Clock, ShieldCheck, ShieldX, Eye, Calendar, MapPin, Tag, User as UserIcon, MessageSquare, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "../context/AuthContext";
 import { apiRequest } from "@/lib/queryClient";
 import { useTranslation } from "react-i18next";
 import SEO from "@/components/SEO";
 import { Offer, Item, User } from "@shared/schema";
+import ReviewForm from "@/components/ratings/ReviewForm";
 
 // Extended Offer type with related data
 interface OfferWithDetails extends Offer {

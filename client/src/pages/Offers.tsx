@@ -34,7 +34,7 @@ export default function Offers() {
   const [activeTab, setActiveTab] = useState("received");
   const [selectedOffer, setSelectedOffer] = useState<OfferWithDetails | null>(null);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
-  const [actionType, setActionType] = useState<"accept" | "reject" | null>(null);
+  const [actionType, setActionType] = useState<"accept" | "reject" | "complete" | null>(null);
 
   // Get offers
   const { data: offers = [], isLoading } = useQuery<OfferWithDetails[]>({
@@ -48,12 +48,21 @@ export default function Offers() {
       return apiRequest('PUT', `/api/offers/${id}/status`, { status });
     },
     onSuccess: () => {
-      toast({ 
-        title: actionType === "accept" ? t('offers.accepted') : t('offers.rejected'),
-        description: actionType === "accept" 
-          ? t('offers.acceptedDescription') 
-          : t('offers.rejectedDescription')
-      });
+      let title = '';
+      let description = '';
+      
+      if (actionType === "accept") {
+        title = t('offers.accepted');
+        description = t('offers.acceptedDescription');
+      } else if (actionType === "reject") {
+        title = t('offers.rejected');
+        description = t('offers.rejectedDescription');
+      } else if (actionType === "complete") {
+        title = t('offers.completed');
+        description = t('offers.completedDescription');
+      }
+      
+      toast({ title, description });
       
       queryClient.invalidateQueries({ queryKey: ['/api/offers'] });
       queryClient.invalidateQueries({ queryKey: ['/api/items'] });
@@ -78,14 +87,30 @@ export default function Offers() {
     setActionType(action);
     setConfirmDialogOpen(true);
   };
+  
+  // Handle offer completion
+  const handleOfferCompletion = (offer: OfferWithDetails) => {
+    setSelectedOffer(offer);
+    setActionType("complete");
+    updateOfferMutation.mutate({
+      id: offer.id,
+      status: "completed"
+    });
+  };
 
   // Confirm action
   const confirmAction = () => {
     if (!selectedOffer || !actionType) return;
     
+    const status = actionType === "accept" 
+      ? "accepted" 
+      : actionType === "complete"
+      ? "completed"
+      : "rejected";
+      
     updateOfferMutation.mutate({
       id: selectedOffer.id,
-      status: actionType === "accept" ? "accepted" : "rejected"
+      status
     });
   };
 
@@ -146,17 +171,27 @@ export default function Offers() {
         {/* Tabs for sent/received offers */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full max-w-md grid-cols-2 mb-8">
-            <TabsTrigger value="received">
-              {t('offers.receivedOffers')} 
-              {receivedOffers.length > 0 && (
-                <Badge variant="outline" className="ml-2">{receivedOffers.length}</Badge>
-              )}
+            <TabsTrigger value="received" className="flex items-center justify-center">
+              <div className="flex items-center">
+                <Package className="h-4 w-4 mr-2" />
+                {t('offers.receivedOffers')} 
+                {receivedOffers.length > 0 && (
+                  <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-800 border-blue-300">
+                    {receivedOffers.length}
+                  </Badge>
+                )}
+              </div>
             </TabsTrigger>
-            <TabsTrigger value="sent">
-              {t('offers.sentOffers')}
-              {sentOffers.length > 0 && (
-                <Badge variant="outline" className="ml-2">{sentOffers.length}</Badge>
-              )}
+            <TabsTrigger value="sent" className="flex items-center justify-center">
+              <div className="flex items-center">
+                <ArrowRightLeft className="h-4 w-4 mr-2" />
+                {t('offers.sentOffers')}
+                {sentOffers.length > 0 && (
+                  <Badge variant="outline" className="ml-2 bg-blue-100 text-blue-800 border-blue-300">
+                    {sentOffers.length}
+                  </Badge>
+                )}
+              </div>
             </TabsTrigger>
           </TabsList>
 
@@ -184,6 +219,7 @@ export default function Offers() {
                     viewMode="received"
                     onAccept={() => handleOfferAction(offer, "accept")}
                     onReject={() => handleOfferAction(offer, "reject")}
+                    onComplete={() => handleOfferCompletion(offer)}
                   />
                 ))}
               </div>
@@ -331,6 +367,8 @@ function OfferCard({ offer, viewMode, onAccept, onReject }: OfferCardProps) {
         return <Badge variant="outline" className="bg-yellow-100 text-yellow-800 border-yellow-300 whitespace-nowrap"><Clock className="h-3 w-3 mr-1" /> {t('offers.statusPending')}</Badge>;
       case 'accepted':
         return <Badge variant="outline" className="bg-green-100 text-green-800 border-green-300 whitespace-nowrap"><ShieldCheck className="h-3 w-3 mr-1" /> {t('offers.statusAccepted')}</Badge>;
+      case 'completed':
+        return <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-300 whitespace-nowrap"><Check className="h-3 w-3 mr-1" /> {t('offers.statusCompleted')}</Badge>;
       case 'rejected':
         return <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300 whitespace-nowrap"><ShieldX className="h-3 w-3 mr-1" /> {t('offers.statusRejected')}</Badge>;
       default:
@@ -437,15 +475,26 @@ function OfferCard({ offer, viewMode, onAccept, onReject }: OfferCardProps) {
           </CardFooter>
         )}
         
-        {/* Info for accepted/rejected offers */}
+        {/* Info for accepted/rejected/completed offers */}
         {offer.status !== "pending" && (
-          <CardFooter className="pt-0">
-            <Alert variant={offer.status === "accepted" ? "default" : "destructive"} className="py-2">
+          <CardFooter className="pt-0 flex flex-col gap-2">
+            <Alert variant={
+                offer.status === "accepted" ? "default" :
+                offer.status === "completed" ? "default" : 
+                "destructive"
+              } 
+              className="py-2"
+            >
               <AlertTitle className="text-sm flex items-center">
                 {offer.status === "accepted" ? (
                   <>
                     <Check className="h-4 w-4 mr-1" />
                     {t('offers.offerAccepted')}
+                  </>
+                ) : offer.status === "completed" ? (
+                  <>
+                    <Check className="h-4 w-4 mr-1" />
+                    {t('offers.offerCompleted')}
                   </>
                 ) : (
                   <>
@@ -457,10 +506,46 @@ function OfferCard({ offer, viewMode, onAccept, onReject }: OfferCardProps) {
               <AlertDescription className="text-xs">
                 {offer.status === "accepted" 
                   ? t('offers.offerAcceptedDescription')
+                  : offer.status === "completed"
+                  ? t('offers.offerCompletedDescription')
                   : t('offers.offerRejectedDescription')
                 }
               </AlertDescription>
             </Alert>
+            
+            {/* Mark as completed button for accepted offers */}
+            {offer.status === "accepted" && (
+              <Button 
+                onClick={() => {
+                  // Get queryClient and mutation functionality from Offers parent
+                  const queryClient = useQueryClient();
+                  const updateStatus = async () => {
+                    try {
+                      await apiRequest('PUT', `/api/offers/${offer.id}/status`, { status: 'completed' });
+                      queryClient.invalidateQueries({ queryKey: ['/api/offers'] });
+                      queryClient.invalidateQueries({ queryKey: ['/api/items'] });
+                      toast({
+                        title: t('offers.completed'),
+                        description: t('offers.completedDescription')
+                      });
+                    } catch (error) {
+                      toast({
+                        title: t('offers.updateFailed'),
+                        description: error.message,
+                        variant: "destructive"
+                      });
+                    }
+                  };
+                  updateStatus();
+                }}
+                className="w-full"
+                size="sm"
+                variant="outline"
+              >
+                <Check className="h-4 w-4 mr-1" />
+                {t('offers.markAsCompleted')}
+              </Button>
+            )}
           </CardFooter>
         )}
       </Card>
@@ -621,6 +706,22 @@ function OfferCard({ offer, viewMode, onAccept, onReject }: OfferCardProps) {
                 <Button onClick={onReject} variant="destructive">
                   <X className="h-4 w-4 mr-1" />
                   {t('offers.reject')}
+                </Button>
+              </>
+            ) : offer.status === "accepted" ? (
+              <>
+                <Button variant="outline" onClick={() => setDetailsOpen(false)}>
+                  {t('common.close')}
+                </Button>
+                <Button 
+                  onClick={() => {
+                    /* Mark as completed logic will go here */
+                    console.log("Mark as completed", offer.id);
+                    setDetailsOpen(false);
+                  }}
+                >
+                  <Check className="h-4 w-4 mr-1" />
+                  {t('offers.markAsCompleted')}
                 </Button>
               </>
             ) : (

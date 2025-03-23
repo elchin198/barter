@@ -1,0 +1,93 @@
+BarterTap Saytında Çatışmayan və ya Təkmilləşdirilməli Hissələr
+1. ✅ Çoxdillilik Sistemi Görünmür
+Sayt yalnız Azərbaycan dilindədir, halbuki Rus və İngilis dəstəyi qeyd olunmuşdu.
+
+📌 Tapşırıq:
+React.js-də react-i18next paketi qurulsun, JSON dil faylları (az.json, ru.json, en.json) hazırlansın.
+Navbar-da dil seçimi (🇦🇿 | 🇷🇺 | 🇬🇧) əlavə edilsin.
+
+bash
+Copy
+Edit
+npm install react-i18next i18next
+2. 🛑 Təklif Sistemi İşləmir və ya Mövcud Deyil
+Elanlara klik etdikdə “təklif et” funksiyası yoxdur və barter prosesi tamamlanmır.
+
+📌 Tapşırıq:
+
+Elan detallarına daxil olduqda “öz elanımdan seçim et” + “qısa mesaj yaz” sahələri olan bir təklif formu əlavə et.
+
+Bu form təklifləri POST /api/offers endpointinə göndərsin.
+
+Dashboard səhifəsində göndərilmiş/alınmış təkliflər statusla görünsün.
+
+3. 📸 Şəkil Yükləmə Funksiyası Məhduddur
+Elan yerləşdirərkən şəkil yükləmə çox zəif və ya ümumiyyətlə işləmir.
+
+📌 Tapşırıq:
+
+base64 əvəzinə Cloudinary kimi bir servis istifadə et.
+
+image upload komponenti yenidən qurulsun və preview göstərilsin.
+
+bash
+Copy
+Edit
+npm install axios
+4. 👤 Profil və Təkliflər Paneli Mövcud Deyil
+İstifadəçinin öz elanları və barter tarixçəsi görünmür.
+
+📌 Tapşırıq:
+
+Dashboard səhifəsi əlavə et:
+
+Mənim Elanlarım
+
+Mənim Təkliflərim (göndərilən/alınan)
+
+Təkliflərin statusu (pending/accepted/rejected)
+
+5. 🔍 Filtrləmə və Axtarış Sistemi Yoxdur
+Elanları axtarmaq və kateqoriyaya görə süzmək mümkün deyil.
+
+📌 Tapşırıq:
+
+Axtarış input komponenti əlavə et (başlıq və təsvir üzrə filter).
+
+Kateqoriya və şəhər üzrə dropdown süzgəc sistemi hazırlanmalıdır.
+
+6. 📱 Mobil Uyğunluq zəifdir
+Sayt mobil telefonlarda ideal görünmür.
+
+📌 Tapşırıq:
+
+Bütün səhifələr Tailwind ilə responsive dizayn olmalıdır
+
+Navbar collapsible olunmalıdır (mobile hamburger menu)
+
+7. 🧾 Elan Redaktə və Silmə yoxdur
+İstifadəçi yerləşdirdiyi elanı redaktə və ya silə bilmir.
+
+📌 Tapşırıq:
+
+“Mənim Elanlarım” səhifəsində hər elanın yanında “Redaktə et” və “Sil” düymələri olmalıdır.
+
+Redaktə komponenti mövcud məlumatları formda göstərsin və yeniləsin.
+
+🧱 Qovluq Struktur Tapşırığı (React + Express)
+bash
+Copy
+Edit
+/client
+  /src
+    /components
+    /pages
+    /i18n
+    App.js
+    index.js
+
+/server
+  /models
+  /routes
+  /controllers
+  server.js

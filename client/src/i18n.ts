@@ -1,39 +1,55 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
+import HttpBackend from 'i18next-http-backend';
 
-// Don't want to use this?
-// have a look at the Quick start guide 
-// for passing in lng and translations on init
-
+// i18n initialization
 i18n
-  // detect user language
-  // learn more: https://github.com/i18next/i18next-browser-languageDetector
+  // Load translations using HTTP
+  .use(HttpBackend)
+  // Detect user language
   .use(LanguageDetector)
-  // pass the i18n instance to react-i18next.
+  // Pass i18n instance to react-i18next
   .use(initReactI18next)
-  // init i18next
-  // for all options read: https://www.i18next.com/overview/configuration-options
+  // Initialize i18next
   .init({
     fallbackLng: 'az',
     debug: true,
     supportedLngs: ['az', 'ru', 'en'],
     
-    // language detection options
+    // Language detection options
     detection: {
       order: ['localStorage', 'navigator'],
       lookupLocalStorage: 'i18nextLng',
       caches: ['localStorage'],
     },
 
-    interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
-    },
-
-    // load translations from public/locales folder
+    // Configure backend
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
+
+    // React does not need escaping
+    interpolation: {
+      escapeValue: false,
+    },
+
+    // Initialize with empty resources to avoid warnings on first load
+    resources: {
+      az: {
+        translation: {
+          common: {
+            home: 'Ana Səhifə',
+            allItems: 'Bütün Əşyalar',
+            categories: 'Kateqoriyalar',
+            howItWorks: 'Necə İşləyir',
+            addItem: 'Əşya Əlavə Et',
+            login: 'Daxil ol',
+            register: 'Qeydiyyat'
+          }
+        }
+      }
+    }
   });
 
 export default i18n;

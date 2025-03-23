@@ -1,0 +1,146 @@
+Saytı hərtərəfli analiz etdim və aşağıda funksional, interfeys və təhlükəsizlik baxımından bütün çatışmazlıqları və təkmilləşdirmə təkliflərini mərhələli şəkildə təqdim edirəm. Hər bir problem üçün konkret Replit uyğun tapşırıq də əlavə olunub.
+
+🔎 1. FUNKSİONAL PROBLEMLƏR
+❌ Barter Prosesi Mövcud Deyil
+Problem:
+Heç bir yerdə barter təklif sistemi yoxdur. İstifadəçi digər elana təklif göndərə bilmir.
+
+📌 Tapşırıq:
+
+Elan detallarında “öz elanı seç”, “mesaj yaz” və “təklif et” funksiyası əlavə et.
+
+Təkliflər /api/offers route-u ilə DB-də saxlanılsın.
+
+Hər istifadəçi “Barterlərim” panelində aldığı və göndərdiyi təklifləri görsün.
+
+❌ Elan Detalları Yoxdur
+Problem:
+Elana klik etdikdə sadəcə şəkil və başlıq görünür. Təfsilatlı səhifə açılmır.
+
+📌 Tapşırıq:
+
+Elan detallarına keçid ver.
+
+Ayrı səhifədə aşağıdakılar göstərilsin:
+
+Başlıq
+
+Təsvir
+
+Kateqoriya
+
+Şəhər
+
+İstifadəçinin adı
+
+Şəkil
+
+“Təklif et” düyməsi
+
+❌ İstifadəçi Paneli Mövcud Deyil
+Problem:
+Qeydiyyatdan keçən istifadəçi nə profilinə, nə də elanlarına baxa bilir.
+
+📌 Tapşırıq:
+
+“Profilim” səhifəsi əlavə olunsun:
+
+Mənim Elanlarım
+
+Mənim Təkliflərim
+
+Şifrə və dil ayarları
+
+❌ Elan Yerləşdirmə Məhduddur
+Problem:
+Şəkil yükləmə funksiyası zəif və ya mövcud deyil, formda validasiya yoxlanmır.
+
+📌 Tapşırıq:
+
+Şəkil yükləmə üçün Cloudinary və ya base64 dəstəyi ver
+
+Forma yoxlaması (required sahələr, uzunluq yoxlaması)
+
+🌍 2. DİZAYN VƏ UX PROBLEMLƏRİ
+❌ Çoxdillilik Yoxdur
+Problem:
+Sayt yalnız Azərbaycan dilindədir.
+
+📌 Tapşırıq:
+
+react-i18next modulu ilə dil faylları (az.json, ru.json, en.json) qur
+
+Navbar-a 🇦🇿 | 🇷🇺 | 🇬🇧 dil dəyişdirici əlavə et
+
+❌ Mobil Uyğunluq Zəifdir
+Problem:
+Sayt mobil cihazlarda yaxşı görünmür.
+
+📌 Tapşırıq:
+
+Tailwind ilə responsive dizayn təmin et
+
+Navbar collapsible hamburger menyuya çevrilsin
+
+❌ Axtarış və Filtrləmə Yoxdur
+Problem:
+İstifadəçi elanlar arasında axtarış və süzgəc edə bilmir.
+
+📌 Tapşırıq:
+
+Ana səhifəyə axtarış inputu əlavə et
+
+Kateqoriya və şəhər üzrə süzgəc filter komponentləri yaz
+
+❌ Elan Redaktəsi və Silinməsi Yoxdur
+Problem:
+İstifadəçi yerləşdirdiyi elanı nə redaktə edə, nə də silə bilir.
+
+📌 Tapşırıq:
+
+“Mənim Elanlarım”da “Redaktə Et” və “Sil” düymələri əlavə et
+
+PUT və DELETE API-lər işləsin
+
+🛡️ 3. TƏHLÜKƏSİZLİK PROBLEMLƏRİ
+❌ Token və Sessiya Qorunması Yoxdur
+Problem:
+Sayta daxil olduqdan sonra istifadəçi məlumatları qorunmur, JWT istifadə olunmur.
+
+📌 Tapşırıq:
+
+Backend-də jsonwebtoken ilə token yarat
+
+Frontend-də localStorage-də token saxla
+
+Axios ilə Authorization: Bearer <token> başlığı əlavə et
+
+❌ Form Validasiyası Yoxdur
+Problem:
+Boş sahələr, uzun mesajlar, və s. heç bir yoxlamadan keçmir.
+
+📌 Tapşırıq:
+
+React-da formik və yup ilə forma doğrulama əlavə et
+
+Backend tərəfdə də express-validator ilə yoxlamalar qur
+
+❌ Ətraflı Şifrə Qorunması Yoxdur
+Problem:
+Şifrələr açıq şəkildə saxlanıla bilər, bcrypt yoxdur.
+
+📌 Tapşırıq:
+
+bcrypt ilə şifrəni hash et və databazada saxla
+
+bash
+Copy
+Edit
+npm install bcrypt
+📬 4. ƏLAVƏ OLARAQ TÖVSİYƏLƏR (Opsional)
+💬 Barter üçün real vaxt mesajlaşma (chat)
+Hər barter razılaşmasında iki istifadəçi arasında sadə chat sistemi qurula bilər (socket.io və ya chat modalı ilə)
+
+📊 Admin Paneli (future)
+Elanları və istifadəçiləri idarə etmək üçün sadə admin panel
+

@@ -9,7 +9,8 @@ import {
   notifications, type Notification, type InsertNotification,
   favorites, type Favorite, type InsertFavorite,
   pushSubscriptions, type PushSubscription, type InsertPushSubscription,
-  type ConversationWithParticipants, type MessageWithSender
+  reviews, type Review, type InsertReview,
+  type ConversationWithParticipants, type MessageWithSender, type UserWithRating, type ReviewWithDetails
 } from "@shared/schema";
 
 // Storage interface
@@ -72,6 +73,14 @@ export interface IStorage {
   getPushSubscription(userId: number): Promise<PushSubscription | undefined>;
   createOrUpdatePushSubscription(subscription: InsertPushSubscription): Promise<PushSubscription>;
   deletePushSubscription(userId: number): Promise<boolean>;
+  
+  // Review methods for reputation system
+  getReviewById(id: number): Promise<ReviewWithDetails | undefined>;
+  getReviewsByUser(userId: number, asReviewer?: boolean): Promise<ReviewWithDetails[]>;
+  getReviewsByOffer(offerId: number): Promise<ReviewWithDetails[]>;
+  createReview(review: InsertReview): Promise<Review>;
+  canReviewOffer(offerId: number, userId: number): Promise<boolean>;
+  getUserRating(userId: number): Promise<UserWithRating>;
 }
 
 export class MemStorage implements IStorage {
@@ -85,6 +94,7 @@ export class MemStorage implements IStorage {
   private notifications: Map<number, Notification>;
   private favorites: Map<number, Favorite>;
   private pushSubscriptions: Map<number, PushSubscription>;
+  private reviews: Map<number, Review>;
   
   private currentUserId: number;
   private currentItemId: number;
@@ -96,6 +106,7 @@ export class MemStorage implements IStorage {
   private currentNotificationId: number;
   private currentFavoriteId: number;
   private currentPushSubscriptionId: number;
+  private currentReviewId: number;
 
   constructor() {
     this.users = new Map();

@@ -134,6 +134,20 @@ export const pushSubscriptions = pgTable("push_subscriptions", {
 export const insertPushSubscriptionSchema = createInsertSchema(pushSubscriptions)
   .omit({ id: true, createdAt: true, updatedAt: true });
 
+// Reviews table (for reputation system)
+export const reviews = pgTable("reviews", {
+  id: serial("id").primaryKey(),
+  offerId: integer("offer_id").notNull().references(() => offers.id),
+  fromUserId: integer("from_user_id").notNull().references(() => users.id),
+  toUserId: integer("to_user_id").notNull().references(() => users.id),
+  rating: integer("rating").notNull(), // 1-5 star rating
+  comment: text("comment"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertReviewSchema = createInsertSchema(reviews)
+  .omit({ id: true, createdAt: true });
+
 // Type definitions
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -165,6 +179,9 @@ export type InsertFavorite = z.infer<typeof insertFavoriteSchema>;
 export type PushSubscription = typeof pushSubscriptions.$inferSelect;
 export type InsertPushSubscription = z.infer<typeof insertPushSubscriptionSchema>;
 
+export type Review = typeof reviews.$inferSelect;
+export type InsertReview = z.infer<typeof insertReviewSchema>;
+
 // Extended types for frontend use
 export type ConversationWithParticipants = Conversation & {
   participants: User[];
@@ -176,4 +193,15 @@ export type ConversationWithParticipants = Conversation & {
 
 export type MessageWithSender = Message & {
   sender: User;
+};
+
+export type UserWithRating = User & {
+  averageRating?: number;
+  reviewCount?: number;
+};
+
+export type ReviewWithDetails = Review & {
+  fromUser: User;
+  toUser: User;
+  offer: Offer;
 };

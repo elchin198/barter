@@ -1,4 +1,4 @@
-import type { Express, Request, Response, NextFunction } from "express";
+import express, { type Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage as dbStorage } from "./storage";
 import { z } from "zod";
@@ -62,6 +62,9 @@ const clients = new Map<number, WebSocket>();
 
 export async function registerRoutes(app: Express): Promise<Server> {
   const httpServer = createServer(app);
+  
+  // Serve static files from public directory
+  app.use('/uploads', express.static(path.join(process.cwd(), 'public/uploads')));
 
   // WebSocket server for real-time messages
   const wss = new WebSocketServer({ 

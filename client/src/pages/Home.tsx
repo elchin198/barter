@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,10 +6,27 @@ import HeroSection from "@/components/home/HeroSection";
 import FeatureSection from "@/components/home/FeatureSection";
 import CategorySlider from "@/components/home/CategorySlider";
 import RecentItems from "@/components/home/RecentItems";
+import SEO from "@/components/SEO";
+import { useTranslation } from "react-i18next";
 
 export default function Home() {
+  const { t } = useTranslation();
+  const [location] = useLocation();
+  // Create specific SEO for home page
+  const homeTitle = t('seo.homeTitle', 'BarterTap.az - Əşya Mübadiləsi Platforması');
+  const homeDescription = t(
+    'seo.homeDescription', 
+    'BarterTap.az - Azərbaycanda ən böyük pulsuz əşya mübadiləsi platforması. Lazımsız əşyalarınızı dəyişin, ehtiyacınız olanları əldə edin.'
+  );
+  
   return (
     <div>
+      {/* Page-specific SEO */}
+      <SEO 
+        title={homeTitle}
+        description={homeDescription}
+        pathName={location}
+      />
       {/* Hero section */}
       <HeroSection />
       

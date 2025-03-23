@@ -1,0 +1,113 @@
+Saytın son versiyasını analiz etdim. Aşağıda həm müsbət tərəflər, həm də təkmilləşdirilməli hissələr var. Xüsusilə çoxdillilik tərəfi artıq çox peşəkar səviyyədə işləyir. 👏
+
+✅ Görülmüş Yaxşı İşlər
+Məsələ	Status	Qısa Qeyd
+🌐 Çoxdillilik	✅ Tam işlək	localStorage + URL parametrləri + HTML lang ✅
+🌍 Navbar və Footer	✅ Tərcümə olunub	Mobil və masaüstü uyğun
+🌐 LangSwitcher	✅ Yaxşı dizayn, stabil keçid	
+🌐 URL-də ?lng= ilə dil seçimi	✅ Dəstəklənir	
+🗃️ Lang fayllar	✅ Yüklənir və sinxron dəyişir	
+🔍 Təkmilləşdirilməli Sahələr və Tapşırıqlar
+1. 🧩 Elan Detalları Yoxdur (kliklənə bilən link yoxdur)
+Problem: Elana klik etdikdə detallı səhifəyə keçid yoxdur.
+
+📌 Tapşırıq:
+
+Hər elanı <Link to={/listing/${id}}> ilə detallı səhifəyə yönləndir.
+
+Yeni səhifədə bu məlumatlar göstərilsin:
+
+Başlıq
+
+Kateqoriya
+
+Təsvir
+
+Şəkil
+
+Təklif et düyməsi
+
+2. 🔁 Təklif Et Sistemi Hələ Yoxdur
+Problem: Heç bir elana barter təklifi göndərmək mümkün deyil.
+
+📌 Tapşırıq:
+
+“Təklif et” düyməsi əlavə et
+
+Öz elanından seçim və mesaj ilə təklif göndər
+
+Backend POST /offers endpoint yaz
+
+Dashboardda göndərilən və alınan təkliflər göstərilsin
+
+3. 📬 Profil / Dashboard Səhifəsi Yoxdur
+Problem: İstifadəçi öz elanlarını və barterlərini görə bilmir.
+
+📌 Tapşırıq:
+
+“Profilim” səhifəsi yarat
+
+Mənim Elanlarım (redaktə/sil)
+
+Mənim Təkliflərim (statusla birlikdə)
+
+Aldığım təkliflər
+
+4. 🗂️ Kateqoriya və Axtarış Sistemi Yoxdur
+Problem: İstifadəçi filtrləyib axtarış edə bilmir.
+
+📌 Tapşırıq:
+
+Kateqoriya Dropdown
+
+Axtarış inputu (başlığa və təsvirə görə filtr)
+
+Backend GET /listings?search=query&category=... kimi filterli endpoint yaz
+
+5. 📸 Şəkil Yükləmə Sadələşdirilməlidir
+Problem: Şəkil base64 və ya zəif şəkildə idarə olunur.
+
+📌 Tapşırıq:
+
+Cloudinary API inteqrasiyası (və ya FileReader + Preview)
+
+Yüklənən şəkil URL-i backend-ə ötürülsün
+
+6. 📱 Mobil Görünüşdə Navbar Bəzən Qırılır
+Problem: Navbar mobil versiyada düzgün açılmır/hamburger menyu yoxdur.
+
+📌 Tapşırıq:
+
+Tailwind ilə hamburger menu əlavə et
+
+react-icons və ya @headlessui/react istifadə edilə bilər
+
+7. 🔐 Girişdə Sessiya Yoxlaması və Qoruma Yoxdur
+Problem: Girişsiz istifadəçi “Elan yerləşdir” səhifəsinə keçə bilir.
+
+📌 Tapşırıq:
+
+Giriş yoxdursa, /add-listing səhifəsini yönləndir:
+
+js
+Copy
+Edit
+if (!token) navigate("/login")
+8. 🧾 Elan Redaktə və Silmə Yoxdur
+Problem: Elan yerləşdirildikdən sonra redaktə edilə və ya silinə bilmir.
+
+📌 Tapşırıq:
+
+Edit və Delete düymələri “Mənim Elanlarım” bölməsində olsun
+
+PUT və DELETE API-ləri əlavə et
+
+9. 🎯 SEO və Meta Məlumat Yoxdur
+Problem: Sosial mediada paylaşanda heç bir məlumat çıxmır.
+
+📌 Tapşırıq:
+
+react-helmet ilə title və meta məlumatları dinamik yüklə
+
+Dilə uyğun title, description təyin et
+

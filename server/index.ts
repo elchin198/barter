@@ -1,28 +1,29 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
-import session from "express-session";
-import memoryStore from "memorystore";
+import path from "path";
+import fs from "fs";
+import dotenv from "dotenv";
+import { configureSession } from "./session";
 
-const MemoryStore = memoryStore(session);
+// Load environment variables from .env file in production
+dotenv.config();
+
+// Ensure uploads directories exist
+const uploadsDir = path.join(process.cwd(), 'public/uploads');
+const avatarsDir = path.join(uploadsDir, 'avatars');
+const itemsDir = path.join(uploadsDir, 'items');
+
+if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+if (!fs.existsSync(avatarsDir)) fs.mkdirSync(avatarsDir, { recursive: true });
+if (!fs.existsSync(itemsDir)) fs.mkdirSync(itemsDir, { recursive: true });
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// Session setup
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'bartertap-secret-key',
-  resave: false,
-  saveUninitialized: false,
-  cookie: { 
-    secure: process.env.NODE_ENV === 'production', 
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
-    sameSite: 'lax'
-  },
-  store: new MemoryStore({
-    checkPeriod: 86400000 // prune expired entries every 24h
-  })
-}));
+// Configure session based on environment
+app.use(configureSession());
 
 app.use((req, res, next) => {
   const start = Date.now();

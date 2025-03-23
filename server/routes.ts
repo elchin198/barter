@@ -72,23 +72,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
     path: '/api/ws'  // Specific path for our WebSocket to avoid conflict with Vite
   });
 
-  wss.on('connection', (ws: WebSocket, req) => {
+  wss.on('connection', (ws, req) => {
     // Extract userId from URL query parameters
     const url = req.url || '';
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
     const userId = parseInt(urlParams.get('userId') || '0');
     
+    console.log('WebSocket connection established. User ID:', userId);
+    
     if (userId > 0) {
       clients.set(userId, ws);
       
-      ws.addEventListener('close', () => {
+      ws.on('close', () => {
         clients.delete(userId);
+        console.log('WebSocket connection closed. User ID:', userId);
       });
       
-      ws.addEventListener('message', async (event: MessageEvent) => {
-        const message = event.data.toString();
+      ws.on('message', async (rawMessage) => {
+        const message = rawMessage.toString();
         try {
           const data = JSON.parse(message);
+          console.log('WebSocket message received:', data.type);
           
           if (data.type === 'message' && data.conversationId && data.content) {
             const newMessage = await dbStorage.createMessage({

@@ -26,7 +26,7 @@ const isAuthenticated = (req: Request, res: Response): boolean => {
 };
 
 // Configure multer for file uploads
-const storage = multer.diskStorage({
+const multerStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/uploads/avatars');
   },
@@ -38,7 +38,7 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({
-  storage,
+  storage: multerStorage,
   limits: {
     fileSize: 5 * 1024 * 1024, // 5MB max file size
   },
@@ -80,7 +80,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const data = JSON.parse(message);
           
           if (data.type === 'message' && data.conversationId && data.content) {
-            const newMessage = await storage.createMessage({
+            const newMessage = await dbStorage.createMessage({
               conversationId: data.conversationId,
               senderId: userId,
               content: data.content,
@@ -88,15 +88,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
             
             // Get the full message with sender info
-            const fullMessage = await storage.getMessage(newMessage.id);
+            const fullMessage = await dbStorage.getMessage(newMessage.id);
             if (!fullMessage) return;
             
             // Find other participants in this conversation
-            const conversation = await storage.getConversation(data.conversationId);
+            const conversation = await dbStorage.getConversation(data.conversationId);
             if (!conversation) return;
             
             // Send to all other participants who are connected
-            conversation.participants.forEach(participant => {
+            conversation.participants.forEach((participant: any) => {
               if (participant.id !== userId && clients.has(participant.id)) {
                 const client = clients.get(participant.id);
                 client?.send(JSON.stringify({
@@ -107,9 +107,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             });
             
             // Create a notification for other participants
-            conversation.participants.forEach(async (participant) => {
+            conversation.participants.forEach(async (participant: any) => {
               if (participant.id !== userId) {
-                await storage.createNotification({
+                await dbStorage.createNotification({
                   userId: participant.id,
                   type: 'message',
                   referenceId: data.conversationId,
@@ -119,7 +119,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 // Send notification to connected user
                 if (clients.has(participant.id)) {
                   const client = clients.get(participant.id);
-                  const count = await storage.getUnreadNotificationsCount(participant.id);
+                  const count = await dbStorage.getUnreadNotificationsCount(participant.id);
                   client?.send(JSON.stringify({
                     type: 'notification_count',
                     count
@@ -141,19 +141,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userData = insertUserSchema.parse(req.body);
       
       // Check if username exists
-      const existingUser = await storage.getUserByUsername(userData.username);
+      const existingUser = await dbStorage.getUserByUsername(userData.username);
       if (existingUser) {
         return res.status(400).json({ message: 'Username already exists' });
       }
       
       // Check if email exists
-      const existingEmail = await storage.getUserByEmail(userData.email);
+      const existingEmail = await dbStorage.getUserByEmail(userData.email);
       if (existingEmail) {
         return res.status(400).json({ message: 'Email already exists' });
       }
       
       // Create user
-      const user = await storage.createUser(userData);
+      const user = await dbStorage.createUser(userData);
       
       // Save user to session
       req.session.userId = user.id;
@@ -179,7 +179,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Find user
-      const user = await storage.getUserByUsername(username);
+      const user = await dbStorage.getUserByUsername(username);
       if (!user || user.password !== password) {
         return res.status(401).json({ message: 'Invalid username or password' });
       }
@@ -212,7 +212,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     try {
-      const user = await storage.getUser(req.session.userId);
+      const user = await dbStorage.getUser(req.session.userId);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -230,7 +230,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = parseInt(req.params.id);
       
-      const user = await storage.getUser(userId);
+      const user = await dbStorage.getUser(userId);
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -255,7 +255,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         delete userData.password;
       }
       
-      const updatedUser = await storage.updateUser(userId, userData);
+      const updatedUser = await dbStorage.updateUser(userId, userData);
       if (!updatedUser) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -278,7 +278,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     try {
       const userId = req.session.userId!;
-      const user = await storage.getUser(userId);
+      const user = await dbStorage.getUser(userId);
       
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
@@ -298,7 +298,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Save the new avatar path to the user's record
       const avatarUrl = `/uploads/avatars/${req.file.filename}`;
-      const updatedUser = await storage.updateUser(userId, { avatar: avatarUrl });
+      const updatedUser = await dbStorage.updateUser(userId, { avatar: avatarUrl });
       
       if (!updatedUser) {
         return res.status(500).json({ message: 'Failed to update user avatar' });
@@ -321,11 +321,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
       const offset = req.query.offset ? parseInt(req.query.offset as string) : undefined;
       
-      const items = await storage.getItems({ category, search, status, limit, offset });
+      const items = await dbStorage.getItems({ category, search, status, limit, offset });
       
       // Get image for each item
       const itemsWithImages = await Promise.all(items.map(async (item) => {
-        const images = await storage.getImagesByItem(item.id);
+        const images = await dbStorage.getImagesByItem(item.id);
         const mainImage = images.find(img => img.isMain)?.filePath || images[0]?.filePath;
         return { ...item, mainImage };
       }));
@@ -340,16 +340,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const itemId = parseInt(req.params.id);
       
-      const item = await storage.getItem(itemId);
+      const item = await dbStorage.getItem(itemId);
       if (!item) {
         return res.status(404).json({ message: 'Item not found' });
       }
       
       // Get images
-      const images = await storage.getImagesByItem(itemId);
+      const images = await dbStorage.getImagesByItem(itemId);
       
       // Get owner
-      const owner = await storage.getUser(item.userId);
+      const owner = await dbStorage.getUser(item.userId);
       if (!owner) {
         return res.status(404).json({ message: 'Item owner not found' });
       }
@@ -360,7 +360,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Check if favorite for current user
       let isFavorite = false;
       if (req.session.userId) {
-        isFavorite = await storage.isFavorite(req.session.userId, itemId);
+        isFavorite = await dbStorage.isFavorite(req.session.userId, itemId);
       }
       
       res.status(200).json({
@@ -384,7 +384,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId
       });
       
-      const item = await storage.createItem(itemData);
+      const item = await dbStorage.createItem(itemData);
       res.status(201).json(item);
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -402,7 +402,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.session.userId!;
       
       // Check if item exists and belongs to user
-      const item = await storage.getItem(itemId);
+      const item = await dbStorage.getItem(itemId);
       if (!item) {
         return res.status(404).json({ message: 'Item not found' });
       }
@@ -412,7 +412,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Update item
-      const updatedItem = await storage.updateItem(itemId, req.body);
+      const updatedItem = await dbStorage.updateItem(itemId, req.body);
       if (!updatedItem) {
         return res.status(404).json({ message: 'Item not found' });
       }
@@ -431,7 +431,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.session.userId!;
       
       // Check if item exists and belongs to user
-      const item = await storage.getItem(itemId);
+      const item = await dbStorage.getItem(itemId);
       if (!item) {
         return res.status(404).json({ message: 'Item not found' });
       }
@@ -441,7 +441,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Delete item
-      await storage.deleteItem(itemId);
+      await dbStorage.deleteItem(itemId);
       
       res.status(200).json({ message: 'Item deleted successfully' });
     } catch (error) {
@@ -458,7 +458,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.session.userId!;
       
       // Check if item exists and belongs to user
-      const item = await storage.getItem(itemId);
+      const item = await dbStorage.getItem(itemId);
       if (!item) {
         return res.status(404).json({ message: 'Item not found' });
       }
@@ -474,7 +474,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'File path is required' });
       }
       
-      const image = await storage.createImage({
+      const image = await dbStorage.createImage({
         itemId,
         filePath,
         isMain: !!isMain
@@ -495,7 +495,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.session.userId!;
       
       // Check if item exists and belongs to user
-      const item = await storage.getItem(itemId);
+      const item = await dbStorage.getItem(itemId);
       if (!item) {
         return res.status(404).json({ message: 'Item not found' });
       }
@@ -504,7 +504,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: 'You can only update images for your own items' });
       }
       
-      const success = await storage.setMainImage(imageId, itemId);
+      const success = await dbStorage.setMainImage(imageId, itemId);
       if (!success) {
         return res.status(404).json({ message: 'Image not found' });
       }
@@ -524,7 +524,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.session.userId!;
       
       // Check if item exists and belongs to user
-      const item = await storage.getItem(itemId);
+      const item = await dbStorage.getItem(itemId);
       if (!item) {
         return res.status(404).json({ message: 'Item not found' });
       }
@@ -533,7 +533,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: 'You can only delete images for your own items' });
       }
       
-      const success = await storage.deleteImage(imageId);
+      const success = await dbStorage.deleteImage(imageId);
       if (!success) {
         return res.status(404).json({ message: 'Image not found' });
       }
@@ -551,7 +551,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.session.userId!;
       
-      const conversations = await storage.getConversationsByUser(userId);
+      const conversations = await dbStorage.getConversationsByUser(userId);
       
       // Calculate unread counts and set other participant
       const enhancedConversations = conversations.map(conv => {
@@ -584,7 +584,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const conversationId = parseInt(req.params.id);
       const userId = req.session.userId!;
       
-      const conversation = await storage.getConversation(conversationId);
+      const conversation = await dbStorage.getConversation(conversationId);
       if (!conversation) {
         return res.status(404).json({ message: 'Conversation not found' });
       }
@@ -596,13 +596,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Get messages
-      const messages = await storage.getMessagesByConversation(conversationId);
+      const messages = await dbStorage.getMessagesByConversation(conversationId);
       
       // Find the other participant
       const otherParticipant = conversation.participants.find(p => p.id !== userId) || null;
       
       // Mark messages as read
-      await storage.markMessagesAsRead(conversationId, userId);
+      await dbStorage.markMessagesAsRead(conversationId, userId);
       
       res.status(200).json({
         conversation: {
@@ -628,21 +628,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Check if other user exists
-      const otherUser = await storage.getUser(otherUserId);
+      const otherUser = await dbStorage.getUser(otherUserId);
       if (!otherUser) {
         return res.status(404).json({ message: 'Other user not found' });
       }
       
       // Check if item exists if provided
       if (itemId) {
-        const item = await storage.getItem(itemId);
+        const item = await dbStorage.getItem(itemId);
         if (!item) {
           return res.status(404).json({ message: 'Item not found' });
         }
       }
       
       // Check if conversation already exists
-      const existingConversation = await storage.getConversationByParticipants(userId, otherUserId, itemId);
+      const existingConversation = await dbStorage.getConversationByParticipants(userId, otherUserId, itemId);
       
       let conversationId: number;
       
@@ -650,7 +650,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         conversationId = existingConversation.id;
       } else {
         // Create new conversation
-        const newConversation = await storage.createConversation(
+        const newConversation = await dbStorage.createConversation(
           { itemId: itemId || null },
           [
             { userId, conversationId: 0 }, // conversationId will be set by storage
@@ -663,7 +663,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Add message if provided
       if (message) {
-        await storage.createMessage({
+        await dbStorage.createMessage({
           conversationId,
           senderId: userId,
           content: message,
@@ -671,7 +671,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         
         // Create notification
-        await storage.createNotification({
+        await dbStorage.createNotification({
           userId: otherUserId,
           type: 'message',
           referenceId: conversationId,
@@ -681,7 +681,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Send notification via WebSocket if the user is connected
         if (clients.has(otherUserId)) {
           const client = clients.get(otherUserId);
-          const count = await storage.getUnreadNotificationsCount(otherUserId);
+          const count = await dbStorage.getUnreadNotificationsCount(otherUserId);
           client?.send(JSON.stringify({
             type: 'notification_count',
             count
@@ -689,7 +689,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      const conversation = await storage.getConversation(conversationId);
+      const conversation = await dbStorage.getConversation(conversationId);
       res.status(201).json(conversation);
     } catch (error) {
       res.status(500).json({ message: 'Failed to create conversation' });
@@ -709,7 +709,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Check if conversation exists and user is a participant
-      const conversation = await storage.getConversation(messageData.conversationId);
+      const conversation = await dbStorage.getConversation(messageData.conversationId);
       if (!conversation) {
         return res.status(404).json({ message: 'Conversation not found' });
       }
@@ -720,10 +720,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Create message
-      const message = await storage.createMessage(messageData);
+      const message = await dbStorage.createMessage(messageData);
       
       // Get full message with sender
-      const fullMessage = await storage.getMessage(message.id);
+      const fullMessage = await dbStorage.getMessage(message.id);
       if (!fullMessage) {
         return res.status(500).json({ message: 'Failed to create message' });
       }
@@ -733,7 +733,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Create notifications for other participants
       for (const participant of otherParticipants) {
-        await storage.createNotification({
+        await dbStorage.createNotification({
           userId: participant.id,
           type: 'message',
           referenceId: conversation.id,
@@ -751,7 +751,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           }));
           
           // Send notification count update
-          const count = await storage.getUnreadNotificationsCount(participant.id);
+          const count = await dbStorage.getUnreadNotificationsCount(participant.id);
           client?.send(JSON.stringify({
             type: 'notification_count',
             count
@@ -780,7 +780,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Check if conversation exists and user is a participant
-      const conversation = await storage.getConversation(conversationId);
+      const conversation = await dbStorage.getConversation(conversationId);
       if (!conversation) {
         return res.status(404).json({ message: 'Conversation not found' });
       }
@@ -791,7 +791,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Mark messages as read
-      const markedIds = await storage.markMessagesAsRead(conversationId, userId);
+      const markedIds = await dbStorage.markMessagesAsRead(conversationId, userId);
       
       res.status(200).json({ messageIds: markedIds });
     } catch (error) {
@@ -807,18 +807,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.session.userId!;
       const status = req.query.status as string | undefined;
       
-      const offers = await storage.getOffersByUser(userId, status);
+      const offers = await dbStorage.getOffersByUser(userId, status);
       
       // Enrich the offers with item and user data
       const enrichedOffers = await Promise.all(offers.map(async (offer) => {
-        const fromUser = await storage.getUser(offer.fromUserId);
-        const toUser = await storage.getUser(offer.toUserId);
-        const fromItem = await storage.getItem(offer.fromItemId);
-        const toItem = await storage.getItem(offer.toItemId);
+        const fromUser = await dbStorage.getUser(offer.fromUserId);
+        const toUser = await dbStorage.getUser(offer.toUserId);
+        const fromItem = await dbStorage.getItem(offer.fromItemId);
+        const toItem = await dbStorage.getItem(offer.toItemId);
         
         // Get main images
-        const fromItemImages = await storage.getImagesByItem(offer.fromItemId);
-        const toItemImages = await storage.getImagesByItem(offer.toItemId);
+        const fromItemImages = await dbStorage.getImagesByItem(offer.fromItemId);
+        const toItemImages = await dbStorage.getImagesByItem(offer.toItemId);
         
         const fromItemMainImage = fromItemImages.find(img => img.isMain)?.filePath || fromItemImages[0]?.filePath;
         const toItemMainImage = toItemImages.find(img => img.isMain)?.filePath || toItemImages[0]?.filePath;
@@ -850,12 +850,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Check if all entities exist
-      const toUser = await storage.getUser(offerData.toUserId);
+      const toUser = await dbStorage.getUser(offerData.toUserId);
       if (!toUser) {
         return res.status(404).json({ message: 'Recipient user not found' });
       }
       
-      const fromItem = await storage.getItem(offerData.fromItemId);
+      const fromItem = await dbStorage.getItem(offerData.fromItemId);
       if (!fromItem) {
         return res.status(404).json({ message: 'Your item not found' });
       }
@@ -864,7 +864,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: 'You can only offer your own items' });
       }
       
-      const toItem = await storage.getItem(offerData.toItemId);
+      const toItem = await dbStorage.getItem(offerData.toItemId);
       if (!toItem) {
         return res.status(404).json({ message: 'Target item not found' });
       }
@@ -874,13 +874,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Create the offer
-      const offer = await storage.createOffer(offerData);
+      const offer = await dbStorage.createOffer(offerData);
       
       // Create or get conversation for these users
-      let conversation = await storage.getConversationByParticipants(fromUserId, offerData.toUserId);
+      let conversation = await dbStorage.getConversationByParticipants(fromUserId, offerData.toUserId);
       
       if (!conversation) {
-        conversation = await storage.createConversation(
+        conversation = await dbStorage.createConversation(
           { itemId: offerData.toItemId },
           [
             { userId: fromUserId, conversationId: 0 },
@@ -890,7 +890,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Add system message about the offer
-      await storage.createMessage({
+      await dbStorage.createMessage({
         conversationId: conversation.id,
         senderId: fromUserId,
         content: `I'm offering my ${fromItem.title} for your ${toItem.title}. What do you think?`,
@@ -898,7 +898,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Create notification
-      await storage.createNotification({
+      await dbStorage.createNotification({
         userId: offerData.toUserId,
         type: 'offer',
         referenceId: offer.id,
@@ -908,7 +908,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Send notification via WebSocket if the user is connected
       if (clients.has(offerData.toUserId)) {
         const client = clients.get(offerData.toUserId);
-        const count = await storage.getUnreadNotificationsCount(offerData.toUserId);
+        const count = await dbStorage.getUnreadNotificationsCount(offerData.toUserId);
         client?.send(JSON.stringify({
           type: 'notification_count',
           count
@@ -937,7 +937,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Check if offer exists
-      const offer = await storage.getOffer(offerId);
+      const offer = await dbStorage.getOffer(offerId);
       if (!offer) {
         return res.status(404).json({ message: 'Offer not found' });
       }
@@ -956,27 +956,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Update offer status
-      const updatedOffer = await storage.updateOfferStatus(offerId, status);
+      const updatedOffer = await dbStorage.updateOfferStatus(offerId, status);
       if (!updatedOffer) {
         return res.status(500).json({ message: 'Failed to update offer status' });
       }
       
       // If accepted, update the items status to 'pending'
       if (status === 'accepted') {
-        await storage.updateItem(offer.fromItemId, { status: 'pending' });
-        await storage.updateItem(offer.toItemId, { status: 'pending' });
+        await dbStorage.updateItem(offer.fromItemId, { status: 'pending' });
+        await dbStorage.updateItem(offer.toItemId, { status: 'pending' });
       }
       
       // If completed, update the items status to 'completed'
       if (status === 'completed') {
-        await storage.updateItem(offer.fromItemId, { status: 'completed' });
-        await storage.updateItem(offer.toItemId, { status: 'completed' });
+        await dbStorage.updateItem(offer.fromItemId, { status: 'completed' });
+        await dbStorage.updateItem(offer.toItemId, { status: 'completed' });
       }
       
       // If rejected or cancelled, ensure items are 'active'
       if (status === 'rejected' || status === 'cancelled') {
-        await storage.updateItem(offer.fromItemId, { status: 'active' });
-        await storage.updateItem(offer.toItemId, { status: 'active' });
+        await dbStorage.updateItem(offer.fromItemId, { status: 'active' });
+        await dbStorage.updateItem(offer.toItemId, { status: 'active' });
       }
       
       // Create notification for the other party
@@ -985,7 +985,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                          status === 'rejected' ? 'rejected' :
                          status === 'cancelled' ? 'cancelled' : 'marked as completed';
       
-      await storage.createNotification({
+      await dbStorage.createNotification({
         userId: otherUserId,
         type: 'offer_status',
         referenceId: offerId,
@@ -995,7 +995,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Send notification via WebSocket if the user is connected
       if (clients.has(otherUserId)) {
         const client = clients.get(otherUserId);
-        const count = await storage.getUnreadNotificationsCount(otherUserId);
+        const count = await dbStorage.getUnreadNotificationsCount(otherUserId);
         client?.send(JSON.stringify({
           type: 'notification_count',
           count
@@ -1018,7 +1018,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
       const offset = req.query.offset ? parseInt(req.query.offset as string) : undefined;
       
-      const notifications = await storage.getNotificationsByUser(userId, { includeRead, limit, offset });
+      const notifications = await dbStorage.getNotificationsByUser(userId, { includeRead, limit, offset });
       
       res.status(200).json(notifications);
     } catch (error) {
@@ -1032,7 +1032,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.session.userId!;
       
-      const count = await storage.getUnreadNotificationsCount(userId);
+      const count = await dbStorage.getUnreadNotificationsCount(userId);
       
       res.status(200).json({ count });
     } catch (error) {
@@ -1047,7 +1047,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.session.userId!;
       const notificationId = parseInt(req.params.id);
       
-      const success = await storage.markNotificationAsRead(notificationId, userId);
+      const success = await dbStorage.markNotificationAsRead(notificationId, userId);
       if (!success) {
         return res.status(404).json({ message: 'Notification not found' });
       }
@@ -1064,7 +1064,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.session.userId!;
       
-      await storage.markAllNotificationsAsRead(userId);
+      await dbStorage.markAllNotificationsAsRead(userId);
       
       res.status(200).json({ message: 'All notifications marked as read' });
     } catch (error) {
@@ -1079,11 +1079,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.session.userId!;
       
-      const favorites = await storage.getFavoritesByUser(userId);
+      const favorites = await dbStorage.getFavoritesByUser(userId);
       
       // Enrich with item images
       const enrichedFavorites = await Promise.all(favorites.map(async (fav) => {
-        const images = await storage.getImagesByItem(fav.item.id);
+        const images = await dbStorage.getImagesByItem(fav.item.id);
         const mainImage = images.find(img => img.isMain)?.filePath || images[0]?.filePath;
         
         return {
@@ -1112,13 +1112,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
       
       // Check if item exists
-      const item = await storage.getItem(favoriteData.itemId);
+      const item = await dbStorage.getItem(favoriteData.itemId);
       if (!item) {
         return res.status(404).json({ message: 'Item not found' });
       }
       
       // Add to favorites
-      const favorite = await storage.addFavorite(favoriteData);
+      const favorite = await dbStorage.addFavorite(favoriteData);
       
       res.status(201).json(favorite);
     } catch (error) {
@@ -1136,7 +1136,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.session.userId!;
       const itemId = parseInt(req.params.itemId);
       
-      const success = await storage.removeFavorite(userId, itemId);
+      const success = await dbStorage.removeFavorite(userId, itemId);
       if (!success) {
         return res.status(404).json({ message: 'Favorite not found' });
       }
@@ -1158,7 +1158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         userId
       });
       
-      const subscription = await storage.createOrUpdatePushSubscription(subscriptionData);
+      const subscription = await dbStorage.createOrUpdatePushSubscription(subscriptionData);
       
       res.status(201).json(subscription);
     } catch (error) {
@@ -1175,7 +1175,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.session.userId!;
       
-      const success = await storage.deletePushSubscription(userId);
+      const success = await dbStorage.deletePushSubscription(userId);
       if (!success) {
         return res.status(404).json({ message: 'Subscription not found' });
       }

@@ -152,5 +152,31 @@
     "somethingWentWrong": "Something went wrong",
     "unauthorized": "Unauthorized",
     "notFound": "Not Found"
+  },
+  "seo": {
+    "defaultTitle": "BarterTap.az - Free Item Exchange Platform",
+    "defaultDescription": "Exchange your unwanted items for free with BarterTap.az. Get new items without spending money.",
+    "defaultKeywords": "item exchange, barter, free exchange, second hand, used items, swap, azerbaijan",
+    "homeTitle": "BarterTap.az - Item Exchange Platform",
+    "homeDescription": "BarterTap.az - The largest free item exchange platform in Azerbaijan. Exchange your unwanted items and get what you need.",
+    "howItWorksTitle": "How It Works | BarterTap.az - Item Exchange Platform",
+    "howItWorksDescription": "Learn how item exchange works on the BarterTap.az platform. Exchange your items for free with simple steps.",
+    "itemDetailTitle": "{{itemTitle}} | BarterTap.az",
+    "itemDetailDescription": "{{itemTitle}} - {{itemDescription}}. You can exchange this item for yours on BarterTap.az.",
+    "offersTitle": "Offers | BarterTap.az - Item Exchange Platform",
+    "offersDescription": "Sent and received barter offers on the BarterTap.az platform. Accept, reject and track the status of your offers.",
+    "offersKeywords": "item exchange offers, barter offers, exchange status, item swap, free exchange"
+  },
+  "footer": {
+    "description": "BarterTap.az is the largest free item exchange platform in Azerbaijan. It provides the opportunity to exchange unwanted items for what you need without spending money.",
+    "quickLinks": "Quick Links",
+    "account": "Account",
+    "helpSupport": "Help & Support",
+    "faq": "Frequently Asked Questions",
+    "contact": "Contact Us",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy",
+    "helpCenter": "Help Center",
+    "copyright": "All rights reserved."
   }
 }

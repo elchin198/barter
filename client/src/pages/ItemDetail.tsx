@@ -431,10 +431,10 @@ export default function ItemDetail() {
                 </div>
 
                 {/* Message Button */}
-                {!isOwner && user && (
+                {!isOwner && user && item.status === 'active' && (
                   <div className="mt-4">
                     <Button 
-                      variant="outline" 
+                      variant="default"
                       className="w-full flex items-center justify-center gap-2"
                       onClick={() => setOpenMessageModal(true)}
                     >
@@ -450,8 +450,8 @@ export default function ItemDetail() {
           {!isOwner && user && (
             <Tabs defaultValue="message" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="message">Send Message</TabsTrigger>
-                <TabsTrigger value="offer">Make Offer</TabsTrigger>
+                <TabsTrigger value="message">{t('messages.send')}</TabsTrigger>
+                <TabsTrigger value="offer">{t('offers.makeOffer')}</TabsTrigger>
               </TabsList>
               
               <TabsContent value="message" className="mt-4">
@@ -552,6 +552,16 @@ export default function ItemDetail() {
         excludeItemId={item.id}
         limit={3}
       />
+
+      {/* Message Modal */}
+      {user && item.owner && (
+        <MessageModal
+          open={openMessageModal}
+          onOpenChange={setOpenMessageModal}
+          recipient={item.owner}
+          item={item}
+        />
+      )}
     </div>
   );
 }

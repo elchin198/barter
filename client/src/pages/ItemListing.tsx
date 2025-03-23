@@ -9,10 +9,12 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { X, Upload, Image as ImageIcon } from "lucide-react";
 
 const CATEGORIES = [
   "Electronics",
@@ -40,7 +42,7 @@ const itemSchema = z.object({
   category: z.string().min(1, "Please select a category"),
   condition: z.string().min(1, "Please select a condition"),
   imageUrl: z.string().optional(),
-  imageFile: z.any().optional(),
+  imageFiles: z.any().optional(),
 });
 
 type ItemFormValues = z.infer<typeof itemSchema>;
@@ -49,6 +51,8 @@ export default function ItemListing() {
   const { user } = useAuth();
   const [, navigate] = useLocation();
   const { toast } = useToast();
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const MAX_IMAGES = 5; // Maximum number of images allowed
   
   // Redirect if not logged in
   useEffect(() => {
@@ -70,9 +74,45 @@ export default function ItemListing() {
       category: "",
       condition: "",
       imageUrl: "",
-      imageFile: undefined,
+      imageFiles: [],
     },
   });
+  
+  // Handle image uploads
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    // Convert FileList to array and filter for images
+    const newFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+    
+    // Check if adding new files would exceed the limit
+    if (uploadedImages.length + newFiles.length > MAX_IMAGES) {
+      toast({
+        title: "Too many images",
+        description: `You can only upload a maximum of ${MAX_IMAGES} images.`,
+        variant: "destructive"
+      });
+      return;
+    }
+    
+    // Add new files to the array
+    setUploadedImages(prev => [...prev, ...newFiles]);
+    
+    // Clear image URL if files are uploaded
+    form.setValue('imageUrl', '');
+    
+    // Set images in the form
+    form.setValue('imageFiles', [...uploadedImages, ...newFiles]);
+  };
+  
+  // Remove image from preview
+  const removeImage = (index: number) => {
+    const newImages = [...uploadedImages];
+    newImages.splice(index, 1);
+    setUploadedImages(newImages);
+    form.setValue('imageFiles', newImages);
+  };
   
   // Create item mutation
   const mutation = useMutation({
@@ -87,20 +127,29 @@ export default function ItemListing() {
       });
       const item = await itemRes.json();
       
-      // Handle image upload if file is provided
-      if (data.imageFile && data.imageFile instanceof File) {
-        const formData = new FormData();
-        formData.append('image', data.imageFile);
-        
-        // Use fetch directly as apiRequest doesn't support FormData
-        const uploadRes = await fetch(`/api/items/${item.id}/upload`, {
-          method: 'POST',
-          body: formData,
-          credentials: 'include',
-        });
-        
-        if (!uploadRes.ok) {
-          throw new Error('Failed to upload image');
+      // Handle multiple image uploads
+      if (uploadedImages.length > 0) {
+        // Upload each image and set the first one as main
+        for (let i = 0; i < uploadedImages.length; i++) {
+          const formData = new FormData();
+          formData.append('image', uploadedImages[i]);
+          
+          // Use fetch directly as apiRequest doesn't support FormData
+          const uploadRes = await fetch(`/api/items/${item.id}/upload`, {
+            method: 'POST',
+            body: formData,
+            credentials: 'include',
+          });
+          
+          if (!uploadRes.ok) {
+            throw new Error(`Failed to upload image ${i+1}`);
+          }
+          
+          // If this is the first image, set it as main
+          if (i === 0) {
+            const imageData = await uploadRes.json();
+            await apiRequest('PUT', `/api/items/${item.id}/images/${imageData.id}/main`, {});
+          }
         }
       } 
       // Or use image URL if provided instead
@@ -130,6 +179,8 @@ export default function ItemListing() {
   });
   
   async function onSubmit(data: ItemFormValues) {
+    // Set uploaded images in the form data
+    data.imageFiles = uploadedImages;
     mutation.mutate(data);
   }
   
@@ -239,35 +290,64 @@ export default function ItemListing() {
               <div className="grid grid-cols-1 gap-6">
                 <FormField
                   control={form.control}
-                  name="imageFile"
-                  render={({ field: { value, onChange, ...fieldProps } }) => (
+                  name="imageFiles"
+                  render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Upload Image</FormLabel>
+                      <FormLabel>Upload Images (Max {MAX_IMAGES})</FormLabel>
                       <FormControl>
-                        <div className="flex flex-col gap-2">
-                          <Input 
-                            type="file" 
-                            accept="image/*" 
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                onChange(file);
-                                
-                                // Clear imageUrl if imageFile is provided
-                                form.setValue('imageUrl', '');
-                              }
-                            }}
-                            {...fieldProps}
-                          />
-                          {value && (
-                            <div className="text-sm text-muted-foreground mt-1">
-                              Selected file: {value instanceof File ? value.name : ''}
+                        <div className="flex flex-col gap-4">
+                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-primary transition-colors">
+                            <label className="flex flex-col items-center justify-center cursor-pointer">
+                              <Upload className="w-8 h-8 text-gray-400 mb-2" />
+                              <span className="text-sm text-gray-500 mb-1">Drag & drop images here or click to browse</span>
+                              <span className="text-xs text-gray-400">{`Up to ${MAX_IMAGES} images, max 5MB each`}</span>
+                              <Input 
+                                type="file" 
+                                accept="image/*"
+                                multiple
+                                className="hidden"
+                                onChange={handleImageUpload}
+                              />
+                            </label>
+                          </div>
+                          
+                          {/* Image previews */}
+                          {uploadedImages.length > 0 && (
+                            <div className="mt-4">
+                              <h3 className="text-sm font-medium mb-2">Selected Images:</h3>
+                              <div className="grid grid-cols-3 gap-3">
+                                {uploadedImages.map((file, index) => (
+                                  <div 
+                                    key={index} 
+                                    className="relative group rounded-md overflow-hidden border border-gray-200"
+                                  >
+                                    <img 
+                                      src={URL.createObjectURL(file)} 
+                                      alt={`Upload preview ${index+1}`}
+                                      className="w-full h-24 object-cover"
+                                    />
+                                    <button
+                                      type="button"
+                                      onClick={() => removeImage(index)}
+                                      className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                      aria-label="Remove image"
+                                    >
+                                      <X className="w-3 h-3" />
+                                    </button>
+                                    {index === 0 && (
+                                      <Badge className="absolute bottom-1 left-1 bg-primary text-xs px-1 py-0">
+                                        Main
+                                      </Badge>
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
                             </div>
                           )}
                         </div>
                       </FormControl>
                       <FormDescription>
-                        Upload an image directly from your device
+                        The first image will be used as the main image for your listing
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -292,15 +372,17 @@ export default function ItemListing() {
                           onChange={(e) => {
                             field.onChange(e);
                             
-                            // Clear imageFile if imageUrl is provided
+                            // Clear uploaded images if URL is provided
                             if (e.target.value) {
-                              form.setValue('imageFile', undefined);
+                              setUploadedImages([]);
+                              form.setValue('imageFiles', []);
                             }
                           }}
+                          disabled={uploadedImages.length > 0}
                         />
                       </FormControl>
                       <FormDescription>
-                        Enter a URL for your item's image
+                        Enter a URL for your item's image (only available when no images are uploaded)
                       </FormDescription>
                       <FormMessage />
                     </FormItem>

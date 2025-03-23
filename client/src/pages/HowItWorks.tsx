@@ -1,15 +1,37 @@
 import { useState } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AlertCircle, Package, Search, MessageSquare, HandshakeIcon, ThumbsUp, Star, Shield, Clock, Award } from "lucide-react";
+import SEO from "@/components/SEO";
+import { useTranslation } from "react-i18next";
 
 export default function HowItWorks() {
+  const { t } = useTranslation();
+  const [location] = useLocation();
   const [currentTab, setCurrentTab] = useState("process");
+  
+  // Define SEO meta data for How It Works page
+  const howItWorksTitle = t('seo.howItWorksTitle', 'Necə İşləyir? | BarterTap.az - Əşya Mübadiləsi Qaydaları');
+  const howItWorksDescription = t(
+    'seo.howItWorksDescription', 
+    'BarterTap.az platformasında əşya mübadiləsi necə aparılır? Sadə 5 addımda barter prosesi, təhlükəsizlik məsləhətləri və daha çox məlumat əldə edin.'
+  );
+  const howItWorksKeywords = t(
+    'seo.howItWorksKeywords',
+    'barter qaydaları, əşya mübadiləsi necə işləyir, barter təhlükəsizlik, əşya dəyişmək, pulsuz mübadilə, barter ipucları'
+  );
   
   return (
     <div className="container mx-auto px-4 py-12">
+      {/* Page-specific SEO */}
+      <SEO 
+        title={howItWorksTitle}
+        description={howItWorksDescription}
+        keywords={howItWorksKeywords}
+        pathName={location}
+      />
       <div className="text-center max-w-3xl mx-auto mb-12">
         <h1 className="text-4xl font-bold mb-4">Necə İşləyir?</h1>
         <p className="text-gray-600 text-lg">

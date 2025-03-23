@@ -14,6 +14,8 @@ import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "../context/AuthContext";
 import { Item, User } from "@shared/schema";
+import SEO from "@/components/SEO";
+import { useTranslation } from "react-i18next";
 
 interface ItemDetailResponse extends Item {
   images: Array<{
@@ -27,9 +29,10 @@ interface ItemDetailResponse extends Item {
 
 export default function ItemDetail() {
   const [, params] = useRoute<{ id: string }>("/items/:id");
-  const [, navigate] = useLocation();
+  const [location, navigate] = useLocation();
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [message, setMessage] = useState("");
@@ -242,9 +245,28 @@ export default function ItemDetail() {
   
   // Filter out tradeable items (user's active items excluding current item)
   const tradeableItems = userItems.filter(i => i.status === 'active' && i.id !== itemId);
+  
+  // Define SEO meta data for item detail page
+  const itemTitle = t('seo.itemTitle', `${item.title} | BarterTap.az - Əşya Mübadiləsi`);
+  const itemDescription = t(
+    'seo.itemDescription', 
+    `${item.description.substring(0, 150)}${item.description.length > 150 ? '...' : ''} – BarterTap.az üzərindən barter edin.`
+  );
+  const itemKeywords = t(
+    'seo.itemKeywords',
+    `barter, ${item.title}, ${item.category}, əşya mübadiləsi, dəyişmək, ${item.condition}, pulsuz mübadilə`
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* Page-specific SEO */}
+      <SEO 
+        title={itemTitle}
+        description={itemDescription}
+        keywords={itemKeywords}
+        pathName={location}
+        ogImage={images[0]?.filePath}
+      />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Images */}
         <div className="space-y-4">

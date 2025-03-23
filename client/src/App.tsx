@@ -28,7 +28,9 @@ function Router() {
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
           <ProtectedRoute path="/item/new" component={ItemListing} />
+          <ProtectedRoute path="/items/new" component={ItemListing} />
           <Route path="/item/:id" component={ItemDetail} />
+          <Route path="/items/:id" component={ItemDetail} />
           <Route path="/items" component={ItemsList} />
           <ProtectedRoute path="/profile" component={Profile} />
           <ProtectedRoute path="/my-items" component={Profile} />

@@ -96,7 +96,7 @@ export default function Navbar() {
                 </span>
               </Link>
               {user && (
-                <Link href="/item/new">
+                <Link href="/items/new">
                   <span className="text-sm font-medium hover:text-blue-600 transition-colors cursor-pointer">
                     Əşya Əlavə Et
                   </span>
@@ -151,7 +151,7 @@ export default function Navbar() {
                       <User className="mr-2 h-4 w-4" />
                       <span>Profil</span>
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => navigate("/item/new")}>
+                    <DropdownMenuItem onClick={() => navigate("/items/new")}>
                       <Plus className="mr-2 h-4 w-4" />
                       <span>Əşya Əlavə Et</span>
                     </DropdownMenuItem>
@@ -241,7 +241,7 @@ export default function Navbar() {
                           Profil
                         </span>
                       </Link>
-                      <Link href="/item/new">
+                      <Link href="/items/new">
                         <span className="text-lg font-medium hover:text-blue-600 flex items-center cursor-pointer py-2">
                           <Plus className="mr-2 h-5 w-5" />
                           Əşya Əlavə Et

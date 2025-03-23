@@ -83,15 +83,15 @@ export default function Profile() {
     },
     onSuccess: () => {
       toast({
-        title: "Profile updated",
-        description: "Your profile has been successfully updated.",
+        title: "Profil yeniləndi",
+        description: "Profiliniz uğurla yeniləndi.",
       });
       refreshUser();
     },
     onError: (error) => {
       toast({
-        title: "Update failed",
-        description: error.message || "Failed to update profile",
+        title: "Yeniləmə xətası",
+        description: error.message || "Profili yeniləmək mümkün olmadı",
         variant: "destructive",
       });
     },
@@ -111,7 +111,7 @@ export default function Profile() {
         <TabsList className="mb-8">
           <TabsTrigger value="profile">Profil</TabsTrigger>
           <TabsTrigger value="items">Mənim Əşyalarım</TabsTrigger>
-          <TabsTrigger value="favorites">Sevimlilər</TabsTrigger>
+          <TabsTrigger value="favorites">Seçilmişlər</TabsTrigger>
         </TabsList>
         
         {/* Profile Tab */}
@@ -243,9 +243,9 @@ export default function Profile() {
                       name="bio"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Bio</FormLabel>
+                          <FormLabel>Haqqında</FormLabel>
                           <FormControl>
-                            <Textarea placeholder="Tell others about yourself" {...field} value={field.value || ""} />
+                            <Textarea placeholder="Özünüz haqqında məlumat verin" {...field} value={field.value || ""} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -256,16 +256,16 @@ export default function Profile() {
                       name="phone"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Phone</FormLabel>
+                          <FormLabel>Telefon</FormLabel>
                           <FormControl>
-                            <Input placeholder="+1 234 567 890" {...field} value={field.value || ""} />
+                            <Input placeholder="+994 55 XXX XX XX" {...field} value={field.value || ""} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                     <Button type="submit" disabled={mutation.isPending}>
-                      {mutation.isPending ? "Saving..." : "Save Changes"}
+                      {mutation.isPending ? "Yadda saxlanılır..." : "Dəyişiklikləri Saxla"}
                     </Button>
                   </form>
                 </Form>
@@ -276,7 +276,7 @@ export default function Profile() {
         
         {/* Items Tab */}
         <TabsContent value="items">
-          <h2 className="text-2xl font-bold mb-6">My Items</h2>
+          <h2 className="text-2xl font-bold mb-6">Mənim Əşyalarım</h2>
           {itemsLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map((i) => (
@@ -297,9 +297,9 @@ export default function Profile() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-lg text-gray-500 mb-4">You haven't listed any items yet.</p>
+              <p className="text-lg text-gray-500 mb-4">Hələ heç bir əşya əlavə etməmisiniz.</p>
               <Button asChild>
-                <a href="/items/new">List Your First Item</a>
+                <a href="/item/new">İlk Əşyanızı Əlavə Edin</a>
               </Button>
             </div>
           )}
@@ -307,7 +307,7 @@ export default function Profile() {
         
         {/* Favorites Tab */}
         <TabsContent value="favorites">
-          <h2 className="text-2xl font-bold mb-6">Favorite Items</h2>
+          <h2 className="text-2xl font-bold mb-6">Seçilmiş Əşyalar</h2>
           {favoritesLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {[1, 2, 3, 4].map((i) => (
@@ -328,9 +328,9 @@ export default function Profile() {
             </div>
           ) : (
             <div className="text-center py-12">
-              <p className="text-lg text-gray-500 mb-4">You haven't favorited any items yet.</p>
+              <p className="text-lg text-gray-500 mb-4">Hələ heç bir əşyanı seçilmişlərə əlavə etməmisiniz.</p>
               <Button asChild variant="outline">
-                <a href="/">Browse Items</a>
+                <a href="/">Əşyalara Baxın</a>
               </Button>
             </div>
           )}

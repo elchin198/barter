@@ -1,5 +1,5 @@
 import { apiRequest } from "./queryClient";
-import { Item, User, Message, Conversation, Offer, Notification, Favorite } from "@shared/schema";
+import { Item, User, Message, Conversation, Offer, Notification, Favorite, Review, UserWithRating } from "@shared/schema";
 
 // Auth API
 export const AuthAPI = {
@@ -168,5 +168,40 @@ export const FavoritesAPI = {
   
   removeFavorite: async (itemId: number): Promise<void> => {
     await apiRequest('DELETE', `/api/favorites/${itemId}`);
+  }
+};
+
+// Reviews API
+export const ReviewsAPI = {
+  getUserReviews: async (userId: number, asReviewer?: boolean): Promise<Review[]> => {
+    let url = `/api/users/${userId}/reviews`;
+    if (asReviewer !== undefined) url += `?asReviewer=${asReviewer}`;
+    
+    const res = await fetch(url, { credentials: 'include' });
+    if (!res.ok) throw new Error('Failed to get user reviews');
+    return res.json();
+  },
+  
+  getOfferReviews: async (offerId: number): Promise<Review[]> => {
+    const res = await fetch(`/api/offers/${offerId}/reviews`, { credentials: 'include' });
+    if (!res.ok) throw new Error('Failed to get offer reviews');
+    return res.json();
+  },
+  
+  createReview: async (data: { offerId: number, rating: number, comment: string }): Promise<Review> => {
+    const res = await apiRequest('POST', '/api/reviews', data);
+    return res.json();
+  },
+  
+  canReviewOffer: async (offerId: number): Promise<{ canReview: boolean }> => {
+    const res = await fetch(`/api/offers/${offerId}/can-review`, { credentials: 'include' });
+    if (!res.ok) throw new Error('Failed to check if offer can be reviewed');
+    return res.json();
+  },
+  
+  getUserRating: async (userId: number): Promise<UserWithRating> => {
+    const res = await fetch(`/api/users/${userId}/rating`, { credentials: 'include' });
+    if (!res.ok) throw new Error('Failed to get user rating');
+    return res.json();
   }
 };

@@ -172,12 +172,67 @@ export default function Profile() {
                       name="avatar"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Avatar URL</FormLabel>
-                          <FormControl>
-                            <Input placeholder="https://example.com/avatar.jpg" {...field} value={field.value || ""} />
-                          </FormControl>
+                          <FormLabel>Profil şəkli</FormLabel>
+                          <div className="space-y-4">
+                            <FormControl>
+                              <Input placeholder="https://example.com/avatar.jpg" {...field} value={field.value || ""} />
+                            </FormControl>
+                            <div className="flex flex-col">
+                              <div className="text-sm mb-2 font-medium">və ya şəkil yüklə:</div>
+                              <div className="flex items-center gap-4">
+                                <label 
+                                  htmlFor="avatar-upload" 
+                                  className="flex h-9 cursor-pointer items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                                >
+                                  Şəkil seç
+                                </label>
+                                <input
+                                  id="avatar-upload"
+                                  type="file"
+                                  accept="image/*"
+                                  className="hidden"
+                                  onChange={async (e) => {
+                                    const file = e.target.files?.[0];
+                                    if (!file) return;
+                                    
+                                    // Create form data for upload
+                                    const formData = new FormData();
+                                    formData.append('avatar', file);
+                                    
+                                    try {
+                                      const response = await fetch('/api/users/me/avatar', {
+                                        method: 'POST',
+                                        body: formData,
+                                        // Don't set Content-Type, the browser will set it including the boundary
+                                      });
+                                      
+                                      if (!response.ok) {
+                                        throw new Error('Failed to upload avatar');
+                                      }
+                                      
+                                      const data = await response.json();
+                                      field.onChange(data.avatarUrl);
+                                      toast({
+                                        title: "Profil şəkli yükləndi",
+                                        description: "Profil şəkliniz uğurla yeniləndi."
+                                      });
+                                      refreshUser();
+                                    } catch (error) {
+                                      toast({
+                                        title: "Xəta",
+                                        description: "Şəkil yüklənərkən xəta baş verdi.",
+                                        variant: "destructive"
+                                      });
+                                      console.error('Error uploading avatar:', error);
+                                    }
+                                  }}
+                                />
+                                {field.value && <img src={field.value} alt="Avatar preview" className="h-12 w-12 rounded-full object-cover" />}
+                              </div>
+                            </div>
+                          </div>
                           <FormDescription>
-                            Enter a URL for your profile picture
+                            Profil şəkliniz üçün URL daxil edin və ya yerli kompüterinizdən bir şəkil yükləyin
                           </FormDescription>
                           <FormMessage />
                         </FormItem>

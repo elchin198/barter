@@ -39,7 +39,8 @@ const itemSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters"),
   category: z.string().min(1, "Please select a category"),
   condition: z.string().min(1, "Please select a condition"),
-  imageUrl: z.string().url("Please enter a valid URL").optional(),
+  imageUrl: z.string().optional(),
+  imageFile: z.any().optional(),
 });
 
 type ItemFormValues = z.infer<typeof itemSchema>;
@@ -69,6 +70,7 @@ export default function ItemListing() {
       category: "",
       condition: "",
       imageUrl: "",
+      imageFile: undefined,
     },
   });
   
@@ -85,8 +87,24 @@ export default function ItemListing() {
       });
       const item = await itemRes.json();
       
-      // Then add the image if provided
-      if (data.imageUrl) {
+      // Handle image upload if file is provided
+      if (data.imageFile && data.imageFile instanceof File) {
+        const formData = new FormData();
+        formData.append('image', data.imageFile);
+        
+        // Use fetch directly as apiRequest doesn't support FormData
+        const uploadRes = await fetch(`/api/items/${item.id}/upload`, {
+          method: 'POST',
+          body: formData,
+          credentials: 'include',
+        });
+        
+        if (!uploadRes.ok) {
+          throw new Error('Failed to upload image');
+        }
+      } 
+      // Or use image URL if provided instead
+      else if (data.imageUrl) {
         await apiRequest('POST', `/api/items/${item.id}/images`, {
           filePath: data.imageUrl,
           isMain: true
@@ -218,22 +236,77 @@ export default function ItemListing() {
                 )}
               />
               
-              <FormField
-                control={form.control}
-                name="imageUrl"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Image URL</FormLabel>
-                    <FormControl>
-                      <Input placeholder="https://example.com/image.jpg" {...field} value={field.value || ""} />
-                    </FormControl>
-                    <FormDescription>
-                      Enter a URL for your item's image
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 gap-6">
+                <FormField
+                  control={form.control}
+                  name="imageFile"
+                  render={({ field: { value, onChange, ...fieldProps } }) => (
+                    <FormItem>
+                      <FormLabel>Upload Image</FormLabel>
+                      <FormControl>
+                        <div className="flex flex-col gap-2">
+                          <Input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                onChange(file);
+                                
+                                // Clear imageUrl if imageFile is provided
+                                form.setValue('imageUrl', '');
+                              }
+                            }}
+                            {...fieldProps}
+                          />
+                          {value && (
+                            <div className="text-sm text-muted-foreground mt-1">
+                              Selected file: {value instanceof File ? value.name : ''}
+                            </div>
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormDescription>
+                        Upload an image directly from your device
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="flex items-center justify-center my-2">
+                  <div className="px-4 py-2 bg-muted rounded-md">OR</div>
+                </div>
+                
+                <FormField
+                  control={form.control}
+                  name="imageUrl"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Image URL</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="https://example.com/image.jpg" 
+                          {...field} 
+                          value={field.value || ""} 
+                          onChange={(e) => {
+                            field.onChange(e);
+                            
+                            // Clear imageFile if imageUrl is provided
+                            if (e.target.value) {
+                              form.setValue('imageFile', undefined);
+                            }
+                          }}
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Enter a URL for your item's image
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               
               <div className="flex justify-end space-x-4">
                 <Button variant="outline" type="button" onClick={() => navigate("/profile")}>

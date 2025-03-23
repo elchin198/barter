@@ -1,78 +1,70 @@
 #!/bin/bash
 
-# Hostinger deployment script for BarterTap.az
+# Exit on error
+set -e
 
-# Set environment variables
-export NODE_ENV=production
+# Variables
+HOSTINGER_USER="u726371272"
+HOSTINGER_HOST="ftp.bartertap.az"
+HOSTINGER_TARGET="/home/$HOSTINGER_USER/public_html"
+BUILD_DIR="dist"
 
-# Create log and upload directories if they don't exist
-echo "Creating necessary directories..."
-mkdir -p /home/u726371272/bartertap.az/logs
-mkdir -p /home/u726371272/bartertap.az/public_html/uploads
-mkdir -p /home/u726371272/bartertap.az/public_html/dist
+echo "=== BarterTap.az Deployment Script ==="
+echo "This script will build and deploy the application to Hostinger"
 
-# Install dependencies
-echo "Installing dependencies..."
-npm install --production
-
-# Build the application
-echo "Building the application..."
+# 1. Build the application
+echo -e "\n=== Building application ==="
+npm install
 npm run build
 
-# Copy static files to public_html directory
-echo "Copying files to public_html directory..."
-cp -r dist/client/* /home/u726371272/bartertap.az/public_html/dist/client/
-cp client/public/favicon.ico /home/u726371272/bartertap.az/public_html/dist/client/
-cp -r client/public/images /home/u726371272/bartertap.az/public_html/dist/client/
-cp public/logo.png /home/u726371272/bartertap.az/public_html/dist/client/
+# 2. Prepare the production files
+echo -e "\n=== Preparing production files ==="
 
-# Create PM2 config if not exists
-if [ ! -f "ecosystem.config.js" ]; then
-  echo "Creating PM2 ecosystem.config.js..."
+# Ensure the pm2 config exists
+if [ ! -f ecosystem.config.js ]; then
+  echo "Creating PM2 ecosystem.config.js file"
   cat > ecosystem.config.js << EOF
 module.exports = {
   apps: [{
-    name: 'bartertap',
-    script: 'dist/server/index.js',
-    instances: 2,
-    exec_mode: 'cluster',
+    name: "bartertap",
+    script: "dist/server.js",
     env: {
-      NODE_ENV: 'production',
-      PORT: 8080
+      NODE_ENV: "production",
+      PORT: 5000
     },
-    env_production: {
-      NODE_ENV: 'production',
-      PORT: 8080
-    },
-    watch: false,
-    max_memory_restart: '512M',
-    log_date_format: 'YYYY-MM-DD HH:mm:ss',
-    error_file: '/home/u726371272/bartertap.az/logs/app-error.log',
-    out_file: '/home/u726371272/bartertap.az/logs/app-out.log',
-    merge_logs: true,
-    time: true
+    instances: 1,
+    exec_mode: "fork"
   }]
 };
 EOF
 fi
 
-# Start/restart the application with PM2
-if pm2 list | grep -q "bartertap"; then
-  echo "Restarting application with PM2..."
-  pm2 restart bartertap
-else
-  echo "Starting application with PM2..."
-  pm2 start ecosystem.config.js
+# Copy .env.production to .env in the build directory
+if [ -f .env.production ]; then
+  echo "Copying .env.production to $BUILD_DIR/.env"
+  cp .env.production $BUILD_DIR/.env
 fi
 
-# Ensure nginx configuration is set
-echo "Setting up Nginx configuration..."
-if [ ! -f "/etc/nginx/sites-available/bartertap.az.conf" ]; then
-  echo "Creating Nginx configuration..."
-  cp nginx.conf /etc/nginx/sites-available/bartertap.az.conf
-  ln -sf /etc/nginx/sites-available/bartertap.az.conf /etc/nginx/sites-enabled/
-  nginx -t && systemctl reload nginx
-fi
+# Create placeholder directories in the build folder for uploads
+mkdir -p $BUILD_DIR/public/uploads/avatars
+mkdir -p $BUILD_DIR/public/uploads/items
 
-echo "Deployment completed successfully!"
-echo "BarterTap.az is now accessible at https://bartertap.az"
+# 3. Upload to Hostinger
+echo -e "\n=== Uploading to Hostinger ==="
+echo "This step should be performed manually via FTP client or Hostinger file manager"
+echo "Upload the following directories and files to $HOSTINGER_TARGET:"
+echo "- dist/ (all contents)"
+echo "- ecosystem.config.js"
+echo "- package.json"
+echo "- package-lock.json"
+
+# 4. Instructions for setting up on Hostinger
+echo -e "\n=== Post-deployment steps ==="
+echo "1. SSH into your Hostinger server"
+echo "2. Navigate to $HOSTINGER_TARGET"
+echo "3. Install dependencies: npm install --production"
+echo "4. Start the application with PM2: pm2 start ecosystem.config.js"
+echo "5. Ensure that the database has been set up correctly"
+
+echo -e "\n=== Deployment preparation complete ==="
+echo "You can now upload the files to Hostinger and follow the post-deployment steps."

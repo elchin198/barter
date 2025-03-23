@@ -1,23 +1,20 @@
 module.exports = {
   apps: [{
-    name: 'bartertap',
-    script: 'dist/server/index.js',
-    instances: 2,
-    exec_mode: 'cluster',
+    name: "bartertap",
+    script: "dist/server.js",
     env: {
-      NODE_ENV: 'production',
-      PORT: 8080
+      NODE_ENV: "production",
+      PORT: 5000
     },
-    env_production: {
-      NODE_ENV: 'production',
-      PORT: 8080
-    },
+    instances: 1,
+    exec_mode: "fork",
     watch: false,
-    max_memory_restart: '512M',
-    log_date_format: 'YYYY-MM-DD HH:mm:ss',
-    error_file: '/home/u726371272/bartertap.az/logs/app-error.log',
-    out_file: '/home/u726371272/bartertap.az/logs/app-out.log',
+    max_memory_restart: "500M",
+    log_date_format: "YYYY-MM-DD HH:mm Z",
+    error_file: "logs/error.log",
+    out_file: "logs/out.log",
     merge_logs: true,
-    time: true
+    time: true,
+    autorestart: true
   }]
 };

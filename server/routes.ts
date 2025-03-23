@@ -330,13 +330,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Item routes
   app.get('/api/items', async (req, res) => {
     try {
+      // Extract all query parameters for filtering and sorting
       const category = req.query.category as string | undefined;
       const search = req.query.search as string | undefined;
       const status = req.query.status as string | undefined;
+      const city = req.query.city as string | undefined;
+      const condition = req.query.condition as string | undefined;
+      const sort = req.query.sort as 'newest' | 'oldest' | 'title_asc' | 'title_desc' | undefined;
       const limit = req.query.limit ? parseInt(req.query.limit as string) : undefined;
       const offset = req.query.offset ? parseInt(req.query.offset as string) : undefined;
       
-      const items = await dbStorage.getItems({ category, search, status, limit, offset });
+      // Retrieve items with all filters applied
+      const items = await dbStorage.getItems({ 
+        category, 
+        search, 
+        status, 
+        city,
+        condition,
+        sort,
+        limit, 
+        offset 
+      });
       
       // Get image for each item
       const itemsWithImages = await Promise.all(items.map(async (item) => {
@@ -345,8 +359,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return { ...item, mainImage };
       }));
       
-      res.status(200).json(itemsWithImages);
+      // Add pagination metadata to the response if limit is specified
+      if (limit) {
+        // Count total items matching the filters for pagination info
+        const totalItems = await dbStorage.getItems({ 
+          category, 
+          search, 
+          status, 
+          city,
+          condition
+        });
+        
+        res.status(200).json({
+          items: itemsWithImages,
+          pagination: {
+            total: totalItems.length,
+            limit,
+            offset: offset || 0
+          }
+        });
+      } else {
+        res.status(200).json(itemsWithImages);
+      }
     } catch (error) {
+      console.error('Failed to get items:', error);
       res.status(500).json({ message: 'Failed to get items' });
     }
   });

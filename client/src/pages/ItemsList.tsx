@@ -30,6 +30,11 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import ItemCard from "@/components/items/ItemCard";
 import { Item } from "@shared/schema";
+
+// Item tipini genişləndirək
+interface ItemWithImage extends Item {
+  mainImage?: string;
+}
 import { useTranslation } from "react-i18next";
 
 // Kategori seçenekleri
@@ -122,7 +127,7 @@ export default function ItemsList() {
   };
   
   // Əşyaları yükləmək üçün sorğu
-  const { data: items = [], isLoading } = useQuery<Item[]>({
+  const { data: items = [], isLoading } = useQuery<ItemWithImage[]>({
     queryKey: ['/api/items', selectedCategory, selectedCity, selectedCondition, sortOption, searchTerm],
     queryFn: async () => {
       const params = new URLSearchParams();

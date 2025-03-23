@@ -6,9 +6,18 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 import { ExternalLink, MapPin } from 'lucide-react';
 
-// Custom marker icon
-const customIcon = new L.Icon({
+// Custom marker icons
+const blueIcon = new L.Icon({
   iconUrl: '/marker-icon.png',
+  shadowUrl: '/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
+const greenIcon = new L.Icon({
+  iconUrl: '/marker-icon-green.png',
   shadowUrl: '/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
@@ -117,7 +126,7 @@ export default function LocationMap({
           <Marker 
             key={marker.id} 
             position={marker.position}
-            icon={customIcon}
+            icon={singleMarker ? greenIcon : blueIcon}
           >
             <Popup>
               <div className="flex flex-col gap-2 py-1">

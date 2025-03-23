@@ -46,14 +46,18 @@ export default function HeroSection() {
             
             <div className="mt-10 flex items-center">
               <div className="flex -space-x-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <div 
-                    key={i}
-                    className="w-10 h-10 rounded-full border-2 border-blue-300 bg-blue-700 flex items-center justify-center overflow-hidden"
-                  >
-                    <span className="font-bold text-white text-xs">İst.{i}</span>
-                  </div>
-                ))}
+                <div className="w-10 h-10 rounded-full border-2 border-blue-300 bg-blue-700 flex items-center justify-center overflow-hidden">
+                  <span className="font-bold text-white text-xs">RN</span>
+                </div>
+                <div className="w-10 h-10 rounded-full border-2 border-blue-300 bg-blue-700 flex items-center justify-center overflow-hidden">
+                  <span className="font-bold text-white text-xs">LH</span>
+                </div>
+                <div className="w-10 h-10 rounded-full border-2 border-blue-300 bg-blue-700 flex items-center justify-center overflow-hidden">
+                  <span className="font-bold text-white text-xs">MK</span>
+                </div>
+                <div className="w-10 h-10 rounded-full border-2 border-blue-300 bg-blue-700 flex items-center justify-center overflow-hidden">
+                  <span className="font-bold text-white text-xs">AQ</span>
+                </div>
               </div>
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-200">1000+ istifadəçi artıq platformaya qoşulub</p>

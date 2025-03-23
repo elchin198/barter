@@ -21,6 +21,7 @@ import SEO from "@/components/SEO";
 import { useTranslation } from "react-i18next";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
+import LocationMap, { getCityCoordinates } from "@/components/map/LocationMap";
 
 interface ItemDetailResponse extends Item {
   images: Array<{

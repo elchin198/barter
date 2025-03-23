@@ -1,16 +1,18 @@
 import { useEffect, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { Icon } from 'leaflet';
+import * as L from 'leaflet';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Link } from 'wouter';
 
 // Custom marker icon
-const customIcon = new Icon({
+const customIcon = new L.Icon({
   iconUrl: '/marker-icon.png',
+  shadowUrl: '/marker-shadow.png',
   iconSize: [25, 41],
   iconAnchor: [12, 41],
   popupAnchor: [1, -34],
+  shadowSize: [41, 41]
 });
 
 // Azərbaycan şəhərlərinin koordinatları
@@ -28,7 +30,6 @@ export const CITY_COORDINATES: Record<string, [number, number]> = {
   'Quba': [41.3750, 48.5125],
   'Xaçmaz': [41.4628, 48.8050],
   'Göyçay': [40.6500, 47.7400],
-  'Lənkəran': [38.7544, 48.8522],
 };
 
 // Center map on location
@@ -87,7 +88,7 @@ export default function LocationMap({
         ref={mapRef}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         

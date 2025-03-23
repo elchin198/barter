@@ -129,8 +129,8 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
 
   return (
     <Card className="overflow-hidden h-full flex flex-col">
-      <Link href={`/items/${item.id}`}>
-        <a className="block relative pt-[70%] overflow-hidden bg-gray-100">
+      <Link href={`/item/${item.id}`}>
+        <div className="block relative pt-[70%] overflow-hidden bg-gray-100 cursor-pointer">
           <img 
             src={imageUrl} 
             alt={item.title}
@@ -139,16 +139,16 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
           <div className="absolute top-2 right-2">
             {getStatusBadge()}
           </div>
-        </a>
+        </div>
       </Link>
       
       <CardContent className="flex-grow p-4">
-        <Link href={`/items/${item.id}`}>
-          <a className="block">
+        <Link href={`/item/${item.id}`}>
+          <div className="block cursor-pointer">
             <h3 className="font-semibold text-lg truncate mb-1 hover:text-blue-600 transition-colors">
               {item.title}
             </h3>
-          </a>
+          </div>
         </Link>
         <div className="flex justify-between items-center">
           <div>
@@ -165,7 +165,7 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
       <CardFooter className="p-4 pt-0 flex justify-between">
         {!showActions ? (
           <>
-            <Link href={`/items/${item.id}`}>
+            <Link href={`/item/${item.id}`}>
               <Button variant="outline" size="sm">View Details</Button>
             </Link>
             <Button
@@ -182,10 +182,10 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
           </>
         ) : (
           <div className="flex gap-2 w-full">
-            <Link href={`/items/${item.id}`}>
+            <Link href={`/item/${item.id}`}>
               <Button variant="outline" size="sm" className="flex-1">View</Button>
             </Link>
-            <Link href={`/items/edit/${item.id}`}>
+            <Link href={`/item/edit/${item.id}`}>
               <Button variant="ghost" size="icon">
                 <Edit className="h-4 w-4" />
               </Button>

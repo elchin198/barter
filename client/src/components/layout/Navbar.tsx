@@ -69,6 +69,7 @@ export default function Navbar() {
                   src="/logo.png" 
                   alt="BarterTap.az" 
                   className="h-8 md:h-10 transition-transform hover:scale-105 duration-300"
+                  style={{ filter: 'brightness(1.2) contrast(1.2)' }}
                 />
               </Link>
             </div>
@@ -204,6 +205,7 @@ export default function Navbar() {
                       src="/logo.png" 
                       alt="BarterTap.az" 
                       className="h-10 mb-4"
+                      style={{ filter: 'brightness(1.2) contrast(1.2)' }}
                     />
                   </Link>
                 </div>

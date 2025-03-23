@@ -109,9 +109,9 @@ export default function Profile() {
     <div className="container mx-auto px-4 py-8">
       <Tabs defaultValue="profile" className="w-full">
         <TabsList className="mb-8">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="items">My Items</TabsTrigger>
-          <TabsTrigger value="favorites">Favorites</TabsTrigger>
+          <TabsTrigger value="profile">Profil</TabsTrigger>
+          <TabsTrigger value="items">Mənim Əşyalarım</TabsTrigger>
+          <TabsTrigger value="favorites">Sevimlilər</TabsTrigger>
         </TabsList>
         
         {/* Profile Tab */}
@@ -119,8 +119,8 @@ export default function Profile() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="md:col-span-1">
               <CardHeader>
-                <CardTitle>Your Profile</CardTitle>
-                <CardDescription>This is how others will see you</CardDescription>
+                <CardTitle>Sizin Profiliniz</CardTitle>
+                <CardDescription>Başqaları sizi belə görəcək</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col items-center">
                 <Avatar className="w-32 h-32 mb-4">
@@ -135,8 +135,8 @@ export default function Profile() {
             
             <Card className="md:col-span-2">
               <CardHeader>
-                <CardTitle>Edit Profile</CardTitle>
-                <CardDescription>Update your personal information</CardDescription>
+                <CardTitle>Profili Düzənlə</CardTitle>
+                <CardDescription>Şəxsi məlumatlarınızı yeniləyin</CardDescription>
               </CardHeader>
               <CardContent>
                 <Form {...form}>
@@ -146,9 +146,9 @@ export default function Profile() {
                       name="fullName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Full Name</FormLabel>
+                          <FormLabel>Tam Ad</FormLabel>
                           <FormControl>
-                            <Input placeholder="John Doe" {...field} />
+                            <Input placeholder="Əhməd Məmmədov" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -159,9 +159,9 @@ export default function Profile() {
                       name="email"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Email</FormLabel>
+                          <FormLabel>E-poçt</FormLabel>
                           <FormControl>
-                            <Input placeholder="john@example.com" {...field} />
+                            <Input placeholder="ad.soyad@gmail.com" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>

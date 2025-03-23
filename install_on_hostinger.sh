@@ -1,74 +1,85 @@
 #!/bin/bash
 
-# Exit on error
-set -e
+# BarterTap.az - Hostinger Quraşdırma Təlimatları
+# Bu skript Hostinger serverində proyekti quraşdırmaq üçün lazımi addımları göstərir.
+# SSH terminalında əl ilə yerinə yetirin.
 
-echo "=== BarterTap.az Hostinger Installation Script ==="
-echo "This script will set up the Node.js application on Hostinger"
+echo "=== BarterTap.az Hostinger Quraşdırma Təlimatları ==="
+echo ""
 
-# 1. Check if we're on the right server
-if [ "$(whoami)" != "u726371272" ]; then
-  echo "This script must be run on the Hostinger server as user u726371272"
-  echo "Connect via SSH first, then run this script"
-  exit 1
-fi
+echo "1. İlk olaraq SSH vasitəsilə serverə qoşulun:"
+echo "   ssh u726371272@46.202.156.134"
+echo ""
 
-# 2. Create necessary directories
-echo "Creating necessary directories..."
-mkdir -p ~/public_html/logs
-mkdir -p ~/public_html/uploads/avatars
-mkdir -p ~/public_html/uploads/items
+echo "2. Ana kataloqa keçin və mövcud faylları yedəkləyin (əgər varsa):"
+echo "   cd ~/public_html"
+echo "   mkdir -p ~/backups"
+echo "   zip -r ~/backups/site_backup_$(date +%Y%m%d).zip ./*"
+echo ""
 
-# 3. Install Node.js dependencies
-echo "Installing Node.js dependencies..."
-cd ~/public_html
-npm install --production
+echo "3. Node.js və npm quraşdırın (əgər artıq quraşdırılmayıbsa):"
+echo "   Hostinger Control Panel > Website > Node.js"
+echo "   Ən azı Node.js 18 versiyasını seçin və 'Install' seçin"
+echo ""
 
-# 4. Set up environment variables
-if [ ! -f .env ]; then
-  echo "Creating .env file..."
-  cat > .env << EOF
-# Production Environment Configuration
+echo "4. PM2 Process Manager quraşdırın (Node.js tətbiqlərini idarə etmək üçün):"
+echo "   npm install -g pm2"
+echo ""
+
+echo "5. MySQL verilənlər bazasını yaradın (əgər yaradılmayıbsa):"
+echo "   Hostinger Control Panel > Verilənlər Bazaları > MySQL Verilənlər Bazası"
+echo "   Verilənlər bazası adı: u726371272_barter_db"
+echo "   İstifadəçi adı: u726371272_barter_db"
+echo "   Şifrə: <güclü şifrə seçin>"
+echo ""
+
+echo "6. Proyekt fayllarını FTP vasitəsilə yükləyin:"
+echo "   FileZilla məlumatları:"
+echo "   Host: 46.202.156.134"
+echo "   İstifadəçi: u726371272.bartertap.az"
+echo "   Şifrə: <FTP şifrəniz>"
+echo "   Port: 21"
+echo "   Upload folder: public_html"
+echo ""
+
+echo "7. SSH ilə bağlantı qurduqdan sonra, asılılıqları quraşdırın:"
+echo "   cd ~/public_html"
+echo "   npm install --production"
+echo ""
+
+echo "8. .env faylını yaradın və düzgün məlumatları əlavə edin:"
+echo "   Aşağıdakı komandaları SSH terminalında icra edin:"
+echo '   cat > .env << EOL
 NODE_ENV=production
+PORT=5000
+SESSION_SECRET=<güclü bir sesiya şifrəsi>
+DATABASE_URL=mysql://u726371272_barter_db:<şifrə>@localhost:3306/u726371272_barter_db
+EOL'
+echo ""
 
-# Database Configuration
-DB_TYPE=mysql
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=u726371272_barter_db
-# DB_PASSWORD will be set manually
-DB_NAME=u726371272_barter_db
+echo "9. PM2 ilə serveri başladın və avtomatik başlanğıc konfiqurasiya edin:"
+echo "   pm2 start ecosystem.config.js"
+echo "   pm2 save"
+echo "   pm2 startup"
+echo ""
 
-# Session Secret
-SESSION_SECRET=bartertap-production-secret-key
+echo "10. Nginx Reverse Proxy Konfiqurasiyası (əgər mümkündürsə):"
+echo "    Hostinger adətən Nginx/Apache konfiqurasiyasını əvvəlcədən təmin edir,"
+echo "    amma .htaccess faylını yükləmək də bu məqsədə xidmət edə bilər."
+echo ""
 
-# Website Settings
-BASE_URL=https://bartertap.az
-UPLOAD_DIR=/home/u726371272/public_html/uploads
-EOF
+echo "11. Domain və SSL konfiqurasiyası:"
+echo "    Hostinger Control Panel > Website > SSL > Install SSL"
+echo "    Hostinger Control Panel > Website > Domain > Point Domain"
+echo ""
 
-  echo "Please edit .env file and set DB_PASSWORD manually"
-fi
+echo "12. Test edin ki, sayt işləyir:"
+echo "    Brauzerinizdə bartertap.az ünvanını açın"
+echo ""
 
-# 5. Check if PM2 is installed globally
-if ! command -v pm2 &> /dev/null; then
-  echo "PM2 is not installed. Installing PM2 globally..."
-  npm install -g pm2
-fi
+echo "13. Hər hansı problem yaranacağı təqdirdə, jurnal fayllarını yoxlayın:"
+echo "    pm2 logs"
+echo ""
 
-# 6. Start the application with PM2
-echo "Starting the application with PM2..."
-pm2 start ecosystem.config.js
-
-# 7. Save the PM2 configuration
-echo "Saving PM2 configuration..."
-pm2 save
-
-# 8. Set up PM2 to start on system boot
-echo "Setting up PM2 to start on system boot..."
-pm2 startup
-
-echo -e "\n=== BarterTap.az installation complete ==="
-echo "The application should now be running."
-echo "You can check the status with: pm2 status"
-echo "View logs with: pm2 logs bartertap"
+echo "=== Quraşdırma başa çatdı ==="
+echo "Qeyd: Bu skript birbaşa icra edilmək üçün yazılmayıb, addım-addım təlimatlar kimi istifadə edilməlidir."

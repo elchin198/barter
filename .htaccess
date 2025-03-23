@@ -1,0 +1,55 @@
+# Disable directory browsing
+Options -Indexes
+
+# Protect files and directories
+<FilesMatch "^\.">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Block access to sensitive files
+<FilesMatch "(package\.json|package-lock\.json|\.env|\.md|\.gitignore|ecosystem\.config\.js)$">
+  Order allow,deny
+  Deny from all
+</FilesMatch>
+
+# Redirect to Node.js application
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Don't rewrite files or directories
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  
+  # Allow access to uploads directory
+  RewriteRule ^uploads/ - [L]
+  
+  # Redirect all other requests to Node.js server
+  RewriteRule ^ http://localhost:5000%{REQUEST_URI} [P,L]
+  ProxyPassReverse / http://localhost:5000/
+</IfModule>
+
+# Custom error pages
+ErrorDocument 404 /404.html
+ErrorDocument 500 /500.html
+
+# Enable compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Set caching headers
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>

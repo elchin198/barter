@@ -12,6 +12,7 @@ import ItemsList from "@/pages/ItemsList";
 import Profile from "@/pages/Profile";
 import Messages from "@/pages/Messages";
 import Notifications from "@/pages/Notifications";
+import Offers from "@/pages/Offers";
 import HowItWorks from "@/pages/HowItWorks";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProtectedRoute } from "@/lib/protected-route";
@@ -42,6 +43,7 @@ function Router() {
           <ProtectedRoute path="/my-items" component={Profile} />
           <ProtectedRoute path="/messages" component={Messages} />
           <ProtectedRoute path="/notifications" component={Notifications} />
+          <ProtectedRoute path="/offers" component={Offers} />
           <Route path="/how-it-works" component={HowItWorks} />
           <Route path="/categories" component={ItemsList} />
           <Route path="/search" component={ItemsList} />

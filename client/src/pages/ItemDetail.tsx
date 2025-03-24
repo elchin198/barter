@@ -292,7 +292,7 @@ export default function ItemDetail() {
     showThumbnails: true,
     lazyLoad: true,
     showNav: true,
-    thumbnailPosition: 'bottom',
+    thumbnailPosition: 'bottom' as 'bottom' | 'left' | 'right' | 'top',
     slideDuration: 450,
     slideInterval: 3000,
     startIndex: 0,
@@ -654,7 +654,7 @@ export default function ItemDetail() {
             <LocationMap 
               markers={[{
                 id: item.id,
-                position: item.coordinates ? JSON.parse(item.coordinates) : [40.3777, 49.8920], 
+                position: getCityCoordinates(item.city), 
                 title: item.title,
                 city: item.city
               }]}

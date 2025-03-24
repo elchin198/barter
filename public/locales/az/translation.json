@@ -58,7 +58,24 @@
     "noItems": "Heç bir əşya tapılmadı",
     "makeOffer": "Təklif et",
     "contactOwner": "Sahibi ilə əlaqə",
-    "report": "Şikayət et"
+    "report": "Şikayət et",
+    "barterProgress": "Barter Prosesi",
+    "barterStatus": {
+      "pending": "Təklif Göndərildi",
+      "accepted": "Qəbul Edildi",
+      "inProgress": "Barter Gözlənilir",
+      "completed": "Tamamlandı",
+      "rejected": "Rədd Edildi"
+    },
+    "barterSteps": {
+      "sent": "Göndərildi",
+      "accepted": "Qəbul Edildi",
+      "inProgress": "Gözlənilir",
+      "completed": "Tamamlandı"
+    },
+    "relatedItems": "Əlaqəli Əşyalar",
+    "sameCategory": "Eyni Kateqoriyadan",
+    "sameCity": "Eyni Şəhərdən"
   },
   "offers": {
     "makeOffer": "Təklif et",

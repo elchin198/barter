@@ -58,7 +58,24 @@
     "noItems": "Предметы не найдены",
     "makeOffer": "Сделать предложение",
     "contactOwner": "Связаться с владельцем",
-    "report": "Пожаловаться"
+    "report": "Пожаловаться",
+    "barterProgress": "Прогресс Бартера",
+    "barterStatus": {
+      "pending": "Предложение Отправлено",
+      "accepted": "Принято",
+      "inProgress": "Бартер в Процессе",
+      "completed": "Завершено",
+      "rejected": "Отклонено"
+    },
+    "barterSteps": {
+      "sent": "Отправлено",
+      "accepted": "Принято",
+      "inProgress": "В Процессе",
+      "completed": "Завершено"
+    },
+    "relatedItems": "Похожие Предметы",
+    "sameCategory": "Из Той Же Категории",
+    "sameCity": "Из Того Же Города"
   },
   "offers": {
     "makeOffer": "Сделать предложение",

@@ -58,7 +58,24 @@
     "noItems": "No items found",
     "makeOffer": "Make Offer",
     "contactOwner": "Contact Owner",
-    "report": "Report"
+    "report": "Report",
+    "barterProgress": "Barter Progress",
+    "barterStatus": {
+      "pending": "Offer Sent",
+      "accepted": "Accepted",
+      "inProgress": "Barter in Progress",
+      "completed": "Completed",
+      "rejected": "Rejected"
+    },
+    "barterSteps": {
+      "sent": "Sent",
+      "accepted": "Accepted",
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    },
+    "relatedItems": "Related Items",
+    "sameCategory": "From Same Category",
+    "sameCity": "From Same City"
   },
   "offers": {
     "makeOffer": "Make Offer",

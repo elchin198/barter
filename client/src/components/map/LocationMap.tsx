@@ -73,6 +73,8 @@ interface LocationMapProps {
   width?: string;
   singleMarker?: boolean;
   interactive?: boolean;
+  cityName?: string;
+  className?: string;
 }
 
 export default function LocationMap({ 

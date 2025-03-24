@@ -642,7 +642,16 @@ export default function ItemDetail() {
             </Badge>
           </div>
           <div className="h-[400px] rounded-xl overflow-hidden shadow-lg border border-gray-200">
-            <LocationMap cityName={item.city} className="w-full h-full" />
+            <LocationMap 
+              markers={[{
+                id: item.id,
+                position: item.coordinates ? JSON.parse(item.coordinates) : [40.3777, 49.8920], 
+                title: item.title,
+                city: item.city
+              }]}
+              singleMarker={true}
+              zoom={13}
+            />
           </div>
         </motion.div>
       )}
@@ -674,8 +683,9 @@ export default function ItemDetail() {
         isOpen={openMessageModal}
         onClose={() => setOpenMessageModal(false)}
         item={item}
-        onSend={(message) => {
-          setMessage(message);
+        recipient={item.owner}
+        onSend={(messageText: string) => {
+          setMessage(messageText);
           handleSendMessage();
           setOpenMessageModal(false);
         }}

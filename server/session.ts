@@ -13,9 +13,10 @@ export function configureSession() {
   const sessionOptions: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || 'bartertap-secret-key',
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true, // Changed to true for development
     cookie: { 
-      secure: process.env.NODE_ENV === 'production', 
+      secure: false, // Set to false in development to work with HTTP
+      httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // 1 day
       sameSite: 'lax'
     },

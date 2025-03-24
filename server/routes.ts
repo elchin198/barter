@@ -19,6 +19,8 @@ declare module 'express-session' {
 
 // Utility to check if user is authenticated
 const isAuthenticated = (req: Request, res: Response): boolean => {
+  console.log('Session check:', req.session.id, 'User ID:', req.session.userId);
+  
   if (!req.session.userId) {
     res.status(401).json({ message: 'Unauthorized: You must be logged in' });
     return false;

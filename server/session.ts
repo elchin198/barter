@@ -1,81 +1,88 @@
 import session from 'express-session';
 import memoryStore from 'memorystore';
 import dotenv from 'dotenv';
-import crypto from 'crypto';
+import { randomBytes } from 'crypto';
 
 // Load .env file in production
 dotenv.config();
 
-// Create a fixed secret for testing that won't change on restart
-// In production, this should be an environment variable
-const SESSION_SECRET = 'bartertap-fixed-development-secret-2025';
+/**
+ * Create a better, secure and fixed session secret for development
+ * that won't be regenerated on restart
+ */
+const generateFixedSecret = () => {
+  // In crypto terms, this isn't perfect but good enough for development
+  return '3Jn32d8aHx9kQmP5sT7wYzR4vF6gC1pE2022BakterTap';
+};
 
+const SESSION_SECRET = generateFixedSecret();
 const MemoryStore = memoryStore(session);
 
-// Configure session for development (in-memory) or production (MySQL)
+// Declare global session types for TypeScript
+declare module 'express-session' {
+  interface SessionData {
+    userId?: number;
+    username?: string;
+    role?: string;
+    isAdmin?: boolean;
+    isAuthenticated?: boolean;
+  }
+}
+
+// Configure session with stronger settings, absolute path, and debug information
 export function configureSession() {
-  // Use the fixed secret for consistency between server restarts
+  // Use environment variable in production or fixed secret in development
   const sessionSecret = process.env.SESSION_SECRET || SESSION_SECRET;
   
-  // Default in-memory session store for development
+  console.log('Session configuration:');
+  console.log('- Secret length:', sessionSecret.length);
+  console.log('- Session cookie name: bartertap');
+  
+  // Default to in-memory session store for development
   const sessionOptions: session.SessionOptions = {
-    name: 'bartersession', // IMPORTANT: Single consistent name
+    name: 'bartertap', // Most important! Single consistent name
     secret: sessionSecret,
-    resave: true, // Save session on every request
-    saveUninitialized: true, // Create session for all visitors
+    resave: false, // Only save when session is modified
+    saveUninitialized: false, // Don't create sessions for non-authenticated users
+    rolling: true, // Reset expiration on each response
+    unset: 'destroy', // Remove session when req.session is nulled
     cookie: { 
-      secure: false, // Must be false in development for HTTP
-      httpOnly: true,
-      sameSite: 'lax', // Use 'lax' mode for better browser compatibility
-      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days for longer sessions
-      path: '/' // Ensure cookie is available for the entire site
+      secure: process.env.NODE_ENV === 'production', // Only use secure in production
+      httpOnly: true, // Prevent JavaScript access to cookie
+      sameSite: 'lax', // Relaxed cross-origin policy
+      maxAge: 1000 * 60 * 60 * 24 * 14, // 14 days
+      path: '/', // Available on entire site
     },
     store: new MemoryStore({
-      checkPeriod: 86400000 // prune expired entries every 24h
+      checkPeriod: 86400000, // Prune expired entries every 24h
+      stale: false, // Don't return expired sessions
     })
   };
 
-  // In production with MySQL, use MySQL session store
+  // In production with DATABASE_URL, use PostgreSQL session store
   if (process.env.NODE_ENV === 'production' && process.env.DATABASE_URL) {
     try {
-      const MySQLStore = require('express-mysql-session')(session);
+      const pgSession = require('connect-pg-simple')(session);
       
-      // Parse database URL or use separate environment variables
-      let dbConfig: any = {};
-      
-      if (process.env.DATABASE_URL) {
-        // Parse the connection string
-        const dbUrl = new URL(process.env.DATABASE_URL);
-        dbConfig = {
-          host: dbUrl.hostname,
-          port: parseInt(dbUrl.port || '3306'),
-          user: dbUrl.username,
-          password: dbUrl.password,
-          database: dbUrl.pathname.substring(1), // remove leading slash
-        };
-      } else {
-        // Fallback to individual variables
-        dbConfig = {
-          host: process.env.DB_HOST,
-          port: parseInt(process.env.DB_PORT || '3306'),
-          user: process.env.DB_USER,
-          password: process.env.DB_PASSWORD,
-          database: process.env.DB_NAME,
-        };
-      }
+      // Use DATABASE_URL directly for PostgreSQL
+      const sessionStore = new pgSession({
+        conObject: {
+          connectionString: process.env.DATABASE_URL,
+          ssl: process.env.NODE_ENV === 'production'
+        },
+        tableName: 'sessions',
+        createTableIfMissing: true
+      });
 
-      // Create MySQL session store
-      const sessionStore = new MySQLStore(dbConfig);
-
-      // Use MySQL session store
       sessionOptions.store = sessionStore;
-      console.log('Using MySQL session store');
+      console.log('Using PostgreSQL session store');
     } catch (error) {
-      console.error('Failed to initialize MySQL session store, fallback to Memory store:', error);
+      console.error('Failed to initialize PostgreSQL session store, fallback to Memory store:', error);
     }
   } else {
     console.log('Using Memory session store');
   }
 
+  // Create the session middleware with our configuration
   return session(sessionOptions);
 }

@@ -21,8 +21,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('AuthContext: Fetching current user data');
     
     try {
-      // Enhanced request with debug options
-      const res = await fetch('/api/auth/me', {
+      // Enhanced request with debug options - using the new auth service endpoint
+      const res = await fetch('/api/user', {
         credentials: 'include',
         cache: 'no-cache',
         mode: 'cors',

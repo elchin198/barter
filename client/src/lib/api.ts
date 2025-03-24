@@ -171,6 +171,47 @@ export const FavoritesAPI = {
   }
 };
 
+// Admin API
+export const AdminAPI = {
+  // User management
+  getUsers: async (search?: string): Promise<User[]> => {
+    let url = '/api/admin/users';
+    if (search) url += `?search=${encodeURIComponent(search)}`;
+    
+    const res = await fetch(url, { credentials: 'include' });
+    if (!res.ok) {
+      if (res.status === 401) throw new Error('Not authenticated');
+      if (res.status === 403) throw new Error('Not authorized');
+      throw new Error('Failed to get users');
+    }
+    return res.json();
+  },
+  
+  getUser: async (id: number): Promise<User & { itemsCount: number, averageRating?: number, reviewCount?: number }> => {
+    const res = await fetch(`/api/admin/users/${id}`, { credentials: 'include' });
+    if (!res.ok) {
+      if (res.status === 401) throw new Error('Not authenticated');
+      if (res.status === 403) throw new Error('Not authorized');
+      throw new Error('Failed to get user');
+    }
+    return res.json();
+  },
+  
+  updateUserRole: async (id: number, role: 'user' | 'admin'): Promise<User> => {
+    const res = await apiRequest('PATCH', `/api/admin/users/${id}/role`, { role });
+    return res.json();
+  },
+  
+  updateUserStatus: async (id: number, active: boolean): Promise<User> => {
+    const res = await apiRequest('PATCH', `/api/admin/users/${id}/status`, { active });
+    return res.json();
+  },
+  
+  deleteUser: async (id: number): Promise<void> => {
+    await apiRequest('DELETE', `/api/admin/users/${id}`);
+  }
+};
+
 // Reviews API
 export const ReviewsAPI = {
   getUserReviews: async (userId: number, asReviewer?: boolean): Promise<Review[]> => {

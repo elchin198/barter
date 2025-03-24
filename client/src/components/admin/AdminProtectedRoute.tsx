@@ -1,50 +1,50 @@
-import { useEffect } from 'react';
-import { Redirect, useLocation } from 'wouter';
-import { useAdmin } from '@/context/AdminContext';
+import { useLocation, Route, Redirect } from 'wouter';
 import { Loader2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/context/AuthContext';
 
-interface AdminProtectedRouteProps {
-  component: React.ComponentType;
+export interface AdminProtectedRouteProps {
   path: string;
+  component: React.ComponentType;
 }
 
-export function AdminProtectedRoute({
-  component: Component,
-  path
-}: AdminProtectedRouteProps) {
-  const { isAdmin, adminLoading, checkAdminStatus } = useAdmin();
-  const { toast } = useToast();
-  const [, setLocation] = useLocation();
+export function AdminProtectedRoute({ path, component: Component }: AdminProtectedRouteProps) {
+  const { user, isLoading } = useAuth();
 
-  useEffect(() => {
-    const verifyAdmin = async () => {
-      const isUserAdmin = await checkAdminStatus();
-      if (!isUserAdmin) {
-        toast({
-          title: 'Unauthorized',
-          description: 'You do not have permission to access the admin area.',
-          variant: 'destructive',
-        });
-        setLocation('/');
-      }
-    };
-
-    verifyAdmin();
-  }, []);
-
-  if (adminLoading) {
+  if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        <span className="ml-2 text-lg">Checking admin privileges...</span>
-      </div>
+      <Route path={path}>
+        <div className="flex items-center justify-center min-h-screen">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </Route>
     );
   }
 
-  if (!isAdmin) {
-    return <Redirect to="/" />;
+  if (!user) {
+    return (
+      <Route path={path}>
+        <Redirect to="/auth" />
+      </Route>
+    );
   }
 
-  return <Component />;
+  if (user.role !== 'admin') {
+    return (
+      <Route path={path}>
+        <div className="flex flex-col items-center justify-center min-h-screen p-4">
+          <h1 className="text-2xl font-bold text-destructive mb-2">Access Denied</h1>
+          <p className="text-muted-foreground mb-6">You don't have permission to access the admin area.</p>
+          <a href="/" className="text-primary hover:underline">
+            Back to home
+          </a>
+        </div>
+      </Route>
+    );
+  }
+
+  return (
+    <Route path={path}>
+      <Component />
+    </Route>
+  );
 }

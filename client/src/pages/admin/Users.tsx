@@ -1,5 +1,12 @@
 import { useState } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import { AdminAPI } from '@/lib/api';
+import { User } from '@shared/schema';
+import { useToast } from '@/hooks/use-toast';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { 
   Table, 
   TableBody, 
@@ -8,286 +15,409 @@ import {
   TableHeader, 
   TableRow 
 } from '@/components/ui/table';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { 
-  MoreHorizontal, 
   Search, 
-  UserCheck, 
-  UserX, 
-  Ban, 
-  ShieldCheck, 
-  User, 
-  Eye, 
-  XCircle 
+  Trash2, 
+  MoreVertical, 
+  Lock, 
+  Unlock, 
+  Shield, 
+  User as UserIcon,
+  Loader2,
+  UserX,
+  ShieldAlert
 } from 'lucide-react';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-
-// Sample User data - this would normally come from an API
-const mockUsers = [
-  { 
-    id: 1, 
-    username: 'user1', 
-    email: 'user1@example.com', 
-    fullName: 'User One', 
-    role: 'user', 
-    status: 'active',
-    itemCount: 12,
-    offerCount: 5,
-    registeredAt: '2023-10-15T12:00:00'
-  },
-  { 
-    id: 2, 
-    username: 'user2', 
-    email: 'user2@example.com', 
-    fullName: 'User Two', 
-    role: 'user', 
-    status: 'banned',
-    itemCount: 0,
-    offerCount: 0,
-    registeredAt: '2023-09-25T14:30:00'
-  },
-  { 
-    id: 3, 
-    username: 'admin1', 
-    email: 'admin@example.com', 
-    fullName: 'Admin User', 
-    role: 'admin', 
-    status: 'active',
-    itemCount: 3,
-    offerCount: 2,
-    registeredAt: '2023-08-12T09:15:00'
-  },
-  { 
-    id: 4, 
-    username: 'user3', 
-    email: 'user3@example.com', 
-    fullName: 'User Three', 
-    role: 'user', 
-    status: 'inactive',
-    itemCount: 5,
-    offerCount: 0,
-    registeredAt: '2023-11-01T17:45:00'
-  },
-  { 
-    id: 5, 
-    username: 'user4', 
-    email: 'user4@example.com', 
-    fullName: 'User Four', 
-    role: 'user', 
-    status: 'active',
-    itemCount: 22,
-    offerCount: 15,
-    registeredAt: '2023-07-20T10:30:00'
-  },
-];
+import { formatDate } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
+import { queryClient } from '@/lib/queryClient';
 
 export default function UsersAdmin() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  
-  // Filter users based on search and status
-  const filteredUsers = mockUsers.filter(user => {
-    const matchesSearch = 
-      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      user.fullName.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = 
-      statusFilter === 'all' || 
-      user.status === statusFilter;
-    
-    return matchesSearch && matchesStatus;
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const [search, setSearch] = useState('');
+  const [userIdToDelete, setUserIdToDelete] = useState<number | null>(null);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showUserDetail, setShowUserDetail] = useState(false);
+
+  // Fetch users data
+  const { data: users, isLoading, isError, error } = useQuery({
+    queryKey: ['/api/admin/users', search],
+    queryFn: () => AdminAPI.getUsers(search),
   });
-  
-  // Format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('az-AZ', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
+
+  // Fetch detailed user data when a user is selected
+  const { data: userDetail, isLoading: isLoadingDetail } = useQuery({
+    queryKey: ['/api/admin/users', selectedUser?.id],
+    queryFn: () => selectedUser ? AdminAPI.getUser(selectedUser.id) : null,
+    enabled: !!selectedUser,
+  });
+
+  // Mutation for changing user role
+  const roleMutation = useMutation({
+    mutationFn: ({ id, role }: { id: number, role: 'user' | 'admin' }) => 
+      AdminAPI.updateUserRole(id, role),
+    onSuccess: () => {
+      toast({
+        title: t('admin.roleUpdated', 'Role updated'),
+        description: t('admin.roleUpdatedDescription', 'User role has been updated successfully'),
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: 'destructive',
+        title: t('admin.roleUpdateFailed', 'Failed to update role'),
+        description: error.message,
+      });
+    }
+  });
+
+  // Mutation for changing user status
+  const statusMutation = useMutation({
+    mutationFn: ({ id, active }: { id: number, active: boolean }) => 
+      AdminAPI.updateUserStatus(id, active),
+    onSuccess: () => {
+      toast({
+        title: t('admin.statusUpdated', 'Status updated'),
+        description: t('admin.statusUpdatedDescription', 'User status has been updated successfully'),
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: 'destructive',
+        title: t('admin.statusUpdateFailed', 'Failed to update status'),
+        description: error.message,
+      });
+    }
+  });
+
+  // Mutation for deleting a user
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => AdminAPI.deleteUser(id),
+    onSuccess: () => {
+      toast({
+        title: t('admin.userDeleted', 'User deleted'),
+        description: t('admin.userDeletedDescription', 'User has been deleted successfully'),
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/admin/users'] });
+      setUserIdToDelete(null);
+    },
+    onError: (error: Error) => {
+      toast({
+        variant: 'destructive',
+        title: t('admin.userDeleteFailed', 'Failed to delete user'),
+        description: error.message,
+      });
+      setUserIdToDelete(null);
+    }
+  });
+
+  // Handle role change
+  const handleRoleChange = (user: User, newRole: 'user' | 'admin') => {
+    if (user.role !== newRole) {
+      roleMutation.mutate({ id: user.id, role: newRole });
+    }
   };
-  
+
+  // Handle status change
+  const handleStatusChange = (user: User, newActive: boolean) => {
+    statusMutation.mutate({ id: user.id, active: newActive });
+  };
+
+  // Handle user delete
+  const handleDeleteUser = () => {
+    if (userIdToDelete) {
+      deleteMutation.mutate(userIdToDelete);
+    }
+  };
+
+  // View user details
+  const handleViewUser = (user: User) => {
+    setSelectedUser(user);
+    setShowUserDetail(true);
+  };
+
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-3xl font-bold tracking-tight">Users Management</h2>
-            <p className="text-muted-foreground">Manage user accounts and permissions</p>
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold tracking-tight">
+            {t('admin.users', 'Users')}
+          </h1>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          <div className="relative w-full sm:w-96">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder={t('admin.searchUsers', 'Search users...') || ''}
+              className="w-full pl-8"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
         </div>
-        
-        <div className="flex flex-col space-y-6">
-          {/* Stats Cards */}
-          <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-                <User className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{mockUsers.length}</div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Active Users</CardTitle>
-                <UserCheck className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {mockUsers.filter(user => user.status === 'active').length}
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Banned Users</CardTitle>
-                <Ban className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">
-                  {mockUsers.filter(user => user.status === 'banned').length}
-                </div>
-              </CardContent>
-            </Card>
+
+        {isLoading ? (
+          <div className="flex justify-center p-8">
+            <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
           </div>
-          
-          {/* Search and Filters */}
-          <div className="flex flex-col sm:flex-row gap-4">
-            <div className="relative flex-grow">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by username, email or name..."
-                className="pl-8"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            
-            <Tabs 
-              defaultValue="all" 
-              className="w-full sm:w-auto"
-              onValueChange={setStatusFilter}
-            >
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="all">All</TabsTrigger>
-                <TabsTrigger value="active">Active</TabsTrigger>
-                <TabsTrigger value="banned">Banned</TabsTrigger>
-              </TabsList>
-            </Tabs>
+        ) : isError ? (
+          <div className="bg-destructive/10 p-4 rounded-md text-center">
+            <p className="text-sm text-destructive">
+              {error instanceof Error ? error.message : 'Failed to load users'}
+            </p>
           </div>
-          
-          {/* Users Table */}
-          <Card>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>User</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Items</TableHead>
-                    <TableHead>Registered</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filteredUsers.map((user) => (
+        ) : (
+          <div className="rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t('admin.id', 'ID')}</TableHead>
+                  <TableHead>{t('admin.username', 'Username')}</TableHead>
+                  <TableHead>{t('admin.email', 'Email')}</TableHead>
+                  <TableHead>{t('admin.fullName', 'Full Name')}</TableHead>
+                  <TableHead>{t('admin.role', 'Role')}</TableHead>
+                  <TableHead>{t('admin.status', 'Status')}</TableHead>
+                  <TableHead>{t('admin.joinDate', 'Join Date')}</TableHead>
+                  <TableHead className="text-right">{t('admin.actions', 'Actions')}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {users && users.length > 0 ? (
+                  users.map((user) => (
                     <TableRow key={user.id}>
+                      <TableCell className="font-medium">{user.id}</TableCell>
+                      <TableCell>{user.username}</TableCell>
+                      <TableCell>{user.email}</TableCell>
+                      <TableCell>{user.fullName || '-'}</TableCell>
                       <TableCell>
-                        <div className="flex flex-col">
-                          <span className="font-medium">{user.username}</span>
-                          <span className="text-sm text-muted-foreground">{user.email}</span>
-                        </div>
+                        <Badge 
+                          variant={user.role === 'admin' ? 'default' : 'outline'}
+                          className="flex w-fit items-center gap-1"
+                        >
+                          {user.role === 'admin' ? (
+                            <ShieldAlert className="h-3 w-3" />
+                          ) : (
+                            <UserIcon className="h-3 w-3" />
+                          )}
+                          {user.role}
+                        </Badge>
                       </TableCell>
                       <TableCell>
-                        {user.role === 'admin' ? (
-                          <Badge className="bg-primary text-primary-foreground">Admin</Badge>
-                        ) : (
-                          <Badge variant="outline">User</Badge>
-                        )}
+                        <Badge 
+                          variant={user.active ? 'success' : 'destructive'}
+                          className="flex w-fit items-center gap-1"
+                        >
+                          {user.active ? (
+                            <UserIcon className="h-3 w-3" />
+                          ) : (
+                            <UserX className="h-3 w-3" />
+                          )}
+                          {user.active ? 'Active' : 'Blocked'}
+                        </Badge>
                       </TableCell>
-                      <TableCell>
-                        {user.status === 'active' && (
-                          <Badge className="bg-green-500 text-white">Active</Badge>
-                        )}
-                        {user.status === 'banned' && (
-                          <Badge variant="destructive">Banned</Badge>
-                        )}
-                        {user.status === 'inactive' && (
-                          <Badge variant="secondary">Inactive</Badge>
-                        )}
-                      </TableCell>
-                      <TableCell>{user.itemCount}</TableCell>
-                      <TableCell>{formatDate(user.registeredAt)}</TableCell>
+                      <TableCell>{formatDate(user.createdAt)}</TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon">
-                              <MoreHorizontal className="h-4 w-4" />
+                              <MoreVertical className="h-4 w-4" />
                               <span className="sr-only">Actions</span>
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem className="flex items-center">
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Profile
+                            <DropdownMenuItem onClick={() => handleViewUser(user)}>
+                              <UserIcon className="mr-2 h-4 w-4" />
+                              {t('admin.viewDetails', 'View Details')}
                             </DropdownMenuItem>
-                            
-                            {user.role !== 'admin' && (
-                              <DropdownMenuItem className="flex items-center">
-                                <ShieldCheck className="mr-2 h-4 w-4" />
-                                Make Admin
-                              </DropdownMenuItem>
-                            )}
-                            
-                            {user.status === 'active' ? (
-                              <DropdownMenuItem className="flex items-center text-destructive">
-                                <Ban className="mr-2 h-4 w-4" />
-                                Ban User
-                              </DropdownMenuItem>
-                            ) : user.status === 'banned' ? (
-                              <DropdownMenuItem className="flex items-center">
-                                <UserCheck className="mr-2 h-4 w-4" />
-                                Unban User
-                              </DropdownMenuItem>
-                            ) : null}
-                            
-                            <DropdownMenuItem className="flex items-center text-destructive">
-                              <XCircle className="mr-2 h-4 w-4" />
-                              Delete Account
+                            <DropdownMenuItem 
+                              onClick={() => handleRoleChange(user, user.role === 'admin' ? 'user' : 'admin')}
+                            >
+                              {user.role === 'admin' ? (
+                                <>
+                                  <UserIcon className="mr-2 h-4 w-4" />
+                                  {t('admin.makeUser', 'Make User')}
+                                </>
+                              ) : (
+                                <>
+                                  <Shield className="mr-2 h-4 w-4" />
+                                  {t('admin.makeAdmin', 'Make Admin')}
+                                </>
+                              )}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              onClick={() => handleStatusChange(user, !user.active)}
+                            >
+                              {user.active ? (
+                                <>
+                                  <Lock className="mr-2 h-4 w-4" />
+                                  {t('admin.block', 'Block')}
+                                </>
+                              ) : (
+                                <>
+                                  <Unlock className="mr-2 h-4 w-4" />
+                                  {t('admin.unblock', 'Unblock')}
+                                </>
+                              )}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem 
+                              className="text-destructive focus:text-destructive"
+                              onClick={() => setUserIdToDelete(user.id)}
+                            >
+                              <Trash2 className="mr-2 h-4 w-4" />
+                              {t('admin.delete', 'Delete')}
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </div>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={8} className="h-24 text-center">
+                      {search
+                        ? t('admin.noMatchingUsers', 'No users match your search')
+                        : t('admin.noUsers', 'No users found')}
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </div>
+
+      {/* User Detail Dialog */}
+      <Dialog open={showUserDetail} onOpenChange={setShowUserDetail}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{t('admin.userDetails', 'User Details')}</DialogTitle>
+            <DialogDescription>
+              {t('admin.viewingUserDetails', 'Viewing detailed information for this user.')}
+            </DialogDescription>
+          </DialogHeader>
+          
+          {isLoadingDetail ? (
+            <div className="flex justify-center p-4">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+            </div>
+          ) : userDetail ? (
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="text-sm font-medium text-right">{t('admin.id', 'ID')}:</span>
+                <span className="col-span-3">{userDetail.id}</span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="text-sm font-medium text-right">{t('admin.username', 'Username')}:</span>
+                <span className="col-span-3">{userDetail.username}</span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="text-sm font-medium text-right">{t('admin.email', 'Email')}:</span>
+                <span className="col-span-3">{userDetail.email}</span>
+              </div>
+              {userDetail.fullName && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <span className="text-sm font-medium text-right">{t('admin.fullName', 'Full Name')}:</span>
+                  <span className="col-span-3">{userDetail.fullName}</span>
+                </div>
+              )}
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="text-sm font-medium text-right">{t('admin.role', 'Role')}:</span>
+                <span className="col-span-3">
+                  <Badge variant={userDetail.role === 'admin' ? 'default' : 'outline'}>
+                    {userDetail.role}
+                  </Badge>
+                </span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="text-sm font-medium text-right">{t('admin.status', 'Status')}:</span>
+                <span className="col-span-3">
+                  <Badge variant={userDetail.active ? 'success' : 'destructive'}>
+                    {userDetail.active ? 'Active' : 'Blocked'}
+                  </Badge>
+                </span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="text-sm font-medium text-right">{t('admin.joinDate', 'Join Date')}:</span>
+                <span className="col-span-3">{formatDate(userDetail.createdAt)}</span>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <span className="text-sm font-medium text-right">{t('admin.items', 'Items')}:</span>
+                <span className="col-span-3">{userDetail.itemsCount || 0}</span>
+              </div>
+              {userDetail.averageRating !== undefined && (
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <span className="text-sm font-medium text-right">{t('admin.rating', 'Rating')}:</span>
+                  <span className="col-span-3">
+                    {userDetail.averageRating.toFixed(1)} ⭐ ({userDetail.reviewCount || 0} reviews)
+                  </span>
+                </div>
+              )}
+            </div>
+          ) : null}
+          
+          <DialogFooter>
+            <Button onClick={() => setShowUserDetail(false)}>
+              {t('common.close', 'Close')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!userIdToDelete} onOpenChange={(open) => !open && setUserIdToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t('admin.confirmDelete', 'Confirm deletion')}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t('admin.deleteWarning', "This action cannot be undone. This will permanently delete the user's account and remove their data from our servers.")}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>
+              {t('common.cancel', 'Cancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteUser}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {deleteMutation.isPending ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                <Trash2 className="mr-2 h-4 w-4" />
+              )}
+              {t('admin.delete', 'Delete')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </AdminLayout>
   );
 }

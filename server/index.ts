@@ -32,14 +32,25 @@ app.use(express.urlencoded({ extended: false }));
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
     ? ['https://bartertap.az', 'https://www.bartertap.az'] 
-    : 'http://localhost:5000',
+    : true, // Allow all origins in development
   credentials: true,
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
 
 // Configure session based on environment
-app.use(configureSession());
+const sessionMiddleware = configureSession();
+app.use(sessionMiddleware);
+
+// Debug session middleware
+app.use((req, res, next) => {
+  if (req.session) {
+    console.log(`Session: ID=${req.session.id}, UserID=${req.session.userId || 'none'}, Username=${req.session.username || 'none'}`);
+  } else {
+    console.log('No session found!');
+  }
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();

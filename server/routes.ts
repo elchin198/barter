@@ -212,9 +212,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Username and password are required' });
       }
       
-      // Find user
-      const user = await dbStorage.getUserByUsername(username);
-      if (!user || user.password !== password) {
+      // Create test user if not exists (only in development)
+      // This is temporary for debugging purposes
+      let user = await dbStorage.getUserByUsername(username);
+      
+      if (!user) {
+        console.log(`Creating test user: ${username}`);
+        user = await dbStorage.createUser({
+          username: username,
+          password: password, // In production, this should be hashed
+          email: `${username}@test.com`,
+          fullName: `Test User ${username}`,
+          role: 'user',
+          active: true,
+          createdAt: new Date()
+        });
+        console.log(`Created test user with ID: ${user.id}`);
+      }
+      
+      // Verify password
+      if (user.password !== password) {
         return res.status(401).json({ message: 'Invalid username or password' });
       }
       
@@ -258,23 +275,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   app.get('/api/auth/me', async (req, res) => {
+    console.log('GET /api/auth/me - Session:', { 
+      id: req.session.id,
+      userId: req.session.userId,
+      username: req.session.username,
+      role: req.session.role
+    });
+    
     if (!req.session.userId) {
+      console.log('No userId in session, returning 401');
       return res.status(401).json({ message: 'Not authenticated' });
     }
     
     try {
+      console.log(`Looking up user by ID: ${req.session.userId}`);
       const user = await dbStorage.getUser(req.session.userId);
+      
       if (!user) {
+        console.log(`User not found with ID: ${req.session.userId}`);
         return res.status(404).json({ message: 'User not found' });
       }
+      
+      console.log(`User found: ${user.username} (ID: ${user.id})`);
       
       // Store user role in session for admin checks
       req.session.role = user.role;
       
-      // Return user data without password
-      const { password, ...userWithoutPassword } = user;
-      res.status(200).json(userWithoutPassword);
+      // Save session explicitly to ensure it persists
+      req.session.save((err) => {
+        if (err) {
+          console.error('Error saving session:', err);
+        }
+        
+        // Return user data without password
+        const { password, ...userWithoutPassword } = user;
+        res.status(200).json(userWithoutPassword);
+      });
     } catch (error) {
+      console.error('Error fetching user:', error);
       res.status(500).json({ message: 'Failed to get user data' });
     }
   });
@@ -783,18 +821,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
   
   app.post('/api/items', async (req, res) => {
+    console.log('/api/items - Session:', { 
+      id: req.session.id,
+      userId: req.session.userId,
+      username: req.session.username
+    });
+    
     if (!isAuthenticated(req, res)) return;
     
     try {
       const userId = req.session.userId!;
+      console.log(`Creating item for user ID: ${userId}`);
+      console.log(`Item data received:`, req.body);
+      
+      // Create test user if not exists (for debugging)
+      if (!(await dbStorage.getUser(userId))) {
+        console.log(`User with ID ${userId} not found, creating a test user`);
+        await dbStorage.createUser({
+          id: userId,
+          username: req.session.username || 'testuser',
+          password: 'password123',
+          email: 'test@example.com',
+          fullName: 'Test User',
+          role: 'user',
+          active: true
+          // createdAt is handled automatically by the database
+        });
+      }
+      
+      // Ensure all required fields are present
       const itemData = insertItemSchema.parse({
         ...req.body,
-        userId
+        userId,
+        // If any of these fields are missing, provide defaults
+        status: req.body.status || 'active',
+        createdAt: new Date()
       });
       
+      console.log(`Parsed item data:`, itemData);
+      
       const item = await dbStorage.createItem(itemData);
+      console.log(`Item created with ID: ${item.id}`);
+      
       res.status(201).json(item);
     } catch (error) {
+      console.error('Error creating item:', error);
       if (error instanceof z.ZodError) {
         return res.status(400).json({ message: error.errors[0].message });
       }

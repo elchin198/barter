@@ -1,15 +1,21 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRoute, useLocation, Link } from "wouter";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Heart, MessageCircle, Share2, AlertTriangle, Star, MapPin, Clock, ExternalLink, UserCircle, Users, Package } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
+import { 
+  Heart, MessageCircle, Share2, AlertTriangle, Star, MapPin, Clock, 
+  ExternalLink, UserCircle, Users, Package, CheckCircle, ShieldCheck,
+  Calendar, Tag, BarChart, Eye, Bookmark, ThumbsUp, Camera, BookOpen,
+  ChevronRight, AtSign
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "../context/AuthContext";
@@ -22,6 +28,8 @@ import { useTranslation } from "react-i18next";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import LocationMap, { getCityCoordinates } from "@/components/map/LocationMap";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
+import NotFound from "./not-found";
 
 interface ItemDetailResponse extends Item {
   images: Array<{
@@ -272,8 +280,18 @@ export default function ItemDetail() {
     `barter, ${item.title}, ${item.category}, əşya mübadiləsi, dəyişmək, ${item.condition}, pulsuz mübadilə`
   );
 
+  // Scroll animation references and setup
+  const scrollRef = useRef(null);
+  const { scrollYProgress } = useScroll({ 
+    target: scrollRef,
+    offset: ["start start", "end start"] 
+  });
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -20]);
+
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8" ref={scrollRef}>
       {/* Page-specific SEO */}
       <SEO 
         title={itemTitle}
@@ -282,109 +300,246 @@ export default function ItemDetail() {
         pathName={location}
         ogImage={images[0]?.filePath}
       />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        {/* Images with Gallery */}
-        <div className="space-y-4">
-          {images.length > 0 && (
-            <div className="aspect-w-4 aspect-h-3 bg-gray-100 rounded-lg overflow-hidden">
-              <ImageGallery
-                items={images.map(image => ({
-                  original: image.filePath,
-                  thumbnail: image.filePath,
-                  originalAlt: item.title,
-                  thumbnailAlt: `${item.title} - thumbnail`,
-                  originalClass: "w-full h-full object-contain max-h-[400px]"
-                }))}
-                {...galleryOptions}
-                additionalClass="item-gallery"
-              />
-            </div>
-          )}
-        </div>
-        
-        {/* Item details */}
-        <div className="space-y-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <div className="flex items-center space-x-2 mb-2">
-                <h1 className="text-3xl font-bold">{item.title}</h1>
-                {getStatusBadge()}
+      
+      {/* Sticky Header with Key Item Info */}
+      <AnimatePresence>
+        <motion.div 
+          className="sticky top-0 z-20 bg-white/90 backdrop-blur-md border-b border-gray-100 py-3 px-4 mb-6 rounded-lg shadow-sm"
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, type: "spring", stiffness: 260, damping: 20 }}
+        >
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-md overflow-hidden bg-gray-100 relative flex-shrink-0">
+                <img 
+                  src={images[0]?.filePath} 
+                  alt={item.title} 
+                  className="w-full h-full object-cover"
+                />
+                {item.status === 'completed' && (
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <CheckCircle className="text-white h-6 w-6" />
+                  </div>
+                )}
               </div>
-              <div className="flex gap-4 text-sm text-gray-600">
-                <span>Category: {item.category}</span>
-                <span>Condition: {item.condition}</span>
+              
+              <div>
+                <h2 className="text-base font-bold line-clamp-1">{item.title}</h2>
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <span className="flex items-center gap-1">
+                    <MapPin className="h-3 w-3" /> {item.city}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Calendar className="h-3 w-3" /> {new Date(item.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
               </div>
             </div>
-            <div className="flex items-center space-x-2">
+            
+            <div className="flex items-center gap-2">
+              {getStatusBadge()}
               <Button 
                 variant="ghost" 
-                size="icon"
+                size="sm"
                 onClick={handleFavoriteToggle}
                 className={favorited ? "text-red-500" : "text-gray-400"}
               >
-                <Heart className="h-6 w-6" fill={favorited ? "currentColor" : "none"} />
+                <Heart className="h-5 w-5" fill={favorited ? "currentColor" : "none"} />
               </Button>
-              <Button variant="ghost" size="icon">
-                <Share2 className="h-6 w-6" />
-              </Button>
+              {user && !isOwner && (
+                <Button 
+                  variant="default"
+                  size="sm"
+                  onClick={() => navigate(`/offers/new?toItemId=${item.id}`)}
+                  className="flex items-center gap-1"
+                >
+                  <Share2 className="h-4 w-4" />
+                  <span className="hidden sm:inline">Təklif göndər</span>
+                </Button>
+              )}
             </div>
           </div>
-          
-          <div className="prose max-w-none">
-            <h3 className="text-lg font-medium mb-2">Description</h3>
-            <p className="whitespace-pre-line">{item.description}</p>
-          </div>
-          
-          {/* Item metadata */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg">
-            <div className="flex flex-col items-center text-center p-2 border-r border-gray-200">
-              <Clock className="h-5 w-5 text-blue-500 mb-1" />
-              <span className="text-xs text-gray-500">Yerləşdirildi</span>
-              <span className="text-sm font-medium">{new Date(item.createdAt).toLocaleDateString()}</span>
-            </div>
-            
-            <div className="flex flex-col items-center text-center p-2 border-r border-gray-200">
-              <MapPin className="h-5 w-5 text-blue-500 mb-1" />
-              <span className="text-xs text-gray-500">Yerləşir</span>
-              <span className="text-sm font-medium">{item.city || "N/A"}</span>
-            </div>
-            
-            <div className="flex flex-col items-center text-center p-2">
-              <Star className="h-5 w-5 text-blue-500 mb-1" />
-              <span className="text-xs text-gray-500">Vəziyyət</span>
-              <span className="text-sm font-medium">{item.condition}</span>
-            </div>
-          </div>
-          
-          {/* Owner information */}
-          <Card className="overflow-hidden">
-            <CardContent className="p-0">
-              <div className="bg-gray-50 p-3 border-b border-gray-100">
-                <h3 className="text-sm font-medium flex items-center">
-                  <UserCircle className="h-4 w-4 mr-2 text-gray-500" />
-                  Bu elanı yerləşdirən
-                </h3>
+        </motion.div>
+      </AnimatePresence>
+      
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        {/* Images with Enhanced Gallery */}
+        <motion.div 
+          className="space-y-4"
+          style={{ opacity, scale, y }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          {images.length > 0 && (
+            <div className="relative overflow-hidden rounded-xl shadow-lg">
+              <div className="relative aspect-w-4 aspect-h-3 bg-gray-100 rounded-lg overflow-hidden">
+                <ImageGallery
+                  items={images.map(image => ({
+                    original: image.filePath,
+                    thumbnail: image.filePath,
+                    originalAlt: item.title,
+                    thumbnailAlt: `${item.title} - thumbnail`,
+                    originalClass: "w-full h-full object-contain max-h-[500px]"
+                  }))}
+                  {...galleryOptions}
+                  additionalClass="item-gallery"
+                />
               </div>
               
-              <div className="p-4">
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-12 w-12 border-2 border-gray-200">
-                    <AvatarImage 
-                      src={item.owner.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.owner.fullName || item.owner.username)}`} 
-                      alt={item.owner.username} 
-                    />
-                    <AvatarFallback>{item.owner.username[0].toUpperCase()}</AvatarFallback>
-                  </Avatar>
+              {/* Image count badge */}
+              {images.length > 1 && (
+                <div className="absolute bottom-3 right-3 bg-black/60 text-white px-2 py-1 rounded-full text-xs flex items-center">
+                  <Camera className="h-3 w-3 mr-1" />
+                  {images.length} şəkil
+                </div>
+              )}
+            </div>
+          )}
+        </motion.div>
+        
+        {/* Item details - Enhanced with animations */}
+        <div className="space-y-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="space-y-4"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <div className="flex items-center space-x-2 mb-2">
+                  <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent">{item.title}</h1>
+                </div>
+                <div className="flex gap-4 text-sm text-gray-600">
+                  <span className="flex items-center">
+                    <Tag className="h-4 w-4 mr-1 text-blue-500" />
+                    {item.category}
+                  </span>
+                  <span className="flex items-center">
+                    <Star className="h-4 w-4 mr-1 text-amber-500" />
+                    {item.condition}
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button 
+                  variant={favorited ? "outline" : "ghost"}
+                  size="icon"
+                  onClick={handleFavoriteToggle}
+                  className={favorited ? "text-red-500 border-red-200 bg-red-50 hover:bg-red-100" : "text-gray-400"}
+                >
+                  <Heart className="h-6 w-6" fill={favorited ? "currentColor" : "none"} />
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <Share2 className="h-6 w-6" />
+                </Button>
+              </div>
+            </div>
+            
+            {/* Key Item Info - Styled as Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
+              <motion.div 
+                className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-3 flex flex-col items-center justify-center border border-blue-200"
+                whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1)" }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="bg-white p-2 rounded-full mb-2">
+                  <Clock className="h-5 w-5 text-blue-500" />
+                </div>
+                <span className="text-xs text-gray-500 mb-1">Yerləşdirildi</span>
+                <span className="text-sm font-medium text-blue-700">{new Date(item.createdAt).toLocaleDateString()}</span>
+              </motion.div>
+              
+              <motion.div 
+                className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-3 flex flex-col items-center justify-center border border-green-200"
+                whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(16, 185, 129, 0.1)" }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="bg-white p-2 rounded-full mb-2">
+                  <MapPin className="h-5 w-5 text-green-500" />
+                </div>
+                <span className="text-xs text-gray-500 mb-1">Yerləşir</span>
+                <span className="text-sm font-medium text-green-700">{item.city || "N/A"}</span>
+              </motion.div>
+              
+              <motion.div 
+                className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-3 flex flex-col items-center justify-center border border-amber-200"
+                whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(245, 158, 11, 0.1)" }}
+                transition={{ duration: 0.2 }}
+              >
+                <div className="bg-white p-2 rounded-full mb-2">
+                  <Star className="h-5 w-5 text-amber-500" />
+                </div>
+                <span className="text-xs text-gray-500 mb-1">Vəziyyət</span>
+                <span className="text-sm font-medium text-amber-700">{item.condition}</span>
+              </motion.div>
+            </div>
+            
+            <motion.div 
+              className="prose max-w-none"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <Card className="border-none shadow-sm">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <BookOpen className="h-5 w-5 text-blue-600" />
+                    Əşya haqqında məlumat
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="whitespace-pre-line text-gray-700 leading-relaxed">{item.description}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </motion.div>
+          
+          {/* Owner information - Enhanced Design */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+          >
+            <Card className="overflow-hidden border-none shadow-md bg-gradient-to-tr from-blue-50 via-white to-blue-50">
+              <CardHeader className="pb-2 bg-white/80 backdrop-blur-sm border-b">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <UserCircle className="h-5 w-5 text-blue-600" />
+                  Bu elanı yerləşdirən
+                </CardTitle>
+              </CardHeader>
+              
+              <CardContent className="p-4">
+                <div className="flex items-start gap-4">
+                  <div className="relative">
+                    <Avatar className="h-16 w-16 border-4 border-white shadow-md">
+                      <AvatarImage 
+                        src={item.owner.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.owner.fullName || item.owner.username)}&background=3b82f6&color=fff`} 
+                        alt={item.owner.username} 
+                      />
+                      <AvatarFallback className="bg-blue-500 text-white text-xl">
+                        {item.owner.username[0].toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="absolute -bottom-1 -right-1 bg-blue-600 text-white rounded-full p-1 w-6 h-6 flex items-center justify-center border-2 border-white shadow-sm">
+                      <ShieldCheck className="h-3 w-3" />
+                    </div>
+                  </div>
                   
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="font-medium">{item.owner.fullName || item.owner.username}</h3>
-                        <p className="text-sm text-gray-600">@{item.owner.username}</p>
+                        <h3 className="font-medium text-lg">{item.owner.fullName || item.owner.username}</h3>
+                        <p className="text-sm text-gray-600 flex items-center">
+                          <AtSign className="h-3 w-3 mr-1" />
+                          {item.owner.username}
+                        </p>
                       </div>
                       
                       <Link href={`/profile/${item.owner.username}`}>
-                        <Button variant="outline" size="sm" className="text-xs flex items-center gap-1.5">
+                        <Button variant="outline" size="sm" className="text-sm flex items-center gap-1.5 border-blue-200 shadow-sm hover:bg-blue-50">
                           <ExternalLink className="h-3 w-3" />
                           Profilə bax
                         </Button>
@@ -393,7 +548,7 @@ export default function ItemDetail() {
                     
                     <div className="mt-3">
                       {/* UserRating-dən istifadə edərək dinamik reytinq */}
-                      <div className="flex items-center mb-1">
+                      <div className="flex items-center mb-3">
                         <StarRating 
                           readOnly 
                           initialRating={4.3} 
@@ -406,201 +561,132 @@ export default function ItemDetail() {
                       </div>
                       
                       {/* İstifadəçi statusu */}
-                      <div className="mb-1">
+                      <div className="flex gap-2 flex-wrap">
                         <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
                           <Clock className="h-3 w-3 mr-1" />
-                          <span className="text-xs">Üzv oldu: {new Date(item.owner.createdAt).toLocaleDateString()}</span>
+                          <span className="text-xs">Üzv: {new Date(item.owner.createdAt).toLocaleDateString()}</span>
+                        </Badge>
+                        
+                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                          <CheckCircle className="h-3 w-3 mr-1" />
+                          <span className="text-xs">Təsdiqlənmiş</span>
                         </Badge>
                       </div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  <div className="text-center p-2 bg-gray-50 rounded flex flex-col items-center">
-                    <Package className="h-4 w-4 text-blue-600 mb-1" />
-                    <span className="block text-sm font-medium text-blue-600">17</span>
-                    <span className="text-xs text-gray-500">Aktiv elan</span>
-                  </div>
-                  <div className="text-center p-2 bg-gray-50 rounded flex flex-col items-center">
-                    <Users className="h-4 w-4 text-green-600 mb-1" />
-                    <span className="block text-sm font-medium text-green-600">23</span>
-                    <span className="text-xs text-gray-500">Tamamlanmış barter</span>
-                  </div>
+                <div className="mt-4 grid grid-cols-2 gap-3">
+                  <motion.div 
+                    className="p-3 bg-blue-50 rounded-lg flex flex-col items-center border border-blue-100"
+                    whileHover={{ y: -3, boxShadow: "0 10px 25px -5px rgba(59, 130, 246, 0.1)" }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Package className="h-5 w-5 text-blue-600 mb-1" />
+                    <span className="block text-lg font-medium text-blue-600">17</span>
+                    <span className="text-xs text-gray-600">Aktiv elan</span>
+                  </motion.div>
+                  
+                  <motion.div 
+                    className="p-3 bg-green-50 rounded-lg flex flex-col items-center border border-green-100"
+                    whileHover={{ y: -3, boxShadow: "0 10px 25px -5px rgba(16, 185, 129, 0.1)" }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ThumbsUp className="h-5 w-5 text-green-600 mb-1" />
+                    <span className="block text-lg font-medium text-green-600">23</span>
+                    <span className="text-xs text-gray-600">Tamamlanmış barter</span>
+                  </motion.div>
                 </div>
-
-                {/* Message Button */}
-                {!isOwner && user && item.status === 'active' && (
-                  <div className="mt-4">
+                
+                {user && !isOwner && (
+                  <div className="mt-4 grid grid-cols-2 gap-3">
                     <Button 
-                      variant="default"
-                      className="w-full flex items-center justify-center gap-2"
                       onClick={() => setOpenMessageModal(true)}
+                      className="flex items-center gap-1.5 border border-blue-200"
+                      variant="outline"
                     >
                       <MessageCircle className="h-4 w-4" />
-                      {t('message.sendNewMessage')}
+                      <span className="text-sm">Mesaj yazın</span>
+                    </Button>
+                    
+                    <Button 
+                      onClick={() => navigate(`/offers/new?toItemId=${item.id}`)}
+                      className="flex items-center gap-1.5 bg-gradient-to-r from-blue-600 to-blue-500"
+                    >
+                      <Share2 className="h-4 w-4" />
+                      <span className="text-sm">Təklif göndərin</span>
                     </Button>
                   </div>
                 )}
-              </div>
-            </CardContent>
-          </Card>
-          
-          {!isOwner && user && (
-            <Tabs defaultValue="message" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="message">{t('messages.send')}</TabsTrigger>
-                <TabsTrigger value="offer">{t('offers.makeOffer')}</TabsTrigger>
-              </TabsList>
-              
-              <TabsContent value="message" className="mt-4">
-                <div className="space-y-4">
-                  <Textarea
-                    placeholder="Write a message to the owner..."
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    rows={4}
-                  />
-                  <Button 
-                    className="w-full"
-                    onClick={handleSendMessage}
-                    disabled={sendMessageMutation.isPending}
-                  >
-                    {sendMessageMutation.isPending ? (
-                      <>Sending...</>
-                    ) : (
-                      <>
-                        <MessageCircle className="mr-2 h-4 w-4" />
-                        Send Message
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </TabsContent>
-              
-              <TabsContent value="offer" className="mt-4">
-                <div className="space-y-4">
-                  {tradeableItems.length > 0 ? (
-                    <>
-                      <p className="text-sm text-gray-600">
-                        Select one of your items to offer in exchange for this item
-                      </p>
-                      <Select onValueChange={(value) => setSelectedItemForOffer(Number(value))}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select your item to trade" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {tradeableItems.map((userItem) => (
-                            <SelectItem key={userItem.id} value={userItem.id.toString()}>
-                              {userItem.title}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <Button 
-                        className="w-full"
-                        onClick={handleSendOffer}
-                        disabled={sendOfferMutation.isPending}
-                      >
-                        {sendOfferMutation.isPending ? "Sending Offer..." : "Send Offer"}
-                      </Button>
-                    </>
-                  ) : (
-                    <div className="text-center py-6">
-                      <p className="text-gray-600 mb-4">You don't have any active items to trade.</p>
-                      <Button asChild>
-                        <a href="/items/new">List an Item</a>
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
-            </Tabs>
-          )}
-          
-          {!user && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="w-full">Contact Owner</Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Authentication Required</DialogTitle>
-                  <DialogDescription>
-                    You need to be logged in to contact the owner of this item.
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button variant="outline" onClick={() => navigate("/login")}>
-                    Login
-                  </Button>
-                  <Button onClick={() => navigate("/register")}>
-                    Register
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-          )}
+              </CardContent>
+            </Card>
+          </motion.div>
         </div>
       </div>
-
-      {/* Xəritə inteqrasiyası */}
-      {item.city && (
-        <div className="mb-10">
-          <div className="flex items-center mb-4">
-            <MapPin className="mr-2 h-5 w-5 text-blue-600" />
-            <h2 className="text-xl font-semibold">{t('items.locationMap', 'Yerləşmə xəritəsi')}</h2>
+      
+      {/* Location Map with Enhanced Design */}
+      {item.city && item.city !== "N/A" && (
+        <motion.div 
+          className="mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+        >
+          <div className="flex items-center gap-2 mb-4">
+            <h3 className="text-xl font-bold flex items-center">
+              <MapPin className="h-5 w-5 mr-2 text-blue-600" />
+              Yerləşdiyi yer
+            </h3>
+            <Badge variant="outline" className="ml-2 bg-blue-50 text-blue-700 border-blue-200">
+              {item.city}
+            </Badge>
           </div>
-          <Card>
-            <CardContent className="p-4">
-              <div className="bg-gray-50 p-3 mb-4 rounded-md">
-                <p className="text-sm text-gray-700 flex items-center">
-                  <MapPin className="h-4 w-4 mr-1 text-blue-500" />
-                  <span>{item.city}</span>
-                </p>
-              </div>
-              <LocationMap 
-                markers={[{
-                  id: item.id,
-                  position: getCityCoordinates(item.city),
-                  title: item.title,
-                  city: item.city,
-                  imageUrl: item.images[0]?.filePath
-                }]}
-                center={getCityCoordinates(item.city)}
-                zoom={14}
-                height="350px"
-                singleMarker={true}
-              />
-              <div className="mt-3 flex justify-end">
-                <Button size="sm" variant="outline" asChild>
-                  <Link to="/map">
-                    <MapPin className="mr-1 h-4 w-4" />
-                    {t('items.viewAllOnMap', 'Bütün elanları xəritədə göstər')}
-                  </Link>
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+          <div className="h-[400px] rounded-xl overflow-hidden shadow-lg border border-gray-200">
+            <LocationMap cityName={item.city} className="w-full h-full" />
+          </div>
+        </motion.div>
       )}
-
-      {/* İstifadəçinin digər elanları */}
-      <UserItems 
-        userId={item.userId}
-        username={item.owner.username} 
-        excludeItemId={item.id}
-        limit={3}
-      />
-
+      
+      {/* User's other items - Enhanced Design */}
+      <motion.div 
+        className="mb-12"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.6 }}
+      >
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-bold flex items-center">
+            <Package className="h-5 w-5 mr-2 text-blue-600" />
+            Bu istifadəçinin digər elanları
+          </h3>
+          <Link href={`/items?userId=${item.userId}`}>
+            <Button variant="outline" size="sm" className="text-xs border-blue-200 hover:bg-blue-50">
+              Hamısına bax
+              <ChevronRight className="h-4 w-4 ml-1" />
+            </Button>
+          </Link>
+        </div>
+        <UserItems userId={item.userId} excludeItemId={item.id} className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4" />
+      </motion.div>
+      
       {/* Message Modal */}
-      {user && item.owner && (
-        <MessageModal
-          open={openMessageModal}
-          onOpenChange={setOpenMessageModal}
-          recipient={item.owner}
-          item={item}
-        />
+      <MessageModal 
+        isOpen={openMessageModal}
+        onClose={() => setOpenMessageModal(false)}
+        item={item}
+        onSend={(message) => {
+          setMessage(message);
+          handleSendMessage();
+          setOpenMessageModal(false);
+        }}
+      />
+      
+      {/* Similar Items - TODO: Implement similar items function */}
+      {false && (
+        <div className="mb-8">
+          <h3 className="text-xl font-bold mb-4">Oxşar əşyalar</h3>
+          {/* Similar items component */}
+        </div>
       )}
     </div>
   );

@@ -14,7 +14,7 @@ import {
   Heart, MessageCircle, Share2, AlertTriangle, Star, MapPin, Clock, 
   ExternalLink, UserCircle, Users, Package, CheckCircle, ShieldCheck,
   Calendar, Tag, BarChart, Eye, Bookmark, ThumbsUp, Camera, BookOpen,
-  ChevronRight, AtSign
+  ChevronRight, AtSign, Mail
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";

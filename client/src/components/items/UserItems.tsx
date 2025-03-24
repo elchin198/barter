@@ -9,9 +9,10 @@ import { useTranslation } from "react-i18next";
 
 interface UserItemsProps {
   userId: number;
-  username: string;
+  username?: string;
   excludeItemId?: number;
   limit?: number;
+  className?: string;
 }
 
 interface ItemWithImage extends Item {

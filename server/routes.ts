@@ -205,6 +205,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { username, password } = req.body;
       
+      console.log("Login attempt:", username);
+      console.log("Session before login:", req.session.id);
+      
       if (!username || !password) {
         return res.status(400).json({ message: 'Username and password are required' });
       }
@@ -220,10 +223,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
       req.session.username = user.username;
       req.session.role = user.role;
       
-      // Return user data without password
-      const { password: _, ...userWithoutPassword } = user;
-      res.status(200).json(userWithoutPassword);
+      // Force session save
+      req.session.save((err) => {
+        if (err) {
+          console.error("Session save error:", err);
+          return res.status(500).json({ message: 'Failed to save session' });
+        }
+        
+        console.log("Session saved, ID:", req.session.id);
+        console.log("User data stored in session:", { 
+          id: req.session.userId, 
+          username: req.session.username,
+          role: req.session.role 
+        });
+        
+        // Return user data without password
+        const { password: _, ...userWithoutPassword } = user;
+        res.status(200).json(userWithoutPassword);
+      });
     } catch (error) {
+      console.error("Login error:", error);
       res.status(500).json({ message: 'Failed to login' });
     }
   });

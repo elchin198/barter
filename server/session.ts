@@ -11,14 +11,15 @@ const MemoryStore = memoryStore(session);
 export function configureSession() {
   // Default in-memory session store for development
   const sessionOptions: session.SessionOptions = {
+    name: 'bartertap.sid', // Give a specific name to the cookie
     secret: process.env.SESSION_SECRET || 'bartertap-secret-key',
-    resave: false,
-    saveUninitialized: true, // Changed to true for development
+    resave: true, // Changed to true to ensure session is saved back
+    saveUninitialized: true, // Always create session to track guest users too
     cookie: { 
-      secure: false, // Set to false in development to work with HTTP
+      secure: false, // Must be false in development for HTTP
       httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
-      sameSite: 'lax'
+      sameSite: 'none', // Allow cross-site cookies 
+      maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     },
     store: new MemoryStore({
       checkPeriod: 86400000 // prune expired entries every 24h

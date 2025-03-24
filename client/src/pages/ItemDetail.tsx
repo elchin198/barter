@@ -30,6 +30,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 import LocationMap, { getCityCoordinates } from "@/components/map/LocationMap";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import NotFound from "./not-found";
+import { BarterProgress, type BarterStatus } from "@/components/items/BarterProgress";
 
 interface ItemDetailResponse extends Item {
   images: Array<{
@@ -501,6 +502,18 @@ export default function ItemDetail() {
                 </CardHeader>
                 <CardContent>
                   <p className="whitespace-pre-line text-gray-700 leading-relaxed">{item.description}</p>
+                </CardContent>
+              </Card>
+              
+              {/* Barter Progress Status Card - New Addition */}
+              <Card className="border-none shadow-sm overflow-hidden mt-4">
+                <CardContent className="p-4">
+                  <BarterProgress 
+                    status={item.status === 'active' ? 'pending' : 
+                            item.status === 'pending' ? 'accepted' : 
+                            item.status === 'completed' ? 'completed' : 'pending'}
+                    className="mt-2"
+                  />
                 </CardContent>
               </Card>
             </motion.div>

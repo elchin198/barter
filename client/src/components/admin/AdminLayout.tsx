@@ -1,26 +1,54 @@
-import { ReactNode } from 'react';
+import { useEffect } from 'react';
 import AdminSidebar from './AdminSidebar';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Toaster } from '@/components/ui/toaster';
+import { useLocation, useRoute } from 'wouter';
+import { useAdmin } from '@/context/AdminContext';
+import { Loader2 } from 'lucide-react';
 
 interface AdminLayoutProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export default function AdminLayout({ children }: AdminLayoutProps) {
+  const { isAdmin, adminLoading, checkAdminStatus } = useAdmin();
+  const [, setLocation] = useLocation();
+  const [isLoginRoute] = useRoute('/admin/login');
+
+  // Check admin status on mount
+  useEffect(() => {
+    const verifyAdmin = async () => {
+      const isAdminVerified = await checkAdminStatus();
+      
+      // If not on login page and not admin, redirect to login
+      if (!isLoginRoute && !isAdminVerified) {
+        setLocation('/admin/login');
+      }
+    };
+
+    verifyAdmin();
+  }, [checkAdminStatus, isLoginRoute, setLocation]);
+
+  // If checking admin status, show loading
+  if (adminLoading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  // If not admin and not on login page, don't render anything (redirect will happen from useEffect)
+  if (!isAdmin && !isLoginRoute) {
+    return null;
+  }
+
   return (
-    <div className="min-h-screen bg-muted/20">
+    <div className="min-h-screen bg-background">
       <AdminSidebar />
-      
-      <main className="md:pl-64 pt-4 md:pt-0">
-        <div className="p-4 md:p-8 max-w-6xl">
-          <ScrollArea className="h-[calc(100vh-32px)]">
-            {children}
-          </ScrollArea>
-        </div>
-      </main>
-      
-      <Toaster />
+      <div className="pl-0 lg:pl-64 pt-14">
+        <main className="container py-6">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

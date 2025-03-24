@@ -194,6 +194,7 @@ export class MemStorage implements IStorage {
       bio: insertUser.bio || null,
       phone: insertUser.phone || null,
       role: insertUser.role || 'user',
+      active: insertUser.active !== undefined ? insertUser.active : true,
       createdAt 
     };
     this.users.set(id, user);

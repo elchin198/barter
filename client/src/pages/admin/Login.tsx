@@ -1,163 +1,156 @@
-import { useState } from 'react';
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useLocation } from 'wouter';
-import { useAuth } from '@/context/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Loader2 } from 'lucide-react';
+import { useState } from "react";
+import { useLocation } from "wouter";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/context/AuthContext";
+import SEO from "@/components/SEO";
+import { Loader2 } from "lucide-react";
 
-// Form validation schema
 const adminLoginSchema = z.object({
-  username: z.string().min(1, 'Username is required'),
-  password: z.string().min(1, 'Password is required'),
+  username: z.string().min(3, {
+    message: "Username must be at least 3 characters",
+  }),
+  password: z.string().min(6, {
+    message: "Password must be at least 6 characters",
+  }),
 });
 
 type AdminLoginFormValues = z.infer<typeof adminLoginSchema>;
 
 export default function AdminLogin() {
-  const [, setLocation] = useLocation();
-  const { login } = useAuth();
+  const { t } = useTranslation();
+  const [, navigate] = useLocation();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const { login, user } = useAuth();
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  // Default values for form
-  const defaultValues: Partial<AdminLoginFormValues> = {
-    username: '',
-    password: '',
-  };
+  // Redirect if already authenticated
+  if (user && user.role === 'admin') {
+    navigate('/admin');
+    return null;
+  }
 
-  // Form definition
   const form = useForm<AdminLoginFormValues>({
     resolver: zodResolver(adminLoginSchema),
-    defaultValues,
+    defaultValues: {
+      username: "",
+      password: ""
+    },
   });
 
-  // Form submission handler
   async function onSubmit(data: AdminLoginFormValues) {
-    setIsLoading(true);
-    
     try {
-      // Attempt login
+      setIsLoggingIn(true);
       const user = await login(data.username, data.password);
       
-      // Check if user has admin role
-      if (user && user.role === 'admin') {
+      if (user.role !== 'admin') {
         toast({
-          title: 'Login successful',
-          description: 'Welcome to the admin panel',
+          variant: "destructive",
+          title: "Access denied",
+          description: "You don't have permission to access the admin area."
         });
-        setLocation('/admin/dashboard');
-      } else {
-        toast({
-          title: 'Access denied',
-          description: 'You do not have administrative privileges',
-          variant: 'destructive',
-        });
+        setIsLoggingIn(false);
+        return;
       }
+      
+      navigate('/admin');
     } catch (error) {
-      // Handle login error
+      let errorMessage = "Failed to login. Please check your credentials.";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
       toast({
-        title: 'Login failed',
-        description: error instanceof Error ? error.message : 'Invalid credentials',
-        variant: 'destructive',
+        variant: "destructive",
+        title: "Login Failed",
+        description: errorMessage
       });
-    } finally {
-      setIsLoading(false);
+      
+      setIsLoggingIn(false);
     }
   }
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-background">
-      <div className="w-full max-w-md px-4">
-        <Card>
-          <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-            <CardDescription>
-              Enter your credentials to access the admin panel
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="username"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Username</FormLabel>
-                      <FormControl>
-                        <Input placeholder="admin" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="password"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Password</FormLabel>
-                      <FormControl>
-                        <Input type="password" placeholder="••••••••" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <Button 
-                  type="submit" 
-                  className="w-full" 
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Logging in...
-                    </>
-                  ) : (
-                    'Log in'
-                  )}
-                </Button>
-              </form>
-            </Form>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-muted-foreground text-center">
-              <p>For testing, use:</p>
-              <p className="font-medium">admin@example.com / admin123</p>
-            </div>
-            <Button 
-              variant="outline" 
-              className="w-full"
-              onClick={() => setLocation('/')}
-            >
-              Back to site
-            </Button>
-          </CardFooter>
-        </Card>
+    <div className="flex flex-col min-h-screen items-center justify-center px-4">
+      <SEO title="Admin Login | BarterTap" noIndex={true} />
+      
+      <div className="flex flex-col items-center justify-center space-y-2 mb-6">
+        <img src="/barter-logo.png" alt="BarterTap" className="w-12 h-12 mb-2" />
+        <h1 className="text-3xl font-bold">Admin Panel</h1>
+        <p className="text-muted-foreground text-sm">Login to access the administration area</p>
       </div>
+      
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>{t('admin.loginTitle', 'Admin Login')}</CardTitle>
+          <CardDescription>
+            {t('admin.loginDescription', 'Enter your credentials to access the admin area')}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('auth.username', 'Username')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder={t('auth.username', 'Username')}
+                        disabled={isLoggingIn}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t('auth.password', 'Password')}</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder={t('auth.password', 'Password')}
+                        disabled={isLoggingIn}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={isLoggingIn}
+              >
+                {isLoggingIn && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {isLoggingIn
+                  ? t('common.processing', 'Processing...')
+                  : t('auth.loginToAccount', 'Login to account')}
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter className="flex justify-center">
+          <Button variant="link" onClick={() => navigate('/')}>
+            {t('common.backToWebsite', 'Back to website')}
+          </Button>
+        </CardFooter>
+      </Card>
     </div>
   );
 }

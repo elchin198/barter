@@ -44,12 +44,13 @@ function Router() {
         <SEO title="Admin Panel | BarterTap" noIndex={true} />
         <Switch>
           <Route path="/admin/login" component={AdminLogin} />
+          <AdminProtectedRoute path="/admin" component={AdminDashboard} />
           <AdminProtectedRoute path="/admin/dashboard" component={AdminDashboard} />
           <AdminProtectedRoute path="/admin/users" component={AdminUsers} />
           <AdminProtectedRoute path="/admin/listings" component={AdminListings} />
           <AdminProtectedRoute path="/admin/offers" component={AdminOffers} />
           <AdminProtectedRoute path="/admin/stats" component={AdminStats} />
-          <Route path="/admin/*" component={() => <AdminProtectedRoute path="/admin/*" component={AdminDashboard} />} />
+          <Route path="/admin/*" component={NotFound} />
         </Switch>
       </div>
     );

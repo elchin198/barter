@@ -615,19 +615,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Avatar upload route
   app.post('/api/users/me/avatar', upload.single('avatar'), async (req, res) => {
-    if (!isAuthenticated(req, res)) return;
+    if (!req.session.userId) {
+      return res.status(401).json({ message: 'Unauthorized: You must be logged in to upload an avatar' });
+    }
     
     if (!req.file) {
       return res.status(400).json({ message: 'No file uploaded' });
     }
     
     try {
-      const userId = req.session.userId!;
+      const userId = req.session.userId;
       const user = await dbStorage.getUser(userId);
       
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
+      
+      console.log(`Processing avatar upload for user ${userId}, file: ${req.file.filename}`);
       
       // If user already has an avatar, delete the old file to save space
       if (user.avatar && user.avatar.startsWith('/uploads/avatars/')) {
@@ -635,6 +639,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           if (fs.existsSync(oldAvatarPath)) {
             fs.unlinkSync(oldAvatarPath);
+            console.log(`Deleted old avatar: ${oldAvatarPath}`);
           }
         } catch (err) {
           console.error('Failed to delete old avatar:', err);
@@ -653,6 +658,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { password, ...userWithoutPassword } = updatedUser;
       res.status(200).json({ ...userWithoutPassword, avatarUrl });
     } catch (error) {
+      console.error('Error uploading avatar:', error);
       res.status(500).json({ message: 'Failed to upload avatar' });
     }
   });

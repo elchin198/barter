@@ -23,6 +23,8 @@ import { AdminProtectedRoute } from "@/components/admin/AdminProtectedRoute";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SEO from "@/components/SEO";
+import { I18nextProvider } from "react-i18next";
+import i18n from "./i18n";
 
 // Admin pages
 import AdminLogin from "@/pages/admin/Login";
@@ -96,14 +98,16 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <AdminProvider>
-          <Router />
-          <Toaster />
-        </AdminProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+    <I18nextProvider i18n={i18n}>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <AdminProvider>
+            <Router />
+            <Toaster />
+          </AdminProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </I18nextProvider>
   );
 }
 

@@ -2,12 +2,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 import "./leaflet.css";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/lib/queryClient";
-import { AuthProvider } from "@/context/AuthContext";
-import { Toaster } from "@/components/ui/toaster";
-// Import i18n config
-import "./i18n";
+import "./i18n"; // İmport i18n config before rendering
 
 // Create link element for custom styles
 const customCssLink = document.createElement('link');
@@ -26,11 +21,4 @@ if (savedTheme === "dark" || (savedTheme === "system" && systemPrefersDark) || (
   document.documentElement.classList.remove("dark");
 }
 
-createRoot(document.getElementById("root")!).render(
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <App />
-      <Toaster />
-    </AuthProvider>
-  </QueryClientProvider>
-);
+createRoot(document.getElementById("root")!).render(<App />);

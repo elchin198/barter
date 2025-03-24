@@ -255,14 +255,17 @@ export default function Profile() {
                                       formData.append('avatar', file);
                                       
                                       try {
+                                        // Use apiRequest helper that includes credentials
                                         const response = await fetch('/api/users/me/avatar', {
                                           method: 'POST',
                                           body: formData,
+                                          credentials: 'include' // Important: include credentials for session cookie
                                           // Don't set Content-Type, the browser will set it including the boundary
                                         });
                                         
                                         if (!response.ok) {
-                                          throw new Error('Failed to upload avatar');
+                                          const errorData = await response.json();
+                                          throw new Error(errorData.message || 'Failed to upload avatar');
                                         }
                                         
                                         const data = await response.json();
@@ -272,10 +275,10 @@ export default function Profile() {
                                           description: "Profil şəkliniz uğurla yeniləndi."
                                         });
                                         refreshUser();
-                                      } catch (error) {
+                                      } catch (error: any) {
                                         toast({
                                           title: "Xəta",
-                                          description: "Şəkil yüklənərkən xəta baş verdi.",
+                                          description: error.message || "Şəkil yüklənərkən xəta baş verdi.",
                                           variant: "destructive"
                                         });
                                         console.error('Error uploading avatar:', error);

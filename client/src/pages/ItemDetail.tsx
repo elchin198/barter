@@ -31,6 +31,7 @@ import LocationMap, { getCityCoordinates } from "@/components/map/LocationMap";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import NotFound from "./not-found";
 import { BarterProgress, type BarterStatus } from "@/components/items/BarterProgress";
+import RelatedItems from "@/components/items/RelatedItems";
 
 interface ItemDetailResponse extends Item {
   images: Array<{
@@ -713,13 +714,19 @@ export default function ItemDetail() {
         }}
       />
       
-      {/* Similar Items - TODO: Implement similar items function */}
-      {false && (
-        <div className="mb-8">
-          <h3 className="text-xl font-bold mb-4">Oxşar əşyalar</h3>
-          {/* Similar items component */}
-        </div>
-      )}
+      {/* Related Items - newly implemented component */}
+      <motion.div 
+        className="mb-12"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.7 }}
+      >
+        <RelatedItems
+          itemId={item.id}
+          category={item.category}
+          city={item.city}
+        />
+      </motion.div>
     </div>
   );
 }

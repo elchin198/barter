@@ -26,13 +26,25 @@ export const AuthAPI = {
 
 // Items API
 export const ItemsAPI = {
-  getItems: async (params?: { category?: string, search?: string, status?: string }): Promise<Item[]> => {
+  getItems: async (params?: { 
+    category?: string, 
+    search?: string, 
+    status?: string, 
+    city?: string,
+    condition?: string,
+    limit?: number, 
+    offset?: number
+  }): Promise<Item[]> => {
     let url = '/api/items';
     if (params) {
       const queryParams = new URLSearchParams();
       if (params.category) queryParams.append('category', params.category);
       if (params.search) queryParams.append('search', params.search);
       if (params.status) queryParams.append('status', params.status);
+      if (params.city) queryParams.append('city', params.city);
+      if (params.condition) queryParams.append('condition', params.condition);
+      if (params.limit) queryParams.append('limit', params.limit.toString());
+      if (params.offset) queryParams.append('offset', params.offset.toString());
       url += `?${queryParams.toString()}`;
     }
     

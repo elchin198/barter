@@ -57,6 +57,21 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   if (req.session) {
     console.log(`Session: ID=${req.session.id}, UserID=${req.session.userId || 'none'}, Username=${req.session.username || 'none'}`);
+    
+    // Clear out old cookies to prevent conflicts
+    if (req.headers.cookie && (
+      req.headers.cookie.includes('bartertap.sid') || 
+      req.headers.cookie.includes('bartertap_sid') ||
+      req.headers.cookie.includes('connect.sid')
+    )) {
+      // Only set these headers if the current cookie doesn't match our expected name
+      if (!req.headers.cookie.includes('bartersession')) {
+        res.clearCookie('bartertap.sid');
+        res.clearCookie('bartertap_sid');
+        res.clearCookie('connect.sid');
+        console.log('Cleared old session cookies');
+      }
+    }
   } else {
     console.log('No session found!');
   }

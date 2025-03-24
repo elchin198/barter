@@ -6,24 +6,29 @@ import crypto from 'crypto';
 // Load .env file in production
 dotenv.config();
 
+// Create a fixed secret for testing that won't change on restart
+// In production, this should be an environment variable
+const SESSION_SECRET = 'bartertap-fixed-development-secret-2025';
+
 const MemoryStore = memoryStore(session);
 
 // Configure session for development (in-memory) or production (MySQL)
 export function configureSession() {
-  // Generate a strong session secret if none is provided
-  const sessionSecret = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+  // Use the fixed secret for consistency between server restarts
+  const sessionSecret = process.env.SESSION_SECRET || SESSION_SECRET;
   
   // Default in-memory session store for development
   const sessionOptions: session.SessionOptions = {
-    name: 'bartertap_sid', // Give a specific name to the cookie
+    name: 'bartersession', // IMPORTANT: Single consistent name
     secret: sessionSecret,
-    resave: true, // Changed to true to ensure session is saved back
-    saveUninitialized: true, // Always create session to track guest users too
+    resave: true, // Save session on every request
+    saveUninitialized: true, // Create session for all visitors
     cookie: { 
       secure: false, // Must be false in development for HTTP
       httpOnly: true,
-      sameSite: 'lax', // Changed from 'none' to 'lax' for development
-      maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
+      sameSite: 'lax', // Use 'lax' mode for better browser compatibility
+      maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days for longer sessions
+      path: '/' // Ensure cookie is available for the entire site
     },
     store: new MemoryStore({
       checkPeriod: 86400000 // prune expired entries every 24h

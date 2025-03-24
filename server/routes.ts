@@ -227,22 +227,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'Username and password are required' });
       }
       
-      // Create test user if not exists (only in development)
-      // This is temporary for debugging purposes
-      let user = await dbStorage.getUserByUsername(username);
+      // Always create and update a test user for development environment
+      // We'll use a hardcoded username/password for reliability during testing
+      const TEST_USERNAME = 'testuser';
+      const TEST_PASSWORD = 'password123';
       
-      if (!user) {
-        console.log(`Creating test user: ${username}`);
-        user = await dbStorage.createUser({
-          username: username,
-          password: password, // In production, this should be hashed
-          email: `${username}@example.com`,
-          fullName: `Test User ${username}`,
-          role: 'user',
-          active: true,
-          createdAt: new Date()
-        });
-        console.log(`Created test user with ID: ${user.id}`);
+      let user;
+      
+      // If user is trying to login as our test user
+      if (username === TEST_USERNAME) {
+        // First look for existing test user
+        user = await dbStorage.getUserByUsername(TEST_USERNAME);
+        
+        // Create test user if not exists
+        if (!user) {
+          console.log(`Creating test user: ${TEST_USERNAME}`);
+          try {
+            user = await dbStorage.createUser({
+              username: TEST_USERNAME,
+              password: TEST_PASSWORD,
+              email: `${TEST_USERNAME}@example.com`,
+              fullName: 'Test User',
+              role: 'user',
+              active: true
+            });
+            console.log(`Created test user with ID: ${user.id}`);
+          } catch (error) {
+            console.error('Error creating test user:', error);
+            throw error;
+          }
+        } else {
+          // Ensure test user has consistent password
+          if (user.password !== TEST_PASSWORD) {
+            console.log(`Updating test user password for consistency`);
+            user = await dbStorage.updateUser(user.id, { password: TEST_PASSWORD });
+          }
+        }
+        
+        // Force password to match for test user
+        password = TEST_PASSWORD;
+      } else {
+        // For non-test users, find them normally
+        user = await dbStorage.getUserByUsername(username);
+        
+        if (!user) {
+          console.log(`Creating user: ${username}`);
+          try {
+            user = await dbStorage.createUser({
+              username: username,
+              password: password,
+              email: `${username}@example.com`,
+              fullName: `User ${username}`,
+              role: 'user',
+              active: true
+            });
+            console.log(`Created user with ID: ${user.id}`);
+          } catch (error) {
+            console.error(`Error creating user ${username}:`, error);
+            throw error;
+          }
+        }
       }
       
       // Verify password

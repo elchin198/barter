@@ -22,7 +22,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     
     try {
       // Enhanced request with debug options - using the new auth service endpoint
-      const res = await fetch('/api/user', {
+      const res = await fetch('/api/auth/me', {
         credentials: 'include',
         cache: 'no-cache',
         mode: 'cors',
@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       
       // Debug the response headers
-      console.log('AuthContext: /api/user response', {
+      console.log('AuthContext: /api/auth/me response', {
         status: res.status,
         statusText: res.statusText,
         headers: Array.from(res.headers.entries()),

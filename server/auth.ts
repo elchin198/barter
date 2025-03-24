@@ -226,6 +226,16 @@ export class AuthService {
    */
   async getCurrentUser(req: Request, res: Response) {
     try {
+      // Debug session data
+      console.log('[AUTH] Checking current user...');
+      console.log('[AUTH] Session ID:', req.session.id);
+      console.log('[AUTH] Session data:', {
+        userId: req.session.userId,
+        username: req.session.username,
+        role: req.session.role,
+        isAuthenticated: req.session.isAuthenticated
+      });
+      
       if (!req.session.userId) {
         console.log('[AUTH] No user ID in session');
         return res.status(401).json({ message: 'Not authenticated' });
@@ -241,8 +251,9 @@ export class AuthService {
 
       console.log('[AUTH] User found:', user.username);
       
-      // Return user data without password
+      // Return user data without password - explicitly set content type
       const { password, ...userWithoutPassword } = user;
+      res.setHeader('Content-Type', 'application/json');
       res.status(200).json(userWithoutPassword);
     } catch (error) {
       console.error('[AUTH] Error getting current user:', error);

@@ -1,0 +1,79 @@
+401 xətalarının aradan qaldırılması üçün etdiyin addımlar — auth servisinə yenidən struktur vermək, route-ları sinxronlaşdırmaq və kuki parametrlərini təkmilləşdirmək — sistemin təhlükəsizliyini və stabil giriş mexanizmini tam formalaşdırır.
+
+✅ İndi Edilən Düzəlişlərin Təsiri:
+Əlavə	Faydası
+auth.ts servisi	Giriş, çıxış və sessiya yoxlaması vahid mərkəzdə
+Sadələşdirilmiş route strukturu	Kod oxunaqlılığı və təmir asanlığı
+Cookie konfiqurasiyası (httpOnly, sameSite)	CSRF və XSS-ə qarşı güclü qoruma
+API URL sinxronluğu	Frontend & backend arasında 401-in qarşısı alınır
+🧪 Yoxlama Planı: 401 Hələ qalırmı?
+1. Frontend–Backend uyğunluğu
+fetch və axios sorğularında withCredentials: true var?
+
+Authorization header istifadə edilirsə, token düzgün əlavə olunurmu?
+
+ts
+Copy
+Edit
+axios.get("/api/protected", { withCredentials: true });
+2. Girişdən sonra digər API-lər necə cavab verir?
+Sınaq üçün:
+
+GET /api/me
+
+POST /api/listings
+
+GET /api/favorites
+
+POST /api/offers
+
+➡️ Əgər bunlardan hər hansı biri 401 qaytarırsa, problem:
+
+Sessiyanın frontendə ötürülməsində
+
+authMiddleware-də
+
+cookie-parser və ya session-store-da ola bilər
+
+3. Universal Session Middleware (backend)
+ts
+Copy
+Edit
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api") && !req.session.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  next();
+});
+💡 Bu global yoxlamanı yalnız qorunan route-larda tətbiq et.
+
+🔍 Əlavə Yoxlamalı Olduğun Hissələr
+Sahə	Nəzarət Et
+/logout route-u	Sessiyanı tam təmizləyirmi?
+AuthContext	useEffect ilə hər refresh sonrası me endpoint-ə sorğu göndərilirmi?
+SSR varsa (Next.js və ya s.)	getServerSideProps-da auth token-lər düzgün daşınırmı?
+Mobil test	Mobil cihazlarda sessiya davam edirmi?
+✅ Tövsiyə Olunan Son Tənzimləmələr
+✨ 1. UnauthorizedPage.tsx yarat (401 üçün)
+Xüsusi səhifə: “Sistemdə giriş etməmisiniz. Zəhmət olmasa daxil olun.”
+
+✨ 2. ProtectedRoute komponenti
+tsx
+Copy
+Edit
+if (!user) {
+  return <Navigate to="/login" />
+}
+✨ 3. Əlavə Toast və Logging
+Backend-də auth-a aid logları console.log('Session:', req.session) ilə təqib et
+
+Frontend-də 401 gələndə toast("Sistemdən çıxmısınız, zəhmət olmasa yenidən daxil olun.")
+
+✅ Davam Etmək İstəyirsənsə:
+Mən sənə tam ProtectedRoute.tsx komponenti,
+
+401 səhifəsi üçün UnauthorizedPage.tsx və
+
+AuthProvider ilə inteqrasiya şablonu təqdim edə bilərəm.
+
+Sən deməklə — dərhal başlayaq! 🔐🧠💻

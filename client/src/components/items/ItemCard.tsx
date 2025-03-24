@@ -118,91 +118,128 @@ export default function ItemCard({ item, showActions = false, isFavorite = false
   const getStatusBadge = () => {
     switch (item.status) {
       case 'active':
-        return <Badge className="bg-green-500">Aktiv</Badge>;
+        return (
+          <Badge className="bg-green-100 text-green-800 border-green-200 backdrop-blur-sm font-medium">
+            Aktiv
+          </Badge>
+        );
       case 'pending':
-        return <Badge className="bg-yellow-500">Gözləyir</Badge>;
+        return (
+          <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 backdrop-blur-sm font-medium">
+            Gözləyir
+          </Badge>
+        );
       case 'completed':
-        return <Badge className="bg-blue-500">Tamamlanıb</Badge>;
+        return (
+          <Badge className="bg-blue-100 text-blue-800 border-blue-200 backdrop-blur-sm font-medium">
+            Tamamlanıb
+          </Badge>
+        );
       default:
         return null;
     }
   };
 
   return (
-    <Card className="overflow-hidden h-full flex flex-col hover:shadow-lg transition-shadow duration-300">
+    <Card className="overflow-hidden h-full flex flex-col group hover:shadow-xl transition-all duration-300 border-gray-100 hover:border-blue-100 transform hover:-translate-y-1">
       <Link href={`/items/${item.id}`}>
         <div className="block relative pt-[70%] overflow-hidden bg-gray-100 cursor-pointer">
           <img 
             src={imageUrl} 
             alt={item.title}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute top-2 right-2">
+          
+          {/* Status badge */}
+          <div className="absolute top-3 left-3">
             {getStatusBadge()}
           </div>
+          
+          {/* Category badge */}
+          <div className="absolute bottom-3 left-3">
+            <Badge variant="outline" className="bg-black/60 text-white border-transparent backdrop-blur-sm">
+              {item.category}
+            </Badge>
+          </div>
+          
+          {/* Favorite button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleFavoriteToggle();
+            }}
+            className={`absolute top-3 right-3 ${
+              favorited ? "text-red-500 bg-white shadow-sm" : "text-gray-400 bg-white/80 hover:bg-white"
+            } rounded-full w-8 h-8 flex items-center justify-center hover:text-red-500 transition-all duration-300`}
+          >
+            <Heart className="h-[18px] w-[18px]" fill={favorited ? "currentColor" : "none"} />
+          </Button>
         </div>
       </Link>
       
-      <CardContent className="flex-grow p-4">
+      <CardContent className="flex-grow p-5">
         <Link href={`/items/${item.id}`}>
-          <div className="block cursor-pointer">
-            <h3 className="font-semibold text-lg truncate mb-1 hover:text-blue-600 transition-colors">
-              {item.title}
-            </h3>
-          </div>
+          <h3 className="font-semibold text-lg line-clamp-1 mb-2 group-hover:text-blue-600 transition-colors">
+            {item.title}
+          </h3>
         </Link>
-        <div className="flex justify-between items-center">
-          <div>
-            <span className="text-sm text-gray-600 block">
-              {item.category}
-            </span>
-            <span className="text-sm text-gray-600 block">
-              Vəziyyəti: {item.condition}
-            </span>
+        
+        <div className="space-y-3">
+          {/* Badges row */}
+          <div className="flex flex-wrap gap-1.5">
+            <Badge variant="outline" className="text-xs bg-blue-50 text-blue-700 border-blue-100">
+              {item.condition}
+            </Badge>
+            
             {item.city && (
-              <span className="text-sm text-gray-600 block">
-                Yerləşdiyi yer: {item.city}
-              </span>
+              <Badge variant="outline" className="text-xs bg-indigo-50 text-indigo-700 border-indigo-100">
+                {item.city}
+              </Badge>
             )}
-            <div className="flex items-center text-sm text-gray-500 mt-2">
-              <Clock className="h-3.5 w-3.5 mr-1" />
-              <span>Yayımlandı: {formatRelativeTime(item.createdAt)}</span>
-            </div>
+          </div>
+          
+          {/* Description preview */}
+          <p className="text-sm text-gray-600 line-clamp-2 min-h-[2.5rem]">
+            {item.description}
+          </p>
+          
+          {/* Date info */}
+          <div className="flex items-center text-xs text-gray-500">
+            <Clock className="h-3 w-3 mr-1.5" />
+            <span>Yayımlandı: {formatRelativeTime(item.createdAt)}</span>
           </div>
         </div>
       </CardContent>
       
-      <CardFooter className="p-4 pt-0 flex justify-between">
+      <CardFooter className="p-5 pt-0 flex justify-between">
         {!showActions ? (
-          <>
-            <Link href={`/items/${item.id}`}>
-              <Button variant="outline" size="sm">Ətraflı bax</Button>
-            </Link>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={(e) => {
-                e.preventDefault();
-                handleFavoriteToggle();
-              }}
-              className={favorited ? "text-red-500" : "text-gray-400 hover:text-red-500 transition-colors"}
+          <Link href={`/items/${item.id}`} className="w-full">
+            <Button 
+              variant="default" 
+              size="sm" 
+              className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
             >
-              <Heart className="h-5 w-5" fill={favorited ? "currentColor" : "none"} />
+              Ətraflı bax
             </Button>
-          </>
+          </Link>
         ) : (
           <div className="flex gap-2 w-full">
-            <Link href={`/items/${item.id}`}>
-              <Button variant="outline" size="sm" className="flex-1">Bax</Button>
+            <Link href={`/items/${item.id}`} className="flex-1">
+              <Button variant="default" size="sm" className="w-full">
+                Bax
+              </Button>
             </Link>
             <Link href={`/items/edit/${item.id}`}>
-              <Button variant="ghost" size="icon">
+              <Button variant="outline" size="icon" className="border-blue-200 text-blue-600 hover:bg-blue-50">
                 <Edit className="h-4 w-4" />
               </Button>
             </Link>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-red-500">
+                <Button variant="outline" size="icon" className="border-red-200 text-red-500 hover:bg-red-50">
                   <Trash2 className="h-4 w-4" />
                 </Button>
               </AlertDialogTrigger>

@@ -723,8 +723,8 @@ export default function ItemDetail() {
       >
         <RelatedItems
           itemId={item.id}
-          category={item.category}
-          city={item.city}
+          category={item.category || ""}
+          city={item.city || ""}
         />
       </motion.div>
     </div>

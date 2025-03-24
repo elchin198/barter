@@ -221,6 +221,76 @@ export const AdminAPI = {
   
   deleteUser: async (id: number): Promise<void> => {
     await apiRequest('DELETE', `/api/admin/users/${id}`);
+  },
+  
+  // Listings management
+  getItems: async (params?: { 
+    category?: string, 
+    status?: string,
+    search?: string,
+    userId?: number,
+    limit?: number,
+    offset?: number
+  }): Promise<Item[]> => {
+    let url = '/api/admin/items';
+    if (params) {
+      const queryParams = new URLSearchParams();
+      if (params.category) queryParams.append('category', params.category);
+      if (params.status) queryParams.append('status', params.status);
+      if (params.search) queryParams.append('search', params.search);
+      if (params.userId) queryParams.append('userId', params.userId.toString());
+      if (params.limit) queryParams.append('limit', params.limit.toString());
+      if (params.offset) queryParams.append('offset', params.offset.toString());
+      url += `?${queryParams.toString()}`;
+    }
+    
+    const res = await fetch(url, { credentials: 'include' });
+    if (!res.ok) {
+      if (res.status === 401) throw new Error('Not authenticated');
+      if (res.status === 403) throw new Error('Not authorized');
+      throw new Error('Failed to get items');
+    }
+    return res.json();
+  },
+  
+  getItemById: async (id: number): Promise<Item & { 
+    owner: User, 
+    images: Array<{ id: number, filePath: string, isMain: boolean }>,
+    offerCount: number,
+    viewCount: number
+  }> => {
+    const res = await fetch(`/api/admin/items/${id}`, { credentials: 'include' });
+    if (!res.ok) {
+      if (res.status === 401) throw new Error('Not authenticated');
+      if (res.status === 403) throw new Error('Not authorized');
+      throw new Error('Failed to get item');
+    }
+    return res.json();
+  },
+  
+  updateItemStatus: async (id: number, status: 'active' | 'pending' | 'suspended' | 'completed'): Promise<Item> => {
+    const res = await apiRequest('PATCH', `/api/admin/items/${id}/status`, { status });
+    return res.json();
+  },
+  
+  deleteItem: async (id: number): Promise<void> => {
+    await apiRequest('DELETE', `/api/admin/items/${id}`);
+  },
+  
+  // Admin stats
+  getStats: async (period: 'day' | 'week' | 'month' | 'year' = 'week'): Promise<{
+    users: { total: number, new: number, active: number },
+    items: { total: number, active: number, completed: number },
+    offers: { total: number, accepted: number, rejected: number },
+    activities: Array<{ date: string, users: number, items: number, offers: number }>
+  }> => {
+    const res = await fetch(`/api/admin/stats?period=${period}`, { credentials: 'include' });
+    if (!res.ok) {
+      if (res.status === 401) throw new Error('Not authenticated');
+      if (res.status === 403) throw new Error('Not authorized');
+      throw new Error('Failed to get stats');
+    }
+    return res.json();
   }
 };
 

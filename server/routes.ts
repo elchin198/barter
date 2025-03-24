@@ -321,7 +321,184 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       res.status(200).json(usersWithoutPasswords);
     } catch (error) {
+      console.error('Error getting users:', error);
       res.status(500).json({ message: 'Failed to get users' });
+    }
+  });
+  
+  // Admin routes for items/listings management
+  app.get('/api/admin/items', isAdmin, async (req, res) => {
+    try {
+      const { category, status, search, userId, limit, offset } = req.query;
+      
+      const options: any = {};
+      if (category) options.category = category as string;
+      if (status) options.status = status as string;
+      if (search) options.search = search as string;
+      if (userId) options.userId = parseInt(userId as string);
+      if (limit) options.limit = parseInt(limit as string);
+      if (offset) options.offset = parseInt(offset as string);
+      
+      const items = await dbStorage.getItems(options);
+      
+      // For each item, fetch the main image and add it
+      const itemsWithImages = await Promise.all(items.map(async (item) => {
+        const images = await dbStorage.getImagesByItem(item.id);
+        const mainImage = images.find(img => img.isMain)?.filePath || 
+                          (images.length > 0 ? images[0].filePath : null);
+        
+        // Get the owner information
+        const owner = await dbStorage.getUser(item.userId);
+        
+        return {
+          ...item,
+          mainImage,
+          owner: owner ? { 
+            id: owner.id, 
+            username: owner.username,
+            fullName: owner.fullName
+          } : null
+        };
+      }));
+      
+      res.json(itemsWithImages);
+    } catch (error) {
+      console.error('Error getting admin items:', error);
+      res.status(500).json({ message: 'Error getting items' });
+    }
+  });
+
+  app.get('/api/admin/items/:id', isAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const item = await dbStorage.getItem(id);
+      
+      if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
+      
+      // Get item owner
+      const owner = await dbStorage.getUser(item.userId);
+      if (!owner) {
+        return res.status(404).json({ message: 'Item owner not found' });
+      }
+      
+      // Get item images
+      const images = await dbStorage.getImagesByItem(id);
+      
+      // Get offers for this item to count them
+      // This would require implementing getOffersByItemId in storage
+      // For now, returning 0 as a placeholder
+      const offerCount = 0;
+      
+      // Get view count - would require implementing view tracking
+      // For now, returning 0 as a placeholder
+      const viewCount = 0;
+      
+      res.json({
+        ...item,
+        owner: {
+          id: owner.id,
+          username: owner.username,
+          fullName: owner.fullName,
+          avatar: owner.avatar
+        },
+        images,
+        offerCount,
+        viewCount
+      });
+    } catch (error) {
+      console.error('Error getting admin item:', error);
+      res.status(500).json({ message: 'Error getting item' });
+    }
+  });
+
+  app.patch('/api/admin/items/:id/status', isAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { status } = req.body;
+      
+      if (!['active', 'pending', 'suspended', 'completed'].includes(status)) {
+        return res.status(400).json({ message: 'Invalid status' });
+      }
+      
+      const updatedItem = await dbStorage.updateItem(id, { status });
+      
+      if (!updatedItem) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
+      
+      res.json(updatedItem);
+    } catch (error) {
+      console.error('Error updating item status:', error);
+      res.status(500).json({ message: 'Error updating item status' });
+    }
+  });
+
+  app.delete('/api/admin/items/:id', isAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      // Check if item exists
+      const item = await dbStorage.getItem(id);
+      if (!item) {
+        return res.status(404).json({ message: 'Item not found' });
+      }
+      
+      // Delete item
+      const success = await dbStorage.deleteItem(id);
+      
+      if (!success) {
+        return res.status(500).json({ message: 'Failed to delete item' });
+      }
+      
+      res.status(200).json({ message: 'Item deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting item:', error);
+      res.status(500).json({ message: 'Error deleting item' });
+    }
+  });
+  
+  // Admin Statistics API
+  app.get('/api/admin/stats', isAdmin, async (req, res) => {
+    try {
+      const period = req.query.period as string || 'week';
+      
+      // In a real implementation, you would query the database for these statistics
+      // based on the period parameter
+      
+      // Here's a simple version returning mock data
+      const mockStats = {
+        users: { 
+          total: 100, 
+          new: 12, 
+          active: 78 
+        },
+        items: { 
+          total: 250, 
+          active: 180, 
+          completed: 45 
+        },
+        offers: { 
+          total: 320, 
+          accepted: 150, 
+          rejected: 70 
+        },
+        activities: [
+          { date: '2023-03-01', users: 5, items: 12, offers: 18 },
+          { date: '2023-03-02', users: 8, items: 15, offers: 22 },
+          { date: '2023-03-03', users: 3, items: 9, offers: 14 },
+          { date: '2023-03-04', users: 7, items: 18, offers: 25 },
+          { date: '2023-03-05', users: 9, items: 21, offers: 30 },
+          { date: '2023-03-06', users: 6, items: 14, offers: 20 },
+          { date: '2023-03-07', users: 11, items: 26, offers: 35 }
+        ]
+      };
+      
+      res.json(mockStats);
+    } catch (error) {
+      console.error('Error getting admin stats:', error);
+      res.status(500).json({ message: 'Error getting statistics' });
     }
   });
   

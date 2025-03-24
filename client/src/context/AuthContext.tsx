@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       });
       
       // Debug the response headers
-      console.log('AuthContext: /api/auth/me response', {
+      console.log('AuthContext: /api/user response', {
         status: res.status,
         statusText: res.statusText,
         headers: Array.from(res.headers.entries()),
@@ -91,8 +91,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     console.log('AuthContext: Attempting login for user:', username);
     
     try {
-      // Ensure credentials are included with the request
-      const res = await apiRequest('POST', '/api/auth/login', { username, password });
+      // Ensure credentials are included with the request - use new API endpoint
+      const res = await apiRequest('POST', '/api/login', { username, password });
       
       // Parse response
       const userData = await res.json();
@@ -124,14 +124,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const register = async (userData: Partial<User>): Promise<User> => {
-    const res = await apiRequest('POST', '/api/auth/register', userData);
+    const res = await apiRequest('POST', '/api/register', userData);
     const newUser = await res.json();
     setUser(newUser);
     return newUser;
   };
 
   const logout = async (): Promise<void> => {
-    await apiRequest('POST', '/api/auth/logout', {});
+    await apiRequest('POST', '/api/logout', {});
     setUser(null);
   };
 

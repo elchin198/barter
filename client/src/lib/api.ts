@@ -4,21 +4,21 @@ import { Item, User, Message, Conversation, Offer, Notification, Favorite, Revie
 // Auth API
 export const AuthAPI = {
   login: async (username: string, password: string): Promise<User> => {
-    const res = await apiRequest('POST', '/api/auth/login', { username, password });
+    const res = await apiRequest('POST', '/api/login', { username, password });
     return res.json();
   },
   
   register: async (userData: Partial<User>): Promise<User> => {
-    const res = await apiRequest('POST', '/api/auth/register', userData);
+    const res = await apiRequest('POST', '/api/register', userData);
     return res.json();
   },
   
   logout: async (): Promise<void> => {
-    await apiRequest('POST', '/api/auth/logout', {});
+    await apiRequest('POST', '/api/logout', {});
   },
   
   getCurrentUser: async (): Promise<User> => {
-    const res = await fetch('/api/auth/me', { credentials: 'include' });
+    const res = await fetch('/api/user', { credentials: 'include' });
     if (!res.ok) throw new Error('Failed to get current user');
     return res.json();
   }

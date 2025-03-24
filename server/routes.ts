@@ -251,7 +251,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               role: 'user',
               active: true
             });
-            console.log(`Created test user with ID: ${user.id}`);
+            console.log(`Created test user with ID: ${user?.id}`);
           } catch (error) {
             console.error('Error creating test user:', error);
             throw error;
@@ -260,12 +260,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // Ensure test user has consistent password
           if (user.password !== TEST_PASSWORD) {
             console.log(`Updating test user password for consistency`);
-            user = await dbStorage.updateUser(user.id, { password: TEST_PASSWORD });
+            const updatedUser = await dbStorage.updateUser(user.id, { password: TEST_PASSWORD });
+            if (updatedUser) {
+              user = updatedUser;
+            }
           }
         }
         
         // Force password to match for test user
-        password = TEST_PASSWORD;
+        const submittedPassword = password;
+        // We need to create a mutable copy of the password for our test users
+        let passwordToUse = TEST_PASSWORD;
+        password = passwordToUse; // reassign to our mutable copy
+        console.log(`Using test password instead of submitted password: "${submittedPassword}"`);
       } else {
         // For non-test users, find them normally
         user = await dbStorage.getUserByUsername(username);
@@ -281,7 +288,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               role: 'user',
               active: true
             });
-            console.log(`Created user with ID: ${user.id}`);
+            console.log(`Created user with ID: ${user?.id}`);
           } catch (error) {
             console.error(`Error creating user ${username}:`, error);
             throw error;
@@ -289,15 +296,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       
-      // Verify password
-      if (user.password !== password) {
+      // Verify password (with null/undefined check)
+      if (!user || user.password !== password) {
         return res.status(401).json({ message: 'Invalid username or password' });
       }
       
-      // Save user to session
-      req.session.userId = user.id;
-      req.session.username = user.username;
-      req.session.role = user.role;
+      // Save user to session (with null/undefined check)
+      if (user) {
+        req.session.userId = user.id;
+        req.session.username = user.username;
+        req.session.role = user.role;
+      } else {
+        console.error('ERROR: User object is null/undefined before session save.');
+        return res.status(500).json({ message: 'Internal server error during authentication' });
+      }
       
       // Force session save with more detailed error handling
       req.session.save((err) => {
@@ -345,6 +357,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
   
+  // Auth ME endpoint with detailed logging
   app.get('/api/auth/me', async (req, res) => {
     console.log('GET /api/auth/me - Session:', { 
       id: req.session.id,
@@ -352,6 +365,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       username: req.session.username,
       role: req.session.role
     });
+    console.log('GET /api/auth/me - Request Headers:', req.headers);
+    
+    // Detailed session debug
+    console.log('Session Cookie Options:', req.session.cookie);
     
     if (!req.session.userId) {
       console.log('No userId in session, returning 401');
@@ -372,15 +389,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Store user role in session for admin checks
       req.session.role = user.role;
       
-      // Save session explicitly to ensure it persists
-      req.session.save((err) => {
-        if (err) {
-          console.error('Error saving session:', err);
+      // Regenerate session to enhance security (helps prevent session fixation)
+      req.session.regenerate((regErr) => {
+        if (regErr) {
+          console.error('Error regenerating session:', regErr);
+          return res.status(500).json({ message: 'Session error' });
         }
         
-        // Return user data without password
-        const { password, ...userWithoutPassword } = user;
-        res.status(200).json(userWithoutPassword);
+        // Restore important session data
+        req.session.userId = user.id;
+        req.session.username = user.username;
+        req.session.role = user.role;
+        
+        // Save session explicitly to ensure it persists
+        req.session.save((saveErr) => {
+          if (saveErr) {
+            console.error('Error saving session:', saveErr);
+            return res.status(500).json({ message: 'Session save error' });
+          }
+          
+          console.log('Session saved successfully, session ID:', req.session.id);
+          
+          // Set additional explicit cookie to help browser track session
+          res.cookie('bartertap_session', 'active', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+            path: '/'
+          });
+          
+          // Return user data without password
+          const { password, ...userWithoutPassword } = user;
+          res.status(200).json(userWithoutPassword);
+        });
       });
     } catch (error) {
       console.error('Error fetching user:', error);

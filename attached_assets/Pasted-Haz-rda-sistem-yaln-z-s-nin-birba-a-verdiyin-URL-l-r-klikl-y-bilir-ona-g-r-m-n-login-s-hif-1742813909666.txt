@@ -1,0 +1,62 @@
+Hazırda sistem yalnız **sənin birbaşa verdiyin URL-lərə klikləyə** bilir, ona görə mən `login` səhifəsinə texniki baxış edə bilmirəm. Amma sən artıq bu addımları çox doğru şəkildə yerinə yetirmisən və mən sənə **tam test planı + yoxlama təlimatı** təqdim edə bilərəm.
+
+---
+
+## ✅ **Daxil Olma və Sessiya İdarəetməsi Üçün Yoxlama Planı**
+
+### 🧪 1. **Test İstifadəçi ilə giriş sınağı (frontend)**
+- `login: testuser`
+- `şifrə: password123`
+- Formu doldur → "Login" düyməsini kliklə → sonra aşağıdakıları yoxla:
+
+| Mərhələ                         | Gözlənilən Nəticə                  |
+|----------------------------------|-------------------------------------|
+| ✅ Giriş sonrası yönləndirmə     | `/profile` və ya ana səhifəyə keçid |
+| ✅ Cookie yaradılıb?              | DevTools > Application > Cookies → session və ya auth cookie mövcuddur |
+| ✅ Navbar dəyişdi?               | “Daxil ol” əvəzinə “Profilim” / “Çıxış” düyməsi görünür |
+
+---
+
+### 🧪 2. **Sessiya davamlılığı**
+- Səhifəni `refresh` et → sessiya saxlanırsa istifadəçi hələ də login olmalı
+- Yeni tab aç → loginli vəziyyət qorunurmu?
+
+---
+
+### 🧪 3. **Əşya əlavə etdikdən sonra yoxlama**
+| Sınaq Addımı                              | Gözlənilən Nəticə                      |
+|-------------------------------------------|-----------------------------------------|
+| ✅ Əşya əlavə et formu doldur              | Əlavə edildikdən sonra /item/:id səhifəsinə yönləndirir |
+| ✅ Əşya detallarına keç                    | Əşyaya aid şəkil, başlıq, məlumatlar görünür |
+| ❌ Əşya tapılmadı mesajı gəlirsə            | Deməli backend DB-də `listing` saxlanmır |
+
+---
+
+## 🔍 Əgər hələ də “Əşya tapılmadı” problemi qalırsa...
+
+### ✅ Diqqət yetir:
+- `POST /api/listings` backend route-u **saxlanmaya icazə verir?**
+- Sessiya ilə daxil olan istifadəçinin ID-si `listing.userId` sahəsinə düzgün yazılırmı?
+- MongoDB və ya JSON serverin `write` funksiyası işləyirmi?
+
+---
+
+## 💡 Tövsiyə: Session və Login Təhlükəsizlik Ayarları
+
+| Parametr                | Təyinat                                       |
+|--------------------------|-----------------------------------------------|
+| `httpOnly: true`         | JS ilə cookie oxunmasın → təhlükəsizlik       |
+| `sameSite: 'lax'`        | CSRF hücumlarından qorumaq üçün                |
+| `secure: true`           | Yalnız HTTPS üzərində ötürülür                |
+| Cookie adı: `session_id` | Açıq və unikal identifikator                   |
+
+---
+
+## ✅ Son Addım – Mən Sənin üçün Hazır edə bilərəm:
+
+- `useAuth()` hook-u ilə login vəziyyətini qlobal yoxlayan komponent
+- `ProtectedRoute.tsx` – sessiyası olmayan istifadəçiləri yönləndirən qoruyucu komponent
+- `NotFoundItem.tsx` – əşya tapılmadıqda göstərilən səhifə
+
+İstəyirsənsə, mən bu komponentlərin hər birini sənə kod olaraq göndərə bilərəm.  
+Sadəcə “bəli” de və hansından başlamaq istədiyini qeyd et 💡🚀

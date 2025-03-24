@@ -1,7 +1,7 @@
 import { createContext, useContext, ReactNode, useState, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { useNavigate } from 'wouter';
+import { useLocation } from 'wouter';
 
 // Define the interface for the admin user
 export interface AdminUser {
@@ -35,7 +35,7 @@ export function useAdmin() {
 export function AdminProvider({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
   const { toast } = useToast();
-  const [, navigate] = useNavigate();
+  const [, setLocation] = useLocation();
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [adminLoading, setAdminLoading] = useState<boolean>(true);
 
@@ -63,7 +63,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
   // Admin logout function
   const adminLogout = () => {
     logout();
-    navigate('/');
+    setLocation('/');
     toast({
       title: 'Admin logged out',
       description: 'You have been logged out of the admin panel.',

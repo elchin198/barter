@@ -16,14 +16,46 @@ import Offers from "@/pages/Offers";
 import HowItWorks from "@/pages/HowItWorks";
 import Map from "@/pages/Map";
 import { AuthProvider } from "@/context/AuthContext";
+import { AdminProvider } from "@/context/AdminContext";
 import { ProtectedRoute } from "@/lib/protected-route";
+import { AdminProtectedRoute } from "@/components/admin/AdminProtectedRoute";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SEO from "@/components/SEO";
 
+// Admin pages
+import AdminLogin from "@/pages/admin/Login";
+import AdminDashboard from "@/pages/admin/Dashboard";
+import AdminUsers from "@/pages/admin/Users";
+import AdminListings from "@/pages/admin/Listings";
+import AdminOffers from "@/pages/admin/Offers";
+import AdminStats from "@/pages/admin/Stats";
+
 function Router() {
   const [location] = useLocation();
   
+  // Check if we're on an admin page
+  const isAdminRoute = location.startsWith('/admin');
+  
+  // Admin routes don't use the same layout as the main site
+  if (isAdminRoute && location !== '/admin/login') {
+    return (
+      <div className="min-h-screen">
+        <SEO title="Admin Panel | BarterTap" noIndex={true} />
+        <Switch>
+          <Route path="/admin/login" component={AdminLogin} />
+          <AdminProtectedRoute path="/admin/dashboard" component={AdminDashboard} />
+          <AdminProtectedRoute path="/admin/users" component={AdminUsers} />
+          <AdminProtectedRoute path="/admin/listings" component={AdminListings} />
+          <AdminProtectedRoute path="/admin/offers" component={AdminOffers} />
+          <AdminProtectedRoute path="/admin/stats" component={AdminStats} />
+          <Route path="/admin/*" component={() => <AdminProtectedRoute path="/admin/*" component={AdminDashboard} />} />
+        </Switch>
+      </div>
+    );
+  }
+  
+  // Regular site routes
   return (
     <div className="min-h-screen flex flex-col">
       {/* Base SEO that will apply to all pages */}
@@ -35,6 +67,7 @@ function Router() {
           <Route path="/" component={Home} />
           <Route path="/login" component={Login} />
           <Route path="/register" component={Register} />
+          <Route path="/admin/login" component={AdminLogin} />
           <ProtectedRoute path="/item/new" component={ItemListing} />
           <ProtectedRoute path="/items/new" component={ItemListing} />
           <Route path="/item/:id" component={ItemDetail} />
@@ -62,8 +95,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Router />
-        <Toaster />
+        <AdminProvider>
+          <Router />
+          <Toaster />
+        </AdminProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

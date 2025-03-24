@@ -1,6 +1,7 @@
 import session from 'express-session';
 import memoryStore from 'memorystore';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 
 // Load .env file in production
 dotenv.config();
@@ -9,16 +10,19 @@ const MemoryStore = memoryStore(session);
 
 // Configure session for development (in-memory) or production (MySQL)
 export function configureSession() {
+  // Generate a strong session secret if none is provided
+  const sessionSecret = process.env.SESSION_SECRET || crypto.randomBytes(32).toString('hex');
+  
   // Default in-memory session store for development
   const sessionOptions: session.SessionOptions = {
-    name: 'bartertap.sid', // Give a specific name to the cookie
-    secret: process.env.SESSION_SECRET || 'bartertap-secret-key',
+    name: 'bartertap_sid', // Give a specific name to the cookie
+    secret: sessionSecret,
     resave: true, // Changed to true to ensure session is saved back
     saveUninitialized: true, // Always create session to track guest users too
     cookie: { 
       secure: false, // Must be false in development for HTTP
       httpOnly: true,
-      sameSite: 'none', // Allow cross-site cookies 
+      sameSite: 'lax', // Changed from 'none' to 'lax' for development
       maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
     },
     store: new MemoryStore({

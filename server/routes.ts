@@ -206,7 +206,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { username, password } = req.body;
       
       console.log("Login attempt:", username);
-      console.log("Session before login:", req.session.id);
+      console.log("Session before login:", {
+        id: req.session.id,
+        cookie: req.session.cookie,
+      });
       
       if (!username || !password) {
         return res.status(400).json({ message: 'Username and password are required' });
@@ -221,7 +224,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         user = await dbStorage.createUser({
           username: username,
           password: password, // In production, this should be hashed
-          email: `${username}@test.com`,
+          email: `${username}@example.com`,
           fullName: `Test User ${username}`,
           role: 'user',
           active: true,
@@ -240,7 +243,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       req.session.username = user.username;
       req.session.role = user.role;
       
-      // Force session save
+      // Force session save with more detailed error handling
       req.session.save((err) => {
         if (err) {
           console.error("Session save error:", err);
@@ -248,14 +251,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
         
         console.log("Session saved, ID:", req.session.id);
+        console.log("Session cookie:", req.session.cookie);
         console.log("User data stored in session:", { 
           id: req.session.userId, 
           username: req.session.username,
           role: req.session.role 
         });
         
+        // Add a cookie directly to ensure session tracking
+        res.cookie('bartertap_session', req.session.id, {
+          httpOnly: true,
+          maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+          path: '/'
+        });
+        
         // Return user data without password
         const { password: _, ...userWithoutPassword } = user;
+        
+        // Set a custom header for debugging
+        res.setHeader('X-Session-ID', req.session.id);
+        
         res.status(200).json(userWithoutPassword);
       });
     } catch (error) {

@@ -1,0 +1,64 @@
+Məqsəd: Saytın vizual görünüşünü daha cəlbedici və peşəkar etmək
+✨ 1. Font və rəng sxemi (branding)
+Bölmə	Tövsiyə
+Font	Inter, Poppins, Nunito – oxunaqlı və modern
+Rəng Palitrası	Dominant 1 rəng (mavi, yaşıl və ya narıncı) + neytral boz tonları
+Tailwind Customization	tailwind.config.js-də rəng və font dəyişiklikləri
+📌 Misal:
+
+js
+Copy
+Edit
+colors: {
+  primary: "#00A8E8",
+  secondary: "#F2F2F2",
+  dark: "#333333"
+}
+✨ 2. Navbar və Footer Dizaynı
+Hissə	Tövsiyə
+Navbar	Sticky navbar + hover effektli menyu
+Mobil	Hamburger menyu → @headlessui/react ilə
+Footer	3 sütunlu layout, sosial media ikonları, qısa haqqımızda bölməsi
+✨ 3. Ana səhifə Hero Seksiyası
+Hissə	Tövsiyə
+Başlıq	Bold, böyük font, sadə CTA düyməsi (məs: “Elan yerləşdir”)
+Arxa fon	Açıq gradient / illüstrasiya (məhsul şəkli ilə)
+CTA düymələri	“Barter et”, “Əşya yerləşdir”, “Necə işləyir?”
+✨ 4. Elan Kartlarının Dizaynı
+Vizual Detal	Tövsiyə
+Hover effekti	Shadow + scale (hover:shadow-lg)
+Badge-lər	“Yeni”, “İşlənmiş”, “Barterdə”
+Şəkil overlay	Lokasiya və status ikonları şəkilin üzərində yerləşdirilə bilər
+✨ 5. Responsive görünüş (Mobil və Tablet)
+Mobil görünüşdə elementlər daha böyük, toxunma dostu olsun
+
+Kartlar flex-col və grid-cols-1 formasına keçsin
+
+Sidebar → drawer komponentinə çevrilə bilər (@radix-ui və ya headlessui ilə)
+
+✨ 6. Təkliflər, Elan Detalları və Profil səhifələrinin UI uyğunluğu
+Bütün səhifələr eyni dizayn dilini daşımalıdır (font ölçüləri, düymə üslubu, spacing)
+
+Detallarda komponentlər bölmələrə ayrılmalı: əsas info, şəkillər, istifadəçi kartı
+
+✨ 7. Animasiya və Mikrohərəkətlər
+Element	Tövsiyə
+Modal açılışı	framer-motion ilə yumşaq animation
+Buton hover	transition duration-300 ease-in-out
+Yükləmə effektləri	Skeleton loaders (məs: react-loading-skeleton)
+✨ 8. Şəkil keyfiyyəti və ölçülər
+Cloudinary və ya imgproxy istifadə et
+
+Thumbnail üçün object-cover, rounded-lg, shadow-md
+
+💡 BONUS: UI Kit Təklifləri (sürətli modern dizayn üçün)
+shadcn/ui – Tailwind əsaslı, müasir və sadə komponentlər
+
+Flowbite – hazır komponentlər
+
+lucide-react – ikonlar üçün əla alternativ
+
+📌 Əgər istəyirsənsə:
+Sənə Tailwind əsaslı dizayn təkmilləşdirmə planı və ya “HomePage” üçün yenilənmiş UI skeleti verə bilərəm.
+
+İstəyirsən “vizual lift” planını kod nümunəsi ilə başlayaq? Yoxsa birbaşa “Hero səhifə + Navbar + Elan kartı” yeniləməsini istəyirsən? 💡🎨

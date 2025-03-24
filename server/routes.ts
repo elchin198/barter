@@ -19,12 +19,24 @@ declare module 'express-session' {
 
 // Utility to check if user is authenticated
 const isAuthenticated = (req: Request, res: Response): boolean => {
-  console.log('Session check:', req.session.id, 'User ID:', req.session.userId);
+  console.log('-------AUTHENTICATION CHECK-------');
+  console.log('Session ID:', req.session.id);
+  console.log('Session Cookie:', req.session.cookie);
+  console.log('Session Data:', {
+    userId: req.session.userId,
+    username: req.session.username,
+    role: req.session.role
+  });
+  console.log('Request Cookies:', req.headers.cookie);
+  console.log('----------------------------------');
   
   if (!req.session.userId) {
+    console.log('AUTHENTICATION FAILED: No userId in session');
     res.status(401).json({ message: 'Unauthorized: You must be logged in' });
     return false;
   }
+  
+  console.log('AUTHENTICATION SUCCESSFUL for user ID:', req.session.userId);
   return true;
 };
 

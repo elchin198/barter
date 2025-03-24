@@ -34,13 +34,24 @@ const corsOptions = {
     ? ['https://bartertap.az', 'https://www.bartertap.az'] 
     : true, // Allow all origins in development
   credentials: true,
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  exposedHeaders: ['X-Session-ID'] // Expose custom headers for debugging
 };
 app.use(cors(corsOptions));
+
+// Configure cookie parser (express.js built-in)
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Configure session based on environment
 const sessionMiddleware = configureSession();
 app.use(sessionMiddleware);
+
+// Log all cookies in requests for debugging
+app.use((req, res, next) => {
+  console.log('REQUEST COOKIES:', req.headers.cookie);
+  next();
+});
 
 // Debug session middleware
 app.use((req, res, next) => {

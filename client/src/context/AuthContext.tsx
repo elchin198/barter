@@ -18,22 +18,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUser = async (): Promise<User | null> => {
+    console.log('AuthContext: Fetching current user data');
+    
     try {
+      // Enhanced request with debug options
       const res = await fetch('/api/auth/me', {
-        credentials: 'include'
+        credentials: 'include',
+        cache: 'no-cache',
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      // Debug the response headers
+      console.log('AuthContext: /api/auth/me response', {
+        status: res.status,
+        statusText: res.statusText,
+        headers: Array.from(res.headers.entries()),
+        url: res.url
       });
       
       if (!res.ok) {
-        if (res.status !== 401) {
-          console.error('Error fetching user:', await res.text());
+        if (res.status === 401) {
+          // This is expected for logged out users
+          console.log('AuthContext: User not authenticated (401)');
+          return null;
         }
+        
+        // Other errors should be logged
+        const errorText = await res.text();
+        console.error(`AuthContext: Error ${res.status} fetching user:`, errorText);
         return null;
       }
       
       const userData = await res.json();
+      console.log('AuthContext: User data fetched successfully:', userData);
+      
+      // Validate user data
+      if (!userData || !userData.id || !userData.username) {
+        console.error('AuthContext: Invalid user data received:', userData);
+        return null;
+      }
+      
       return userData;
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error('AuthContext: Error fetching user:', error);
       return null;
     }
   };
@@ -58,10 +88,39 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = async (username: string, password: string): Promise<User> => {
-    const res = await apiRequest('POST', '/api/auth/login', { username, password });
-    const userData = await res.json();
-    setUser(userData);
-    return userData;
+    console.log('AuthContext: Attempting login for user:', username);
+    
+    try {
+      // Ensure credentials are included with the request
+      const res = await apiRequest('POST', '/api/auth/login', { username, password });
+      
+      // Parse response
+      const userData = await res.json();
+      console.log('AuthContext: Login successful, user data received:', userData);
+      
+      // Check if the response contains the expected user data
+      if (!userData || !userData.id || !userData.username) {
+        console.error('AuthContext: Invalid user data received:', userData);
+        throw new Error('Invalid user data received');
+      }
+      
+      // Store user data in state
+      setUser(userData);
+      
+      // Immediately verify if the session was properly set by doing an auth check
+      try {
+        await fetchUser();
+        console.log('AuthContext: Session verification successful');
+      } catch (verifyError) {
+        console.error('AuthContext: Session verification failed:', verifyError);
+        // Continue anyway since we already have the user data
+      }
+      
+      return userData;
+    } catch (error) {
+      console.error('AuthContext: Login failed:', error);
+      throw error;
+    }
   };
 
   const register = async (userData: Partial<User>): Promise<User> => {

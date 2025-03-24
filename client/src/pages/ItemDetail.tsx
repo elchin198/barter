@@ -55,7 +55,7 @@ export default function ItemDetail() {
   const itemId = parseInt(params.id);
   
   // Fetch item details
-  const { data: item, isLoading, error } = useQuery<ItemDetailResponse>({
+  const { data: item, isLoading, error, isError } = useQuery<ItemDetailResponse>({
     queryKey: [`/api/items/${itemId}`],
   });
   
@@ -215,16 +215,14 @@ export default function ItemDetail() {
     );
   }
   
-  if (error || !item) {
+  if (isError || !item) {
     return (
-      <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col items-center justify-center">
-          <AlertTriangle className="h-16 w-16 text-red-500 mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Item Not Found</h1>
-          <p className="text-gray-600 mb-6">The item you're looking for doesn't exist or may have been removed.</p>
-          <Button onClick={() => navigate("/")}>Go Back Home</Button>
-        </div>
-      </div>
+      <NotFound
+        title={t('errors.itemNotFoundTitle', 'Əşya tapılmadı')}
+        message={t('errors.itemNotFoundDescription', 'Axtardığınız əşya mövcud deyil və ya silinmişdir.')}
+        showGoBack={true}
+        showHome={true}
+      />
     );
   }
   

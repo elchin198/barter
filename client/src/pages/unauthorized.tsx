@@ -45,7 +45,7 @@ export default function Unauthorized() {
         <CardFooter className="flex gap-4 justify-center pb-6">
           <Button 
             variant="outline" 
-            onClick={() => navigate(-1)}
+            onClick={() => window.history.back()}
             className="flex items-center gap-2"
           >
             <ChevronLeft className="h-4 w-4" />

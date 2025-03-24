@@ -21,27 +21,27 @@ export default function AdminSidebar() {
   // Navigation items
   const navItems = [
     {
-      title: t('admin.dashboard'),
+      title: t('admin.dashboard', 'Dashboard'),
       href: '/admin/dashboard',
       icon: LayoutDashboard,
     },
     {
-      title: t('admin.users'),
+      title: t('admin.users', 'Users'),
       href: '/admin/users',
       icon: Users,
     },
     {
-      title: t('admin.listings'),
+      title: t('admin.listings', 'Listings'),
       href: '/admin/listings',
       icon: Package,
     },
     {
-      title: t('admin.offers'),
+      title: t('admin.offers', 'Offers'),
       href: '/admin/offers',
       icon: FileBox,
     },
     {
-      title: t('admin.statistics'),
+      title: t('admin.statistics', 'Statistics'),
       href: '/admin/stats',
       icon: BarChart4,
     },
@@ -74,14 +74,14 @@ export default function AdminSidebar() {
         {/* Logo */}
         <div className="h-16 border-b flex items-center justify-center px-6">
           <Link href="/">
-            <a className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2 cursor-pointer">
               <img 
-                src="/public/barter-logos.ico"
+                src="/barter-logos.ico"
                 alt="BarterTap Logo"
                 className="h-8 w-8"
               />
               <span className="font-bold text-xl">BarterTap Admin</span>
-            </a>
+            </div>
           </Link>
         </div>
 
@@ -109,7 +109,7 @@ export default function AdminSidebar() {
         <div className="border-t p-4">
           <Link href="/">
             <a className="text-sm text-muted-foreground hover:text-foreground transition-colors">
-              {t('admin.backToSite')}
+              {t('admin.backToSite', 'Back to site')}
             </a>
           </Link>
         </div>

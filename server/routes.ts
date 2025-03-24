@@ -309,57 +309,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin routes for user management
   app.get('/api/admin/users', isAdmin, async (req, res) => {
     try {
-      // Get all users - using a different method since users is private
+      // Get all users using the storage method
       const search = req.query.search as string | undefined;
+      const users = await dbStorage.getAllUsers(search);
       
-      // This is just a placeholder - we need to add an actual method to get all users
-      // For now, we'll return a stub response with some example users
-      const users = [
-        {
-          id: 1,
-          username: 'admin',
-          email: 'admin@example.com',
-          fullName: 'Admin User',
-          role: 'admin',
-          avatar: null,
-          createdAt: new Date('2023-01-01'),
-          active: true
-        },
-        {
-          id: 2,
-          username: 'user',
-          email: 'user@example.com',
-          fullName: 'Regular User',
-          role: 'user',
-          avatar: null,
-          createdAt: new Date('2023-01-02'),
-          active: true
-        },
-        {
-          id: 3,
-          username: 'blocked_user',
-          email: 'blocked@example.com',
-          fullName: 'Blocked User',
-          role: 'user',
-          avatar: null,
-          createdAt: new Date('2023-01-03'),
-          active: false
-        }
-      ];
+      // Remove passwords before sending the response
+      const usersWithoutPasswords = users.map(user => {
+        const { password, ...userWithoutPassword } = user;
+        return userWithoutPassword;
+      });
       
-      // Apply search filter if provided
-      let filteredUsers = users;
-      if (search) {
-        const searchLower = search.toLowerCase();
-        filteredUsers = users.filter(
-          user => 
-            user.username.toLowerCase().includes(searchLower) ||
-            (user.email && user.email.toLowerCase().includes(searchLower)) ||
-            (user.fullName && user.fullName.toLowerCase().includes(searchLower))
-        );
-      }
-      
-      res.status(200).json(filteredUsers);
+      res.status(200).json(usersWithoutPasswords);
     } catch (error) {
       res.status(500).json({ message: 'Failed to get users' });
     }
@@ -460,12 +420,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: 'User not found' });
       }
       
-      // Delete user - this is a placeholder, the actual implementation would:
+      // In a real implementation, we would:
       // 1. Delete or anonymize all user data (items, messages, etc.)
       // 2. Delete the user account
       
-      // For now, we'll just return success
-      res.status(200).json({ message: 'User deleted successfully' });
+      // For this demo, we'll just set the user to inactive
+      const updatedUser = await dbStorage.updateUser(userId, { active: false });
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      
+      res.status(200).json({ message: 'User deactivated successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Failed to delete user' });
     }

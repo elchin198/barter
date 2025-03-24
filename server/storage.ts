@@ -19,6 +19,7 @@ export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
+  getAllUsers(search?: string): Promise<User[]>; // Added for admin panel
   createUser(user: InsertUser): Promise<User>;
   updateUser(id: number, data: Partial<InsertUser>): Promise<User | undefined>;
   
@@ -179,6 +180,24 @@ export class MemStorage implements IStorage {
     return Array.from(this.users.values()).find(
       (user) => user.email === email
     );
+  }
+  
+  async getAllUsers(search?: string): Promise<User[]> {
+    let users = Array.from(this.users.values());
+    
+    // Apply search filter if provided
+    if (search) {
+      const searchLower = search.toLowerCase();
+      users = users.filter(
+        user => 
+          user.username.toLowerCase().includes(searchLower) ||
+          (user.email && user.email.toLowerCase().includes(searchLower)) ||
+          (user.fullName && user.fullName.toLowerCase().includes(searchLower))
+      );
+    }
+    
+    // Sort by creation date, newest first
+    return users.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {

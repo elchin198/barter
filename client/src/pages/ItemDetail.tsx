@@ -39,6 +39,7 @@ interface ItemDetailResponse extends Item {
   }>;
   owner: UserType;
   isFavorite?: boolean;
+  coordinates?: string; // JSON string with [lat, lng]
 }
 
 export default function ItemDetail() {
@@ -239,15 +240,7 @@ export default function ItemDetail() {
     ? item.images 
     : [{ id: 0, filePath: "https://placehold.co/600x400/e2e8f0/64748b?text=No+Image", isMain: true }];
     
-  // Prepare image gallery configuration
-  const galleryOptions = {
-    showPlayButton: false,
-    showFullscreenButton: true,
-    showNav: images.length > 1,
-    thumbnailPosition: "bottom" as "bottom",
-    useBrowserFullscreen: true,
-    lazyLoad: true,
-  };
+  // Image gallery will use the enhanced options defined below
   
   // Get status badge
   const getStatusBadge = () => {
@@ -289,6 +282,22 @@ export default function ItemDetail() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
   const y = useTransform(scrollYProgress, [0, 0.5], [0, -20]);
+  
+  // Gallery options for enhanced image gallery
+  const galleryOptions = {
+    showPlayButton: false,
+    showFullscreenButton: true,
+    useBrowserFullscreen: false,
+    showIndex: true,
+    showThumbnails: true,
+    lazyLoad: true,
+    showNav: true,
+    thumbnailPosition: 'bottom',
+    slideDuration: 450,
+    slideInterval: 3000,
+    startIndex: 0,
+    onBeforeSlide: (index: number) => setSelectedImageIndex(index)
+  };
 
   return (
     <div className="container mx-auto px-4 py-8" ref={scrollRef}>

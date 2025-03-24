@@ -1,573 +1,294 @@
 #!/bin/bash
-# BarterTap Hostinger Avtomatik Düzəliş Skripti
-# v1.0.0
+# BarterTap.az - Hostinger Avtomatik Təmir Skripti
+# Bu skript Hostinger-də tez-tez yaranan problemləri avtomatik həll edir
 
 # Rəng kodları
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
-NC='\033[0m' # Rəng sıfırlama
+NC='\033[0m' # No Color
 
-echo -e "${BLUE}====================================${NC}"
-echo -e "${BLUE}BarterTap Hostinger Düzəliş Skripti${NC}"
-echo -e "${BLUE}====================================${NC}"
-echo ""
+echo -e "${BLUE}==================================================${NC}"
+echo -e "${BLUE}    BarterTap.az Hostinger Avtomatik Təmir Skripti    ${NC}"
+echo -e "${BLUE}==================================================${NC}"
 
-# Əsas qovluğu müəyyənləşdir
-PUBLIC_HTML="${HOME}/public_html"
-if [ ! -d "$PUBLIC_HTML" ]; then
-  echo -e "${RED}Xəta: public_html qovluğu tapılmadı.${NC}"
-  echo -e "${YELLOW}Bu skript Hostinger hostingdə işlədilməlidir.${NC}"
-  exit 1
+# Əsas qovluğu yoxla
+ROOT_DIR="/home/u726371272/public_html"
+if [ ! -d "$ROOT_DIR" ]; then
+    echo -e "${RED}Xəta: $ROOT_DIR qovluğu tapılmadı${NC}"
+    echo -e "${YELLOW}Zəhmət olmasa, doğru qovluqda işləyin və ya yolu düzəldin.${NC}"
+    exit 1
 fi
 
-echo -e "${YELLOW}İşləmə qovluğu: ${PUBLIC_HTML}${NC}"
-cd "$PUBLIC_HTML" || exit 1
+echo -e "\n${YELLOW}Hostinger mühiti yoxlanılır...${NC}"
 
-# Backup qovluğu yarat
-BACKUP_DIR="${HOME}/bartertap_backup_$(date +%Y%m%d_%H%M%S)"
-mkdir -p "$BACKUP_DIR"
-echo -e "${GREEN}Backup qovluğu yaradıldı: ${BACKUP_DIR}${NC}"
+# PHP versiyasını yoxla
+PHP_VERSION=$(php -v | head -n 1 | cut -d " " -f 2)
+echo -e "- PHP Versiyası: ${GREEN}$PHP_VERSION${NC}"
 
-# Mövcud faylların yedəklənməsi
-echo -e "${YELLOW}Mövcud konfiqurasiya faylları yedəklənir...${NC}"
-if [ -f "$PUBLIC_HTML/.htaccess" ]; then
-  cp "$PUBLIC_HTML/.htaccess" "$BACKUP_DIR/.htaccess.bak"
-  echo -e "${GREEN}.htaccess yedəkləndi${NC}"
+# MySQL bağlantısını yoxla
+echo -e "- MySQL bağlantısı yoxlanılır..."
+DB_HOST="localhost"
+DB_USER="u726371272_barter_user"
+
+if mysql -h $DB_HOST -u $DB_USER -p -e "SELECT VERSION();" 2>/dev/null; then
+    echo -e "  ${GREEN}MySQL bağlantısı uğurludur${NC}"
+else
+    echo -e "  ${RED}MySQL bağlantısında problem var${NC}"
+    echo -e "  ${YELLOW}Zəhmət olmasa, məlumat bazası giriş məlumatlarını yoxlayın${NC}"
 fi
 
-if [ -f "$PUBLIC_HTML/index.html" ]; then
-  cp "$PUBLIC_HTML/index.html" "$BACKUP_DIR/index.html.bak"
-  echo -e "${GREEN}index.html yedəkləndi${NC}"
+echo -e "\n${YELLOW}Fayl sistemini yoxlanılır...${NC}"
+
+# İcazələri yoxla və düzəlt
+echo -e "- Kritik fayllar üçün icazələr yoxlanılır və təmir edilir..."
+
+# İcazələri düzəlt
+find $ROOT_DIR -type f -name "*.php" -exec chmod 644 {} \;
+find $ROOT_DIR -type f -name "*.html" -exec chmod 644 {} \;
+find $ROOT_DIR -type f -name "*.js" -exec chmod 644 {} \;
+find $ROOT_DIR -type f -name "*.css" -exec chmod 644 {} \;
+chmod 644 $ROOT_DIR/.htaccess 2>/dev/null || echo -e "  ${YELLOW}.htaccess faylı mövcud deyil${NC}"
+chmod 644 $ROOT_DIR/index.php 2>/dev/null || echo -e "  ${YELLOW}index.php faylı mövcud deyil${NC}"
+chmod 644 $ROOT_DIR/index.html 2>/dev/null || echo -e "  ${YELLOW}index.html faylı mövcud deyil${NC}"
+chmod 644 $ROOT_DIR/api.php 2>/dev/null || echo -e "  ${YELLOW}api.php faylı mövcud deyil${NC}"
+
+# Qovluqlara icazələri təyin et
+find $ROOT_DIR -type d -exec chmod 755 {} \;
+
+echo -e "  ${GREEN}Fayl icazələri yeniləndi${NC}"
+
+# Kritik faylların mövcudluğunu yoxla
+echo -e "- Kritik faylların mövcudluğu yoxlanılır..."
+CRITICAL_FILES=(".htaccess" "index.php" "index.html" "api.php")
+MISSING_FILES=()
+
+for file in "${CRITICAL_FILES[@]}"; do
+    if [ ! -f "$ROOT_DIR/$file" ]; then
+        MISSING_FILES+=("$file")
+    fi
+done
+
+if [ ${#MISSING_FILES[@]} -eq 0 ]; then
+    echo -e "  ${GREEN}Bütün kritik fayllar mövcuddur${NC}"
+else
+    echo -e "  ${RED}Aşağıdakı kritik fayllar çatışmır:${NC}"
+    for file in "${MISSING_FILES[@]}"; do
+        echo -e "  - $file"
+    done
+    echo -e "  ${YELLOW}Zəhmət olmasa, çatışmayan faylları əlavə edin${NC}"
 fi
 
-if [ -f "$PUBLIC_HTML/index.php" ]; then
-  cp "$PUBLIC_HTML/index.php" "$BACKUP_DIR/index.php.bak"
-  echo -e "${GREEN}index.php yedəkləndi${NC}"
-fi
+# .htaccess faylı problemləri yoxla və düzəlt
+if [ -f "$ROOT_DIR/.htaccess" ]; then
+    echo -e "- .htaccess faylı yoxlanılır və təmir edilir..."
+    
+    # .htaccess faylının ehtiyat nüsxəsini yarat
+    cp $ROOT_DIR/.htaccess $ROOT_DIR/.htaccess.backup
+    
+    # RewriteEngine On əlavə et (əgər yoxdursa)
+    if ! grep -q "RewriteEngine On" $ROOT_DIR/.htaccess; then
+        echo -e "  ${YELLOW}RewriteEngine On əlavə edilir...${NC}"
+        echo "RewriteEngine On" > $ROOT_DIR/.htaccess.new
+        cat $ROOT_DIR/.htaccess >> $ROOT_DIR/.htaccess.new
+        mv $ROOT_DIR/.htaccess.new $ROOT_DIR/.htaccess
+    fi
+    
+    # SPA yönləndirməsini əlavə et (əgər yoxdursa)
+    if ! grep -q "RewriteRule ^" $ROOT_DIR/.htaccess; then
+        echo -e "  ${YELLOW}SPA yönləndirməsi əlavə edilir...${NC}"
+        cat >> $ROOT_DIR/.htaccess << EOF
 
-# .htaccess yaradılması
-echo -e "${YELLOW}Yeni .htaccess faylı yaradılır...${NC}"
-cat > "$PUBLIC_HTML/.htaccess" << 'EOF'
-# BarterTap əsas .htaccess faylı
-# Avtomatik yaradılmışdır: $(date)
-
-# Enable rewrite engine
-RewriteEngine On
-RewriteBase /
-
-# Əgər fiziki fayl və ya qovluqdursa, birbaşa istifadə et
+# For static files
 RewriteCond %{REQUEST_FILENAME} -f [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^ - [L]
 
-# API və WebSocket sorğuları
-RewriteCond %{REQUEST_URI} ^/api/ [OR]
-RewriteCond %{REQUEST_URI} ^/ws
-RewriteRule ^(.*)$ index.php?route=$1 [L,QSA]
+# For all other requests, route to index.php
+RewriteRule ^ index.php [L]
+EOF
+    fi
+    
+    echo -e "  ${GREEN}.htaccess faylı təmir edildi${NC}"
+else
+    echo -e "- ${RED}.htaccess faylı mövcud deyil, yaradılır...${NC}"
+    
+    cat > $ROOT_DIR/.htaccess << EOF
+# Enable the rewrite engine
+RewriteEngine On
 
-# Bütün digər sorğuları index.html-ə yönləndir
-RewriteRule ^ index.html [L]
-
-# Təhlükəsizlik 
+# Serving Brotli compressed CSS/JS if available and the client accepts it
 <IfModule mod_headers.c>
-  Header set X-XSS-Protection "1; mode=block"
-  Header set X-Content-Type-Options "nosniff"
-  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  # Serve brotli compressed CSS and JS files if they exist and the client accepts br encoding
+  RewriteCond %{HTTP:Accept-encoding} br
+  RewriteCond %{REQUEST_FILENAME}\.br -f
+  RewriteRule ^(.*)\.css $1\.css\.br [QSA]
+  RewriteRule ^(.*)\.js $1\.js\.br [QSA]
+
+  # Serve correct content types and encodings
+  RewriteRule \.css\.br$ - [T=text/css,E=no-gzip:1,E=BROTLI]
+  RewriteRule \.js\.br$ - [T=text/javascript,E=no-gzip:1,E=BROTLI]
+
+  <FilesMatch "(\.js\.br|\.css\.br)$">
+    Header set Content-Encoding br
+    Header append Vary Accept-Encoding
+  </FilesMatch>
 </IfModule>
 
-# Qovluq indekslənməsini qadağan et
+# Handle front-end routing
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  
+  # For all static files
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+  
+  # For all other requests, route to index.php
+  RewriteRule ^ index.php [L]
+</IfModule>
+
+# Set security headers
+<IfModule mod_headers.c>
+  # XSS Protection
+  Header set X-XSS-Protection "1; mode=block"
+  
+  # Prevent MIME-sniffing
+  Header set X-Content-Type-Options "nosniff"
+  
+  # Referrer Policy
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # HSTS (optional - enable once SSL is properly configured)
+  Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+</IfModule>
+
+# Serve correct MIME types
+<IfModule mod_mime.c>
+  # JavaScript
+  AddType application/javascript js
+  AddType application/json json
+  
+  # CSS
+  AddType text/css css
+  
+  # Fonts
+  AddType font/ttf ttf
+  AddType font/otf otf
+  AddType font/woff woff
+  AddType font/woff2 woff2
+  
+  # SVG
+  AddType image/svg+xml svg svgz
+  
+  # Images
+  AddType image/jpeg jpeg jpg
+  AddType image/png png
+  AddType image/gif gif
+  AddType image/webp webp
+</IfModule>
+
+# Enable compression
+<IfModule mod_deflate.c>
+  # Compress HTML, CSS, JavaScript, Text, XML and fonts
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE application/x-font
+  AddOutputFilterByType DEFLATE application/x-font-opentype
+  AddOutputFilterByType DEFLATE application/x-font-otf
+  AddOutputFilterByType DEFLATE application/x-font-truetype
+  AddOutputFilterByType DEFLATE application/x-font-ttf
+  AddOutputFilterByType DEFLATE application/xhtml+xml
+  AddOutputFilterByType DEFLATE application/xml
+  AddOutputFilterByType DEFLATE font/opentype
+  AddOutputFilterByType DEFLATE font/otf
+  AddOutputFilterByType DEFLATE font/ttf
+  AddOutputFilterByType DEFLATE image/svg+xml
+  AddOutputFilterByType DEFLATE image/x-icon
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE text/plain
+  AddOutputFilterByType DEFLATE text/xml
+</IfModule>
+
+# Enable browser caching
+<IfModule mod_expires.c>
+  ExpiresActive On
+  
+  # Images
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  
+  # Fonts
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType font/otf "access plus 1 year"
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  
+  # CSS, JavaScript
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  
+  # Others
+  ExpiresByType application/pdf "access plus 1 month"
+  ExpiresByType application/x-shockwave-flash "access plus 1 month"
+</IfModule>
+
+# Disable directory listing
 Options -Indexes
 
-# Xəta səhifələri
-ErrorDocument 404 /index.html
-ErrorDocument 403 /index.html
-ErrorDocument 500 /index.html
+# In case of 500 errors, show an error page
+ErrorDocument 500 /500.html
+ErrorDocument 404 /404.html
+ErrorDocument 403 /403.html
 EOF
+    
+    echo -e "  ${GREEN}Yeni .htaccess faylı yaradıldı${NC}"
+fi
 
-chmod 644 "$PUBLIC_HTML/.htaccess"
-echo -e "${GREEN}.htaccess yaradıldı${NC}"
-
-# index.html yaradılması
-echo -e "${YELLOW}Yeni index.html faylı yaradılır...${NC}"
-cat > "$PUBLIC_HTML/index.html" << 'EOF'
-<!DOCTYPE html>
-<html lang="az">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BarterTap - Barter Mübadilə Platformu</title>
-  <meta name="description" content="BarterTap - Azərbaycanda əşyaların barter mübadiləsi üçün platformadır." />
-  
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f9f9f9;
-      color: #333;
-    }
+# PHP konfiqurasiyası yaradın (xüsusi php.ini)
+if [ ! -f "$ROOT_DIR/php.ini" ]; then
+    echo -e "- PHP konfiquriyası yaradılır..."
     
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    
-    header {
-      background-color: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      padding: 15px 0;
-    }
-    
-    .header-content {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 0 20px;
-    }
-    
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #0066cc;
-      text-decoration: none;
-    }
-    
-    .nav-links {
-      display: flex;
-      gap: 20px;
-    }
-    
-    .nav-link {
-      color: #333;
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.2s;
-    }
-    
-    .nav-link:hover {
-      color: #0066cc;
-    }
-    
-    .main-section {
-      padding: 50px 20px;
-      text-align: center;
-    }
-    
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #333;
-    }
-    
-    p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #555;
-      margin-bottom: 30px;
-    }
-    
-    .btn {
-      display: inline-block;
-      background-color: #0066cc;
-      color: white;
-      padding: 12px 24px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background-color 0.3s;
-    }
-    
-    .btn:hover {
-      background-color: #0052a3;
-    }
-    
-    .features {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 30px;
-      margin-top: 50px;
-    }
-    
-    .feature {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-      padding: 25px;
-      width: 280px;
-      text-align: center;
-    }
-    
-    .feature h3 {
-      margin-top: 15px;
-      color: #333;
-    }
-    
-    .feature p {
-      font-size: 0.95rem;
-      color: #666;
-    }
-    
-    .feature-icon {
-      background-color: #e6f2ff;
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto;
-      color: #0066cc;
-      font-size: 28px;
-    }
-    
-    footer {
-      background-color: #333;
-      color: white;
-      padding: 40px 0;
-      margin-top: 80px;
-    }
-    
-    .footer-content {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-    
-    .footer-section {
-      width: 250px;
-      margin-bottom: 30px;
-    }
-    
-    .footer-section h4 {
-      font-size: 18px;
-      margin-bottom: 15px;
-      color: #fff;
-    }
-    
-    .footer-section a {
-      color: #ddd;
-      text-decoration: none;
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      transition: color 0.2s;
-    }
-    
-    .footer-section a:hover {
-      color: #fff;
-    }
-    
-    .copyright {
-      text-align: center;
-      padding-top: 20px;
-      border-top: 1px solid #444;
-      margin-top: 30px;
-      font-size: 14px;
-      color: #aaa;
-    }
-    
-    @media (max-width: 768px) {
-      .features {
-        gap: 20px;
-      }
-      
-      .feature {
-        width: 100%;
-        max-width: 320px;
-      }
-      
-      .footer-section {
-        width: 100%;
-        text-align: center;
-      }
-      
-      .nav-links {
-        display: none;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="header-content">
-      <a href="/" class="logo">BarterTap</a>
-      <div class="nav-links">
-        <a href="/" class="nav-link">Ana Səhifə</a>
-        <a href="/items" class="nav-link">Bütün Əşyalar</a>
-        <a href="/map" class="nav-link">Xəritədə Axtar</a>
-        <a href="/auth" class="nav-link">Daxil Ol</a>
-      </div>
-    </div>
-  </header>
-
-  <section class="main-section">
-    <div class="container">
-      <h1>BarterTap - Əşyalarınızı Dəyişdirin</h1>
-      <p>
-        BarterTap platforması ilə istifadə etmədiyiniz əşyaları sizə lazım olan əşyalara səmərəli şəkildə dəyişin. 
-        Pulsuz, rahat və ekoloji təmiz alqı-satqı alternatividir.
-      </p>
-      <a href="/items" class="btn">Əşyalara Bax</a>
-      <a href="/auth" class="btn" style="background-color: #28a745; margin-left: 10px;">Hesab Yarat</a>
-      
-      <div class="features">
-        <div class="feature">
-          <div class="feature-icon">🔄</div>
-          <h3>Dəyiş-Dəyişdir</h3>
-          <p>İstifadə etmədiyiniz əşyalardan qurtulun və sizə lazım olanı tapın.</p>
-        </div>
-        
-        <div class="feature">
-          <div class="feature-icon">🗺️</div>
-          <h3>Yerli Əməkdaşlıq</h3>
-          <p>Xəritə üzərində yaxınlıqdakı əşyaları və istifadəçiləri tapın.</p>
-        </div>
-        
-        <div class="feature">
-          <div class="feature-icon">💬</div>
-          <h3>Təklif və Əlaqə</h3>
-          <p>İstifadəçilərlə əlaqə qurun və əşyalarla bağlı təkliflər verin.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="footer-content">
-      <div class="footer-section">
-        <h4>BarterTap</h4>
-        <a href="/">Ana Səhifə</a>
-        <a href="/how-it-works">Necə İşləyir</a>
-        <a href="/about">Haqqımızda</a>
-        <a href="/contact">Əlaqə</a>
-      </div>
-      
-      <div class="footer-section">
-        <h4>Kateqoriyalar</h4>
-        <a href="/items?category=elektronika">Elektronika</a>
-        <a href="/items?category=geyim">Geyim</a>
-        <a href="/items?category=ev-esyalari">Ev Əşyaları</a>
-        <a href="/items?category=hobbi">Hobbi və İdman</a>
-      </div>
-      
-      <div class="footer-section">
-        <h4>Əlaqə</h4>
-        <p style="color: #ddd; font-size: 14px;">
-          Əhməd Rəcəbli, Bakı<br>
-          +994 55 255 48 00<br>
-          info@bartertap.az
-        </p>
-      </div>
-    </div>
-    
-    <div class="container">
-      <div class="copyright">
-        &copy; 2025 BarterTap. Bütün hüquqlar qorunur.
-      </div>
-    </div>
-  </footer>
-</body>
-</html>
+    cat > $ROOT_DIR/php.ini << EOF
+; Custom PHP settings for BarterTap.az
+display_errors = Off
+log_errors = On
+error_log = /home/u726371272/php_errors.log
+max_execution_time = 300
+max_input_time = 60
+memory_limit = 256M
+post_max_size = 32M
+upload_max_filesize = 16M
+max_file_uploads = 20
+default_charset = "UTF-8"
 EOF
+    
+    echo -e "  ${GREEN}Xüsusi php.ini faylı yaradıldı${NC}"
+fi
 
-chmod 644 "$PUBLIC_HTML/index.html"
-echo -e "${GREEN}index.html yaradıldı${NC}"
+# Köməkçi göstərişlər
+echo -e "\n${YELLOW}Təmir prosesi tamamlandı!${NC}"
+echo -e "\n${BLUE}Problemləri həll edə bilmədikdə:${NC}"
+echo -e "1. Hostinger-də hesabı yenidən yüklə və serveri yenidən başla"
+echo -e "2. Veb domeni üzərində SSL sertifikatının düzgün qurulduğunu təmin edin"
+echo -e "3. DNS qeydlərinin doğru olduğunu yoxlayın"
+echo -e "4. Ətraflı səhv tapılması üçün error_log faylını yoxlayın"
+echo -e "5. Hostinger dəstək xidməti ilə əlaqə saxlayın"
 
-# index.php yaradılması
-echo -e "${YELLOW}Yeni index.php faylı yaradılır...${NC}"
-cat > "$PUBLIC_HTML/index.php" << 'EOF'
-<?php
-/**
- * BarterTap API və Yönləndirmə Skripti
- * Bu fayl API sorğuları üçün əsas giriş nöqtəsidir
- */
+# Log məlumatlarını göstərin
+if [ -f "/home/u726371272/php_errors.log" ]; then
+    echo -e "\n${YELLOW}Son 10 PHP xətası:${NC}"
+    tail -n 10 /home/u726371272/php_errors.log
+fi
 
-// Xəta mesajlarını bildirmək
-ini_set('display_errors', 0);
-error_reporting(E_ALL);
-
-// Sorğu URL-ni əldə et
-$request_uri = $_SERVER['REQUEST_URI'];
-$route = isset($_GET['route']) ? $_GET['route'] : '';
-
-// API sorğularına cavab ver
-if (strpos($request_uri, '/api/') === 0) {
-    header('Content-Type: application/json');
-    echo json_encode([
-        'status' => 'success',
-        'message' => 'API tezliklə işləyəcək',
-        'route' => $route,
-        'time' => date('Y-m-d H:i:s')
-    ]);
-    exit;
-}
-
-// WebSocket sorğularına cavab ver
-if (strpos($request_uri, '/ws') === 0) {
-    header('Content-Type: application/json');
-    echo json_encode([
-        'status' => 'success',
-        'message' => 'WebSocket tezliklə işləyəcək',
-        'time' => date('Y-m-d H:i:s')
-    ]);
-    exit;
-}
-
-// Statik HTML səhifəsinə yönləndir
-include 'index.html';
-EOF
-
-chmod 644 "$PUBLIC_HTML/index.php"
-echo -e "${GREEN}index.php yaradıldı${NC}"
-
-# 404.html və 500.html yaradılması
-echo -e "${YELLOW}Xəta səhifələri yaradılır...${NC}"
-cat > "$PUBLIC_HTML/404.html" << 'EOF'
-<!DOCTYPE html>
-<html lang="az">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 - Səhifə Tapılmadı - BarterTap</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #f8f9fa;
-      color: #333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-    }
-    .container {
-      max-width: 600px;
-      padding: 40px 20px;
-    }
-    h1 {
-      font-size: 3.5rem;
-      margin: 0;
-      color: #0066cc;
-    }
-    p {
-      font-size: 1.1rem;
-      margin: 20px 0 30px;
-      color: #555;
-    }
-    .btn {
-      display: inline-block;
-      background: #0066cc;
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.3s ease;
-    }
-    .btn:hover {
-      background: #0052a3;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>404</h1>
-    <p>Axtardığınız səhifə tapılmadı. Səhifə silinmiş və ya yerləşdiyi yer dəyişdirilmiş ola bilər.</p>
-    <a href="/" class="btn">Ana Səhifəyə Qayıt</a>
-  </div>
-</body>
-</html>
-EOF
-
-cat > "$PUBLIC_HTML/500.html" << 'EOF'
-<!DOCTYPE html>
-<html lang="az">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>500 - Server Xətası - BarterTap</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background: #f8f9fa;
-      color: #333;
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      text-align: center;
-    }
-    .container {
-      max-width: 600px;
-      padding: 40px 20px;
-    }
-    h1 {
-      font-size: 3.5rem;
-      margin: 0;
-      color: #0066cc;
-    }
-    p {
-      font-size: 1.1rem;
-      margin: 20px 0 30px;
-      color: #555;
-    }
-    .btn {
-      display: inline-block;
-      background: #0066cc;
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 4px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: background 0.3s ease;
-    }
-    .btn:hover {
-      background: #0052a3;
-    }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1>500</h1>
-    <p>Server xətası baş verdi. Texniki komandamız bu problemi həll etmək üçün çalışır.</p>
-    <a href="/" class="btn">Ana Səhifəyə Qayıt</a>
-  </div>
-</body>
-</html>
-EOF
-
-chmod 644 "$PUBLIC_HTML/404.html"
-chmod 644 "$PUBLIC_HTML/500.html"
-echo -e "${GREEN}Xəta səhifələri yaradıldı${NC}"
-
-# İcazələri təyin et
-echo -e "${YELLOW}Fayl icazələri tənzimlənir...${NC}"
-find "$PUBLIC_HTML" -type f -exec chmod 644 {} \;
-find "$PUBLIC_HTML" -type d -exec chmod 755 {} \;
-echo -e "${GREEN}Fayl icazələri tənzimləndi${NC}"
-
-echo -e "${GREEN}Bütün əməliyyatlar uğurla tamamlandı!${NC}"
-echo -e "${BLUE}====================================${NC}"
-echo -e "${YELLOW}Tamamlanıdı: $(date)${NC}"
-echo -e "${YELLOW}Yedəkləmələr buraya saxlanıldı: ${BACKUP_DIR}${NC}"
-echo -e "${BLUE}====================================${NC}"
-echo ""
-echo -e "${GREEN}İndi veb saytınızı yoxlaya bilərsiniz. Əsas problemi həll etməlidir.${NC}"
-echo -e "${YELLOW}Əgər problem davam edərsə, lütfən Hostinger dəstəyi ilə əlaqə saxlayın: https://www.hostinger.az/contact${NC}"
-
-exit 0
+echo -e "\n${BLUE}==================================================${NC}"
+echo -e "${GREEN}Təmir skripti tamamlandı!${NC}"
+echo -e "${BLUE}==================================================${NC}\n"

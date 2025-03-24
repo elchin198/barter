@@ -1,145 +1,137 @@
 #!/bin/bash
+# BarterTap.az Hostinger Quraşdırma Skripti
+# Bu skript proyekti Hostinger-də yerləşdirmək üçün istifadə olunur
 
-# This script helps install the application on Hostinger
-# Run it on your local machine after cloning the repository
+# Rəng kodları
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
 
-# Build the production-ready files
-echo "Building application..."
-npm run build
+echo -e "${GREEN}========================================${NC}"
+echo -e "${GREEN}    BarterTap.az Hostinger Quraşdırması    ${NC}"
+echo -e "${GREEN}========================================${NC}"
 
-# Create necessary server files
-echo "Setting up server files..."
-
-# Create package.json for the server
-cat > package.json << 'EOF'
-{
-  "name": "bartertap",
-  "version": "1.0.0",
-  "description": "BarterTap Platform",
-  "main": "server/index.js",
-  "scripts": {
-    "start": "node server/index.js"
-  },
-  "dependencies": {
-    "@neondatabase/serverless": "^0.6.0",
-    "connect-pg-simple": "^9.0.0",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
-    "drizzle-orm": "^0.27.2",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "multer": "^1.4.5-lts.1",
-    "pg": "^8.11.0",
-    "ws": "^8.13.0",
-    "zod": "^3.21.4"
-  },
-  "engines": {
-    "node": ">=18.0.0"
-  }
+# Funksiyanı icra etdikdən sonra nəticəsini yoxla
+function check_result {
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}Xəta: $1${NC}"
+        exit 1
+    else
+        echo -e "${GREEN}Uğurlu: $2${NC}"
+    fi
 }
+
+# Qurmaq üçün yoxlamalar
+echo -e "\n${YELLOW}Başlanğıc yoxlanışları:${NC}"
+
+# Node.js versiyasını yoxla
+if ! command -v node &> /dev/null; then
+    echo -e "${RED}Node.js tapılmadı, zəhmət olmasa quraşdırın${NC}"
+    exit 1
+fi
+NODE_VERSION=$(node -v)
+echo -e "- Node.js versiyası: ${NODE_VERSION}"
+
+# npm versiyasını yoxla
+if ! command -v npm &> /dev/null; then
+    echo -e "${RED}npm tapılmadı, zəhmət olmasa quraşdırın${NC}"
+    exit 1
+fi
+NPM_VERSION=$(npm -v)
+echo -e "- npm versiyası: ${NPM_VERSION}"
+
+# Qovluq strukturunu yoxla
+if [ ! -d "client" ] || [ ! -d "server" ] || [ ! -d "shared" ]; then
+    echo -e "${RED}Layihə strukturu düzgün deyil, zəhmət olmasa kök qovluqda işə salın${NC}"
+    exit 1
+fi
+
+# Bağımlılıqları quraşdır
+echo -e "\n${YELLOW}Bağımlılıqlar quraşdırılır:${NC}"
+npm install
+check_result "npm bağımlılıqları quraşdırıla bilmədi" "Bağımlılıqlar quraşdırıldı"
+
+# Tətbiqi hazırla
+echo -e "\n${YELLOW}Tətbiq hazırlanır...${NC}"
+npm run build
+check_result "Tətbiq hazırlana bilmədi" "Tətbiq uğurla hazırlandı"
+
+# Hostinger üçün faylları hazırla
+echo -e "\n${YELLOW}Hostinger üçün fayllar hazırlanır...${NC}"
+
+# dist qovluğunu yoxla
+if [ ! -d "dist" ]; then
+    echo -e "${RED}dist qovluğu tapılmadı!${NC}"
+    exit 1
+fi
+
+# 'hostinger_deploy' qovluğunu yaradıq (əgər varsa təmizləyirik)
+if [ -d "hostinger_deploy" ]; then
+    rm -rf hostinger_deploy
+fi
+mkdir -p hostinger_deploy
+
+# Statik faylları və PHP adapterlərini köçür
+echo -e "- Statik fayllar köçürülür..."
+cp -r dist/* hostinger_deploy/
+cp .htaccess hostinger_deploy/
+cp api.php hostinger_deploy/
+cp hostinger_db_setup.php hostinger_deploy/
+cp index.html hostinger_deploy/
+cp index.php hostinger_deploy/
+cp 403.html hostinger_deploy/ 2>/dev/null || :
+cp 404.html hostinger_deploy/ 2>/dev/null || :
+cp 500.html hostinger_deploy/ 2>/dev/null || :
+
+# .env.production hazırla və içini doldur
+echo -e "- .env.production yaradılır..."
+cat > hostinger_deploy/.env.production << EOF
+# BarterTap.az Production Environment
+MYSQL_HOST=localhost
+MYSQL_USER=u726371272_barter_user
+MYSQL_PASSWORD=your_database_password
+MYSQL_DATABASE=u726371272_barter_db
 EOF
 
-# Create .env file
-cat > .env << 'EOF'
-# Database URL (will be overridden by Hostinger MySQL credentials)
-DATABASE_URL=postgres://postgres:postgres@localhost:5432/bartertap
-NODE_ENV=production
-PORT=8080
-SESSION_SECRET=bartertap_secret_key_replace_this_in_production
+echo -e "- SQL skripti köçürülür..."
+# SQL initialization skriptini hazırla
+cat > hostinger_deploy/setup_database.php << EOF
+<?php
+// Execute the database setup script
+require_once('hostinger_db_setup.php');
 EOF
 
-# Create .htaccess file
-cat > .htaccess << 'EOF'
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
-  
-  # If the request is for an existing file, directory or symlink, serve it directly
-  RewriteCond %{REQUEST_FILENAME} -f [OR]
-  RewriteCond %{REQUEST_FILENAME} -d [OR]
-  RewriteCond %{REQUEST_FILENAME} -l
-  RewriteRule ^ - [L]
-  
-  # For API requests, forward to Node.js server
-  RewriteCond %{REQUEST_URI} ^/api/ [OR]
-  RewriteCond %{REQUEST_URI} ^/ws
-  RewriteRule ^(.*)$ http://localhost:8080/$1 [P,L]
-  
-  # For all other requests, serve the built frontend
-  RewriteRule ^ index.html [L]
-</IfModule>
+# README hazırla
+echo -e "- README faylı hazırlanır..."
+cat > hostinger_deploy/README.txt << EOF
+==================================
+BarterTap.az Hostinger Quraşdırması
+==================================
 
-# Don't show directory listings
-Options -Indexes
+Quraşdırma addımları:
+1. FTP vasitəsilə bu qovluqdakı bütün faylları Hostinger-in public_html qovluğuna köçürün
+2. SSH vasitəsilə və ya phpMyAdmin ilə setup_database.php skriptini işə salın
+3. Doğru MySQL məlumatlarını .env.production faylında quraşdırın
 
-# PHP settings
-<IfModule mod_php7.c>
-  php_flag display_errors Off
-  php_value max_execution_time 300
-  php_value memory_limit 256M
-  php_value post_max_size 64M
-  php_value upload_max_filesize 16M
-</IfModule>
+İlkin giriş:
+- İstifadəçi adı: testuser
+- Şifrə: password123
+
+Problemlər olduqda:
+- hicran.huseynli@gmail.com
+- +994 55 255 48 00
+
+==================================
 EOF
 
-# Create Hostinger setup instructions
-cat > hostinger_setup.md << 'EOF'
-# Hostinger Setup Instructions
+# ZIP arxivini yaratmaq
+echo -e "\n${YELLOW}Arxiv hazırlanır...${NC}"
+cd hostinger_deploy
+zip -r ../bartertap_hostinger.zip *
+cd ..
+check_result "Arxiv yaradıla bilmədi" "bartertap_hostinger.zip arxivi uğurla yaradıldı"
 
-## Basic Setup
-
-1. Log into your Hostinger control panel
-2. Navigate to the "Website" section
-3. Select "File Manager" or use FTP access
-4. Upload all files from the dist directory to the public_html directory
-
-## Database Setup
-
-1. Go to "Databases" in the Hostinger control panel
-2. Create a new MySQL database
-3. Note down the database name, username, password, and host
-4. Open the .env file and update the DATABASE_URL with your Hostinger MySQL credentials:
-   ```
-   DATABASE_URL=mysql://{username}:{password}@{host}:3306/{database}
-   ```
-
-## Node.js Setup
-
-Hostinger supports Node.js applications through their hPanel:
-
-1. Go to "Website" → "Node.js"
-2. Create a new Node.js application
-3. Set the following:
-   - Entry point: server/index.js
-   - Node.js version: 18.x (LTS)
-   - NPM version: Latest
-4. Click "Enable Node.js"
-5. After enabling, go to the Terminal tab
-6. Run the following commands:
-   ```
-   npm install
-   node server/index.js
-   ```
-
-## Troubleshooting
-
-If you encounter 403 Forbidden errors:
-1. Ensure all files have proper permissions (usually 644 for files, 755 for directories)
-2. Check if .htaccess is correctly uploaded and has the proper permissions
-3. Verify that mod_rewrite is enabled on the server
-4. Contact Hostinger support if issues persist
-EOF
-
-# Create a "dist" directory for deployment
-mkdir -p dist
-cp -r dist/* dist/
-cp .env dist/
-cp .htaccess dist/
-cp package.json dist/
-cp -r server dist/
-cp -r shared dist/
-mkdir -p dist/public/uploads/{avatars,items}
-
-echo "Installation files created. Upload the contents of the 'dist' directory to your Hostinger hosting."
-echo "Follow the instructions in hostinger_setup.md for further configuration."
+echo -e "\n${GREEN}Quraşdırma tamamlandı!${NC}"
+echo -e "${YELLOW}Qeyd:${NC} Hostinger serverində yerləşdirmək üçün 'bartertap_hostinger.zip' faylından istifadə edin."
+echo -e "${YELLOW}Təlimat:${NC} hostinger_deploy/README.txt faylına baxın.\n"

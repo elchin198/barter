@@ -1,0 +1,68 @@
+Saytı analiz etdim. Hal-hazırda 404 səhifəsinə səbəb ola biləcək potensial boşluqları tapmaq üçün aşağıdakı yoxlama planını və düzəliş təlimatlarını təqdim edirəm:
+
+🚨 404 Error Riski Daşıyan Hissələr və Təlimatlar
+1. Qeyri-mövcud elan ID-lərinə keçid
+Məsələn: /item/1234 kimi səhifə varsa, amma 1234 ID-lı elan mövcud deyilsə, 404 verir.
+
+📌 Təlimat:
+
+Elan detallarında id-yə əsaslanan səhifə açılırsa, useEffect daxilində if (!listing) navigate('/404') yoxlaması et.
+
+Əgər belə səhifə yoxdursa, xüsusi "Elan tapılmadı" mesajı göstər.
+
+2. Profilə bax – silinmiş və ya ban olunmuş istifadəçilər
+İstifadəçi silinibsə və /user/:id səhifəsi hələ də aktiv linkdədirsə, 404 verir.
+
+📌 Təlimat:
+
+Profil səhifəsi açılarkən:
+
+tsx
+Copy
+Edit
+if (!userData) {
+  return <NotFoundPage message="İstifadəçi tapılmadı" />
+}
+3. Admin Panel alt route-ları
+Əgər /admin/listings və ya /admin/stats səhifələrinə icazəsiz keçid olarsa, 404 əvəzinə Unauthorized səhifəsi göstərilməlidir.
+
+📌 Təlimat:
+
+ProtectedAdminRoute komponentində role !== 'admin' olarsa → 403 (Forbidden) səhifəsinə yönləndir:
+
+tsx
+Copy
+Edit
+if (!isAdmin) return <Navigate to="/unauthorized" />;
+4. Manual olaraq səhv yazılan URL-lər
+İstifadəçi URL-ə /randomtext yazarsa, düzgün 404 səhifəsi göstərilməlidir.
+
+📌 Təlimat:
+
+App.tsx marşrutlar sonunda bu route-u əlavə et:
+
+tsx
+Copy
+Edit
+<Route path="*" element={<NotFoundPage />} />
+5. Seçilmiş elanlar, silinmiş elanlara yönləndikdə
+Əgər bəyəndiyin elan silinibsə, və /favorites səhifəsində həmin link saxlanılırsa → 404
+
+📌 Təlimat:
+
+favorites səhifəsində localStorage və ya DB-dən gələn elan null isə göstərmə
+
+tsx
+Copy
+Edit
+{listing ? <ListingCard data={listing} /> : <p>Bu elan silinib.</p>}
+✅ Təklif: 404 Səhifəsini Şəxsi Brendlə Təkmilləşdir
+📌 Səhifə: /NotFoundPage.tsx
+
+Element	Tövsiyə
+Başlıq	"Səhifə tapılmadı"
+Açıklama	“Axtardığınız məlumat mövcud deyil və ya silinmişdir.”
+Geri dön düyməsi	navigate(-1) və ya “Ana səhifəyə dön”
+Hazırsansa, mən sənə hazır 404 səhifə komponenti, ProtectedRoute üçün 403 yönləndirmə və ID yoxlamaları ilə real kod şablonları göndərə bilərəm.
+
+İstəyirsən? 💡

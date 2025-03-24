@@ -163,6 +163,18 @@ export class MemStorage implements IStorage {
       bio: "Trading vintage items",
       phone: "123-555-1234"
     });
+    
+    // Create an admin user
+    this.createUser({
+      username: "admin",
+      password: "admin123",
+      email: "admin@bartertap.az",
+      fullName: "Admin User",
+      role: "admin",
+      avatar: "https://ui-avatars.com/api/?name=Admin+User&background=FF4500&color=fff",
+      bio: "System administrator",
+      phone: "123-789-4560"
+    });
   }
 
   // User methods

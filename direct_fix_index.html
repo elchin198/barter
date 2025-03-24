@@ -2,12 +2,10 @@
 <html lang="az">
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/x-icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BarterTap - Barter Mübadilə Platformu</title>
   <meta name="description" content="BarterTap - Azərbaycanda əşyaların barter mübadiləsi üçün platformadır." />
   
-  <!-- Əsas stillər -->
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -181,35 +179,6 @@
       color: #aaa;
     }
     
-    /* Loading spinner animation */
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .loading {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(255,255,255,0.9);
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
-    }
-    
-    .spinner {
-      width: 50px;
-      height: 50px;
-      border: 5px solid #f3f3f3;
-      border-top: 5px solid #0066cc;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-    
-    /* Responsive adjustments */
     @media (max-width: 768px) {
       .features {
         gap: 20px;
@@ -232,11 +201,6 @@
   </style>
 </head>
 <body>
-  <!-- Yüklənmə indikator -->
-  <div class="loading" id="loading">
-    <div class="spinner"></div>
-  </div>
-
   <header>
     <div class="header-content">
       <a href="/" class="logo">BarterTap</a>
@@ -315,31 +279,5 @@
       </div>
     </div>
   </footer>
-
-  <script>
-    // Bu skript sadəcə müvəqqəti həll üçündür
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('BarterTap - Əsas HTML səhifəsi yükləndi');
-      
-      // Səhifə keçidləri üçün yüklənmə göstəricisi
-      const links = document.querySelectorAll('a');
-      const loading = document.getElementById('loading');
-      
-      links.forEach(link => {
-        link.addEventListener('click', function(e) {
-          // Əgər xarici link deyilsə
-          if (this.hostname === window.location.hostname) {
-            e.preventDefault();
-            loading.style.display = 'flex';
-            
-            // Yönləndirmədən əvvəl kiçik gecikmə əlavə edək
-            setTimeout(() => {
-              window.location.href = this.href;
-            }, 300);
-          }
-        });
-      });
-    });
-  </script>
 </body>
 </html>

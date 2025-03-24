@@ -509,9 +509,9 @@ export default function ItemDetail() {
               <Card className="border-none shadow-sm overflow-hidden mt-4">
                 <CardContent className="p-4">
                   <BarterProgress 
-                    status={item.status === 'active' ? 'pending' : 
+                    status={(item.status === 'active' ? 'pending' : 
                             item.status === 'pending' ? 'accepted' : 
-                            item.status === 'completed' ? 'completed' : 'pending'}
+                            item.status === 'completed' ? 'completed' : 'pending') as BarterStatus}
                     className="mt-2"
                   />
                 </CardContent>

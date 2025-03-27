@@ -1,7 +1,5 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
-const BASE_URL = "https://barter-api-8jr6.onrender.com"; // ✅ Render API bazası
-
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;
@@ -21,11 +19,12 @@ export async function apiRequest(
     "Accept": "application/json"
   };
   
+  // Add Content-Type for requests with body
   if (data) {
     headers["Content-Type"] = "application/json";
   }
-
-  const res = await fetch(BASE_URL + url, {
+  
+  const res = await fetch(url, {
     method,
     headers,
     body: data ? JSON.stringify(data) : undefined,
@@ -33,7 +32,8 @@ export async function apiRequest(
     cache: "no-cache",
     mode: "cors"
   });
-
+  
+  // Debug response cookies and headers
   console.log(`API Response: ${res.status} ${res.statusText}`, {
     headers: Array.from(res.headers.entries()),
     url: res.url,
@@ -44,17 +44,14 @@ export async function apiRequest(
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
-
 export const getQueryFn: <T>(options: {
   on401: UnauthorizedBehavior;
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    const queryUrl = BASE_URL + (queryKey[0] as string); // ✅ Əlavə düzəliş burada
-
-    console.log(`GET Query: ${queryUrl}`);
-
-    const res = await fetch(queryUrl, {
+    console.log(`GET Query: ${queryKey[0]}`);
+    
+    const res = await fetch(queryKey[0] as string, {
       credentials: "include",
       cache: "no-cache",
       mode: "cors",
@@ -62,7 +59,7 @@ export const getQueryFn: <T>(options: {
         "Accept": "application/json"
       }
     });
-
+    
     console.log(`Query Response: ${res.status} ${res.statusText}`, {
       headers: Array.from(res.headers.entries()),
       url: res.url
